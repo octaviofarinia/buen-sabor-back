@@ -39,7 +39,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .requestMatchers("/api/v1/public").permitAll()
-                .requestMatchers("/**").authenticated()
+                .requestMatchers("/**").permitAll()
                 .and().cors().configurationSource(corsConfigurationSource())
                 .and().oauth2ResourceServer()
                     .jwt()
