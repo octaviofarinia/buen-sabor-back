@@ -1,4 +1,4 @@
-package com.tup.buensabor.controllers;
+package com.tup.buensabor.controllers.base;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
