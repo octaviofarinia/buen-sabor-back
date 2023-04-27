@@ -63,9 +63,12 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
             }
 
             Optional<E> entityOptional = baseRepository.findById(id);
-            E entityDB = entityOptional.get();
 
-            entityDB = baseRepository.save(entity);
+            if(!entityOptional.isPresent()) {
+                throw new ServicioException("No se encontro la entidad con el id dado.");
+            }
+
+            E entityDB = baseRepository.save(entity);
             return entityDB;
         }catch (Exception e) {
             throw new ServicioException(e.getMessage());

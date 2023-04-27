@@ -31,4 +31,8 @@ public class RubroArticulo extends Base {
         this.rubroPadre = rubroPadre;
     }
 
+    public void setSubRubros(List<RubroArticulo> subRubros) {
+        this.subRubros.clear();
+        this.subRubros.addAll(subRubros);
+    }
 }
