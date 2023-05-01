@@ -6,13 +6,10 @@ import com.tup.buensabor.entities.RubroArticulo;
 import com.tup.buensabor.services.RubroArticuloServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "api/v1/rubros-articulos")
+@RequestMapping(path = "/api/v1/rubros-articulos")
 public class RubroArticuloController extends BaseControllerImpl<RubroArticulo, RubroArticuloServiceImpl> {
 
 
