@@ -1,5 +1,6 @@
 package com.tup.buensabor.services;
 
+import com.tup.buensabor.dtos.RubroArticuloDto;
 import com.tup.buensabor.dtos.RubroArticuloSimpleDto;
 import com.tup.buensabor.entities.RubroArticulo;
 import com.tup.buensabor.exceptions.ServicioException;
@@ -11,6 +12,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,18 +28,32 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         super(baseRepository);
     }
 
-    public RubroArticulo save(RubroArticuloSimpleDto rubroDto) throws Exception {
+    public RubroArticuloSimpleDto save(RubroArticuloSimpleDto rubroDto) throws Exception {
         if(rubroDto.getIdRubroPadre() != null) {
             if(baseRepository.existsById(rubroDto.getIdRubroPadre())) {
-                RubroArticulo entity = new RubroArticulo(rubroDto.getDenominacion(), baseRepository.getReferenceById(rubroDto.getIdRubroPadre()));
-                return rubroArticuloRepository.save(entity);
+                RubroArticulo entity = new RubroArticulo(rubroDto.getDenominacion(), rubroArticuloRepository.findById(rubroDto.getIdRubroPadre()).get());
+                RubroArticulo entityPersisted = rubroArticuloRepository.save(entity);
+                return rubroArticuloMapper.toSimpleDTO(entityPersisted);
             } else {
                 throw new ServicioException("No existe un RubroArticulo con id " + rubroDto.getIdRubroPadre());
             }
         } else {
             RubroArticulo entity = new RubroArticulo(rubroDto.getDenominacion(), null);
-            return rubroArticuloRepository.save(entity);
+            return rubroArticuloMapper.toSimpleDTO(rubroArticuloRepository.save(entity));
         }
+    }
+
+    public RubroArticuloDto getOne(Long id) {
+        RubroArticulo entity = rubroArticuloRepository.findById(id).get();
+        RubroArticuloDto dto = rubroArticuloMapper.toRubroArticuloDTO(entity);
+        return dto;
+    }
+
+    public List<RubroArticuloDto> getAllParents() {
+        List<RubroArticuloDto> dtoList = new ArrayList<RubroArticuloDto>();
+        List<RubroArticulo> parentsList = rubroArticuloRepository.getAllParents();
+
+        return dtoList;
     }
 
     @Transactional
@@ -66,4 +83,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         }
     }
 
+    public RubroArticuloSimpleDto getAllSimple() {
+        return rubroArticuloMapper.;
+    }
 }

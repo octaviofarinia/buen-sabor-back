@@ -1,9 +1,14 @@
 package com.tup.buensabor.mappers;
 
+import com.tup.buensabor.dtos.RubroArticuloDto;
 import com.tup.buensabor.dtos.RubroArticuloSimpleDto;
 import com.tup.buensabor.entities.RubroArticulo;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface RubroArticuloMapper {
@@ -12,6 +17,17 @@ public interface RubroArticuloMapper {
         return Mappers.getMapper(RubroArticuloMapper.class);
     }
 
+    @Mapping(source = "source.rubroPadre.id", target = "idRubroPadre")
     RubroArticuloSimpleDto toSimpleDTO(RubroArticulo source);
+
+    @Mapping(source = "source.rubroPadre.id", target = "idRubroPadre")
+    List<RubroArticuloSimpleDto> toSimpleDTOList(List<RubroArticulo> source);
+
+    RubroArticuloDto toRubroArticuloDTO(RubroArticulo source, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+
+    @DoIgnore
+    default RubroArticuloDto toRubroArticuloDTO(RubroArticulo source) {
+        return toRubroArticuloDTO(source, new CycleAvoidingMappingContext());
+    }
 
 }
