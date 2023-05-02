@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +48,7 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
     @Transactional
     public E save(E entity) throws ServicioException {
         try {
+            entity.setFechaAlta(new Date());
             entity = baseRepository.save(entity);
             return entity;
         }catch (Exception e) {
@@ -68,6 +70,7 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
                 throw new ServicioException("No se encontro la entidad con el id dado.");
             }
 
+            entity.setFechaModificacion(new Date());
             E entityDB = baseRepository.save(entity);
             return entityDB;
         }catch (Exception e) {

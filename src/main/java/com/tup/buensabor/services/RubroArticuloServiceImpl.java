@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,10 +29,12 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         super(baseRepository);
     }
 
+    @Transactional
     public RubroArticuloSimpleDto save(RubroArticuloSimpleDto rubroDto) throws Exception {
         if(rubroDto.getIdRubroPadre() != null) {
             if(baseRepository.existsById(rubroDto.getIdRubroPadre())) {
                 RubroArticulo entity = new RubroArticulo(rubroDto.getDenominacion(), rubroArticuloRepository.findById(rubroDto.getIdRubroPadre()).get());
+                entity.setFechaAlta(new Date());
                 RubroArticulo entityPersisted = rubroArticuloRepository.save(entity);
                 return rubroArticuloMapper.toSimpleDTO(entityPersisted);
             } else {
@@ -39,6 +42,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
             }
         } else {
             RubroArticulo entity = new RubroArticulo(rubroDto.getDenominacion(), null);
+            entity.setFechaAlta(new Date());
             return rubroArticuloMapper.toSimpleDTO(rubroArticuloRepository.save(entity));
         }
     }
@@ -60,6 +64,10 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         return dtoList;
     }
 
+    public List<RubroArticuloSimpleDto> getAllSimple() {
+        return rubroArticuloMapper.toSimpleDTOList(rubroArticuloRepository.getAll());
+    }
+
     @Transactional
     public RubroArticulo update(Long id, RubroArticulo entity) throws ServicioException {
         try {
@@ -76,6 +84,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
             RubroArticulo entityDB = entityOptional.get();
             entityDB.setDenominacion(entity.getDenominacion());
             entityDB.setRubroPadre(entity.getRubroPadre());
+            entityDB.setFechaModificacion(new Date());
             if(entity.getSubRubros() != null) {
                 entityDB.setSubRubros(entity.getSubRubros());
             }
@@ -87,7 +96,27 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         }
     }
 
-    public List<RubroArticuloSimpleDto> getAllSimple() {
-        return rubroArticuloMapper.toSimpleDTOList(rubroArticuloRepository.findAll());
+    @Transactional
+    public boolean delete(Long id) throws ServicioException {
+        try {
+            if (baseRepository.existsById(id)) {
+                recursiveDelete(baseRepository.findById(id).get());
+                return true;
+            }else {
+                throw new Exception("No existe la entidad");
+            }
+        }catch (Exception e) {
+            throw new ServicioException(e.getMessage());
+        }
     }
+
+    public void recursiveDelete(RubroArticulo entity) {
+        for (RubroArticulo child : entity.getSubRubros()) {
+            recursiveDelete(child);
+        }
+
+        entity.setFechaBaja(new Date());
+        baseRepository.save(entity);
+    }
+
 }
