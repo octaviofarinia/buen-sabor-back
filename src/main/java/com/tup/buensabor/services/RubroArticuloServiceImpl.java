@@ -53,6 +53,10 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         List<RubroArticuloDto> dtoList = new ArrayList<RubroArticuloDto>();
         List<RubroArticulo> parentsList = rubroArticuloRepository.getAllParents();
 
+        for (RubroArticulo rubroEntity : parentsList) {
+            dtoList.add(rubroArticuloMapper.toRubroArticuloDTO(rubroEntity));
+        }
+
         return dtoList;
     }
 
@@ -83,7 +87,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         }
     }
 
-    public RubroArticuloSimpleDto getAllSimple() {
-        return rubroArticuloMapper.;
+    public List<RubroArticuloSimpleDto> getAllSimple() {
+        return rubroArticuloMapper.toSimpleDTOList(rubroArticuloRepository.findAll());
     }
 }

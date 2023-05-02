@@ -18,9 +18,9 @@ public interface RubroArticuloMapper {
     }
 
     @Mapping(source = "source.rubroPadre.id", target = "idRubroPadre")
+    @Mapping(source = "source.id", target = "id")
     RubroArticuloSimpleDto toSimpleDTO(RubroArticulo source);
 
-    @Mapping(source = "source.rubroPadre.id", target = "idRubroPadre")
     List<RubroArticuloSimpleDto> toSimpleDTOList(List<RubroArticulo> source);
 
     RubroArticuloDto toRubroArticuloDTO(RubroArticulo source, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
