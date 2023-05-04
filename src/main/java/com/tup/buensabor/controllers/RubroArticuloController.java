@@ -54,8 +54,8 @@ public class RubroArticuloController {
         }
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RubroArticulo object) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RubroArticuloSimpleDto object) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.update(id, object));
         } catch (Exception e) {

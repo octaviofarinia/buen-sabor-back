@@ -69,9 +69,9 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
     }
 
     @Transactional
-    public RubroArticulo update(Long id, RubroArticulo entity) throws ServicioException {
+    public RubroArticuloSimpleDto update(Long id, RubroArticuloSimpleDto rubroDto) throws ServicioException {
         try {
-            if (entity.getId() == null) {
+            if (rubroDto.getId() == null) {
                 throw new ServicioException("La entidad a modificar debe contener un Id.");
             }
 
@@ -82,14 +82,19 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
             }
 
             RubroArticulo entityDB = entityOptional.get();
-            entityDB.setDenominacion(entity.getDenominacion());
-            entityDB.setRubroPadre(entity.getRubroPadre());
-            entityDB.setFechaModificacion(new Date());
-            if(entity.getSubRubros() != null) {
-                entityDB.setSubRubros(entity.getSubRubros());
+
+            if(rubroDto.getIdRubroPadre() != null) {
+                if(baseRepository.existsById(rubroDto.getIdRubroPadre())) {
+                    entityDB.setRubroPadre(rubroArticuloRepository.findById(rubroDto.getIdRubroPadre()).get());
+                } else {
+                    throw new ServicioException("No existe un RubroArticulo con id " + rubroDto.getIdRubroPadre());
+                }
             }
-            
-            return baseRepository.save(entityDB);
+
+            entityDB.setDenominacion(rubroDto.getDenominacion());
+            entityDB.setFechaModificacion(new Date());
+
+            return rubroArticuloMapper.toSimpleDTO(rubroArticuloRepository.save(entityDB));
         }catch (Exception e) {
             e.printStackTrace();
             throw new ServicioException(e.getMessage());
