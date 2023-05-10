@@ -27,6 +27,18 @@ public class RubroArticulo extends Base {
     @Column(nullable = false)
     private String denominacion;
 
+    @Column(name = "fecha_alta")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaAlta;
+
+    @Column(name = "fecha_modificacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaModificacion;
+
+    @Column(name = "fecha_baja")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaBaja;
+
     public RubroArticulo(String denominacion, RubroArticulo rubroPadre) {
         this.denominacion = denominacion;
         this.rubroPadre = rubroPadre;
@@ -36,4 +48,5 @@ public class RubroArticulo extends Base {
         this.subRubros.clear();
         this.subRubros.addAll(subRubros);
     }
+
 }

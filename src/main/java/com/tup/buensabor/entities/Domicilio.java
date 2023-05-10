@@ -1,6 +1,5 @@
 package com.tup.buensabor.entities;
 
-import com.tup.buensabor.enums.Rol;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,19 +9,24 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "domicilio")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Usuario extends Base {
+public class Domicilio extends Base {
 
-    @Column(name = "usuario", nullable = false)
-    private String usuario;
+    @Column(length = 500)
+    private String calle;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "rol", nullable = false)
-    private Rol rol;
+    @Column(precision = 5)
+    private Integer numero;
+
+    private String localidad;
+
+    @ManyToOne()
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
 
     @Column(name = "fecha_alta")
     @Temporal(TemporalType.TIMESTAMP)
