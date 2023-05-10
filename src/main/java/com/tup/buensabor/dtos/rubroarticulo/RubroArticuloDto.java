@@ -1,7 +1,5 @@
-package com.tup.buensabor.dtos;
+package com.tup.buensabor.dtos.rubroarticulo;
 
-import com.tup.buensabor.entities.RubroArticulo;
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;

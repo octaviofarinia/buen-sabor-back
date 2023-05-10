@@ -9,19 +9,17 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "detalle_articulo_manufacturado")
+@Table(name = "detalle_factura")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class DetalleArticuloManufacturado extends Base {
+public class DetalleFactura extends Base {
 
-    @Column(name = "cantidad", precision = 10, scale = 2)
-    private BigDecimal cantidad;
+    private Integer cantidad;
 
-    @ManyToOne()
-    @JoinColumn(name = "id_unidad_medida")
-    private UnidadMedida unidadMedida;
+    @Column(name = "subtotal", precision = 10, scale = 2)
+    private BigDecimal subtotal;
 
     @ManyToOne()
     @JoinColumn(name = "id_articulo_insumo")
@@ -30,5 +28,9 @@ public class DetalleArticuloManufacturado extends Base {
     @ManyToOne()
     @JoinColumn(name = "id_articulo_manufacturado")
     private ArticuloManufacturado articuloManufacturado;
+
+    @ManyToOne()
+    @JoinColumn(name = "id_pedido")
+    private Pedido pedido;
 
 }

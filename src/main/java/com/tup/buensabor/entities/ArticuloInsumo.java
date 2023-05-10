@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -19,16 +20,16 @@ public class ArticuloInsumo extends Base {
     private String denominacion;
 
     @Column(name = "precio_compra", precision = 10, scale = 2)
-    private Double precioCompra;
+    private BigDecimal precioCompra;
 
     @Column(name = "precio_venta", precision = 10, scale = 2)
-    private Double precioVenta;
+    private BigDecimal precioVenta;
 
     @Column(name = "stock_actual", precision = 10, scale = 2)
-    private Double stockActual;
+    private BigDecimal stockActual;
 
     @Column(name = "stock_minimo", precision = 10, scale = 2)
-    private Double stockMinimo;
+    private BigDecimal stockMinimo;
 
     @ManyToOne()
     @JoinColumn(name = "id_unidad_medida")

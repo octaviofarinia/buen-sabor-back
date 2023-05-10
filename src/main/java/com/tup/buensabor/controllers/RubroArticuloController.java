@@ -1,12 +1,8 @@
 package com.tup.buensabor.controllers;
 
-import com.tup.buensabor.controllers.base.BaseControllerImpl;
-import com.tup.buensabor.dtos.RubroArticuloSimpleDto;
-import com.tup.buensabor.entities.RubroArticulo;
+import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
 import com.tup.buensabor.services.RubroArticuloServiceImpl;
-import com.tup.buensabor.services.interfaces.RubroArticuloService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

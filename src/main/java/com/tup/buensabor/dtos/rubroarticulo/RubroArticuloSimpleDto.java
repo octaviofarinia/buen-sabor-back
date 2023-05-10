@@ -1,4 +1,4 @@
-package com.tup.buensabor.dtos;
+package com.tup.buensabor.dtos.rubroarticulo;
 
 import lombok.Data;
 

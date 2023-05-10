@@ -21,7 +21,7 @@ public class RubroArticulo extends Base {
     @JoinColumn(name = "id_rubro_padre")
     private RubroArticulo rubroPadre;
 
-    @OneToMany(mappedBy = "rubroPadre", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "rubroPadre")
     private List<RubroArticulo> subRubros;
 
     @Column(nullable = false)
