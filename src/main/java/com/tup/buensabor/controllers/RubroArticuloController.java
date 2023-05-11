@@ -44,6 +44,15 @@ public class RubroArticuloController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.getOneSimple(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+        }
+    }
+
+    @GetMapping("/{id}/complete")
+    public ResponseEntity<?> getOneComplete(@PathVariable Long id) {
+        try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.getOne(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Error. Por favor intente mas tarde\"}");

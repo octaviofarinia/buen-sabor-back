@@ -53,6 +53,12 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         return dto;
     }
 
+    public RubroArticuloSimpleDto getOneSimple(Long id) {
+        RubroArticulo entity = rubroArticuloRepository.findById(id).get();
+        RubroArticuloSimpleDto dto = rubroArticuloMapper.toSimpleDTO(entity);
+        return dto;
+    }
+
     public List<RubroArticuloDto> getAllParents() {
         List<RubroArticuloDto> dtoList = new ArrayList<RubroArticuloDto>();
         List<RubroArticulo> parentsList = rubroArticuloRepository.getAllParents();
