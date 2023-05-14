@@ -1,6 +1,8 @@
 package com.tup.buensabor.entities;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,28 +19,36 @@ import java.util.Date;
 @Setter
 public class ArticuloInsumo extends Base {
 
+    @NotNull
     private String denominacion;
 
+    @NotNull
     @Column(name = "precio_compra", precision = 10, scale = 2)
     private BigDecimal precioCompra;
 
+    @NotNull
     @Column(name = "precio_venta", precision = 10, scale = 2)
     private BigDecimal precioVenta;
 
+    @NotNull
     @Column(name = "stock_actual", precision = 10, scale = 2)
     private BigDecimal stockActual;
 
+    @NotNull
     @Column(name = "stock_minimo", precision = 10, scale = 2)
     private BigDecimal stockMinimo;
 
+    @NotNull
     @ManyToOne()
     @JoinColumn(name = "id_unidad_medida")
     private UnidadMedida unidadMedida;
 
+    @NotNull
     @ManyToOne()
     @JoinColumn(name = "id_rubro_articulo")
     private RubroArticulo rubroArticulo;
 
+    @NotNull
     @Column(name = "fecha_alta")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAlta;
