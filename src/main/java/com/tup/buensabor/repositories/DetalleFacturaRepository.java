@@ -1,6 +1,5 @@
 package com.tup.buensabor.repositories;
 
-import com.tup.buensabor.entities.ArticuloManufacturado;
 import com.tup.buensabor.entities.DetalleFactura;
 import org.springframework.stereotype.Repository;
 

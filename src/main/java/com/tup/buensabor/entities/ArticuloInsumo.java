@@ -1,6 +1,5 @@
 package com.tup.buensabor.entities;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,6 +20,9 @@ public class ArticuloInsumo extends Base {
 
     @NotNull
     private String denominacion;
+
+    @Column(name = "url_imagen")
+    private String urlImagen;
 
     @NotNull
     @Column(name = "precio_compra", precision = 10, scale = 2)
