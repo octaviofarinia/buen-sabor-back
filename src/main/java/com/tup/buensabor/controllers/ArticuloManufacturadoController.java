@@ -1,9 +1,12 @@
 package com.tup.buensabor.controllers;
 
+import com.tup.buensabor.controllers.base.BaseControllerImpl;
 import com.tup.buensabor.dtos.ArticuloManufacturadoDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
+import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.ArticuloManufacturadoServiceImpl;
+import com.tup.buensabor.services.UnidadMedidaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +17,12 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "api/v1/articulos-manufacturados")
-public class ArticuloManufacturadoController {
-
-    @Autowired
-    private ArticuloManufacturadoServiceImpl articuloManufacturadoService;
+public class ArticuloManufacturadoController extends BaseControllerImpl<ArticuloManufacturado, ArticuloManufacturadoServiceImpl> {
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> save(@RequestPart("producto") ArticuloManufacturadoDto producto, @RequestParam("imagen") MultipartFile imagen) {
         try {
-            ArticuloManufacturado articuloManufacturado = articuloManufacturadoService.save(producto, imagen);
+            ArticuloManufacturado articuloManufacturado = servicio.save(producto, imagen);
             return ResponseEntity.ok(articuloManufacturado);
         } catch (IOException | ServicioException e) {
             e.printStackTrace();
@@ -33,7 +33,7 @@ public class ArticuloManufacturadoController {
     @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> update(@RequestPart("producto") ArticuloManufacturadoDto producto, @RequestParam("imagen") MultipartFile imagen) {
         try {
-            ArticuloManufacturado articuloManufacturado = articuloManufacturadoService.update(producto, imagen);
+            ArticuloManufacturado articuloManufacturado = servicio.update(producto, imagen);
             return ResponseEntity.ok(articuloManufacturado);
         } catch (IOException | ServicioException e) {
             e.printStackTrace();
@@ -44,7 +44,7 @@ public class ArticuloManufacturadoController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         try {
-            articuloManufacturadoService.softDelete(id);
+            servicio.softDelete(id);
             return ResponseEntity.noContent().build();
         } catch (ServicioException e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class ArticuloManufacturadoController {
     @DeleteMapping(value = "/hard_delete/{id}")
     public ResponseEntity<?> hardDelete(@PathVariable(name = "id") Long id) {
         try {
-            articuloManufacturadoService.hardDeleteImage(id);
+            servicio.hardDeleteImage(id);
             return ResponseEntity.noContent().build();
         } catch (IOException | ServicioException e) {
             e.printStackTrace();
