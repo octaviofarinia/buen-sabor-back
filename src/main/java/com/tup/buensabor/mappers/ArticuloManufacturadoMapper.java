@@ -3,6 +3,7 @@ package com.tup.buensabor.mappers;
 import com.tup.buensabor.dtos.ArticuloManufacturadoDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -13,7 +14,10 @@ public interface ArticuloManufacturadoMapper {
         return Mappers.getMapper(ArticuloManufacturadoMapper.class);
     }
 
+    @Mapping(source = "id", target = "id")
     ArticuloManufacturadoDto toDTO(ArticuloManufacturado source);
+
+    @Mapping(source = "id", target = "id")
     ArticuloManufacturado toEntity(ArticuloManufacturadoDto source);
 
     List<ArticuloManufacturadoDto> toDTOsList(List<ArticuloManufacturado> source);

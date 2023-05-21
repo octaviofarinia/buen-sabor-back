@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -16,16 +17,20 @@ public class ImagenService {
     @Autowired
     private Cloudinary cloudinary;
 
-    public Map<String, Object> uploadImage(MultipartFile imagen) throws IOException {
+    public Map<String, Object> uploadImage(MultipartFile imagen, Long idProducto) throws IOException {
         File file = File.createTempFile("temp", null);
         imagen.transferTo(file);
 
         var params = ObjectUtils.asMap(
-                "public_id", "productos/productoTest",
+                "public_id", "productos/"+idProducto,
                 "overwrite", true,
                 "resource_type", "image"
         );
         return cloudinary.uploader().upload(file, params);
+    }
+
+    public Map<String, Object> deleteImage(Long idProducto) throws IOException {
+        return cloudinary.uploader().destroy("productos/"+idProducto, ObjectUtils.asMap("resource_type","image"));
     }
 
 }

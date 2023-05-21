@@ -20,26 +20,46 @@ public class ArticuloManufacturadoController {
     private ArticuloManufacturadoServiceImpl articuloManufacturadoService;
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> save(@RequestPart("producto") ArticuloManufacturadoDto producto,
-                                        @RequestParam("imagen") MultipartFile imagen) {
+    public ResponseEntity<?> save(@RequestPart("producto") ArticuloManufacturadoDto producto, @RequestParam("imagen") MultipartFile imagen) {
         try {
             ArticuloManufacturado articuloManufacturado = articuloManufacturadoService.save(producto, imagen);
             return ResponseEntity.ok(articuloManufacturado);
         } catch (IOException | ServicioException e) {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body(e.getMessage());
+            return ResponseEntity.internalServerError().body("Error al cargar el producto: " + e.getMessage());
         }
     }
 
     @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> update(@RequestPart("producto") ArticuloManufacturadoDto producto,
-                                        @RequestParam("imagen") MultipartFile imagen) {
+    public ResponseEntity<?> update(@RequestPart("producto") ArticuloManufacturadoDto producto, @RequestParam("imagen") MultipartFile imagen) {
         try {
             ArticuloManufacturado articuloManufacturado = articuloManufacturadoService.update(producto, imagen);
             return ResponseEntity.ok(articuloManufacturado);
         } catch (IOException | ServicioException e) {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Error al cargar el producto");
+            return ResponseEntity.internalServerError().body("Error al cargar el producto: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
+        try {
+            articuloManufacturadoService.softDelete(id);
+            return ResponseEntity.noContent().build();
+        } catch (ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al eliminar el producto: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/hard_delete/{id}")
+    public ResponseEntity<?> hardDelete(@PathVariable(name = "id") Long id) {
+        try {
+            articuloManufacturadoService.hardDelete(id);
+            return ResponseEntity.noContent().build();
+        } catch (IOException | ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al eliminar el producto: " + e.getMessage());
         }
     }
 

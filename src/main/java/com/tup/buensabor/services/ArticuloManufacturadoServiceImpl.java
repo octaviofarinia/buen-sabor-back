@@ -7,6 +7,7 @@ import com.tup.buensabor.mappers.ArticuloManufacturadoMapper;
 import com.tup.buensabor.repositories.ArticuloManufacturadoRepository;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.services.interfaces.ArticuloManufacturadoService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloManufacturado, Long> implements ArticuloManufacturadoService {
@@ -24,42 +26,75 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
     @Autowired
     private ImagenService imagenService;
 
-    private ArticuloManufacturadoMapper articuloManufacturadoMapper = ArticuloManufacturadoMapper.getInstance();
+    private final ArticuloManufacturadoMapper articuloManufacturadoMapper = ArticuloManufacturadoMapper.getInstance();
 
     public ArticuloManufacturadoServiceImpl(BaseRepository<ArticuloManufacturado, Long> baseRepository) {
         super(baseRepository);
     }
 
+    @Transactional
     public ArticuloManufacturado save(ArticuloManufacturadoDto articuloManufacturadoDto, MultipartFile imagen) throws IOException, ServicioException {
         if (imagen.isEmpty()) {
             throw new ServicioException("Debe seleccionar una imagen para el producto");
         }
 
-        Map<String, Object> uploadData = imagenService.uploadImage(imagen);
-        articuloManufacturadoDto.setUrlImagen((String) uploadData.get("url"));
-
         ArticuloManufacturado articuloManufacturado = articuloManufacturadoMapper.toEntity(articuloManufacturadoDto);
         articuloManufacturado.setFechaAlta(new Date());
 
-        return this.save(articuloManufacturado);
+        articuloManufacturado = this.save(articuloManufacturado);
+
+        Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloManufacturado.getId());
+        articuloManufacturado.setUrlImagen((String) uploadData.get("url"));
+
+        articuloManufacturado = this.save(articuloManufacturado);
+
+        return articuloManufacturado;
     }
 
+    @Transactional
     public ArticuloManufacturado update(ArticuloManufacturadoDto articuloManufacturadoDto, MultipartFile imagen) throws IOException, ServicioException {
         if (imagen.isEmpty()) {
-            throw new ServicioException("Debe seleccionar una imagen para el producto");
+            throw new ServicioException("Debe seleccionar una imagen para el producto.");
         }
 
         if (articuloManufacturadoDto.getId() == null || articuloManufacturadoDto.getId() <= 0) {
             throw new ServicioException("El campo id es obligatorio y mayor a cero.");
         }
 
-        Map<String, Object> uploadData = imagenService.uploadImage(imagen);
-        articuloManufacturadoDto.setUrlImagen((String) uploadData.get("url"));
+        Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoRepository.findById(articuloManufacturadoDto.getId());
+        if(optionalArticuloManufacturado.isEmpty()) {
+            throw new ServicioException("No existe un producto con el id seleccionado.");
+        }
 
-        ArticuloManufacturado articuloManufacturado = articuloManufacturadoMapper.toEntity(articuloManufacturadoDto);
-        articuloManufacturado.setFechaAlta(new Date());
+        ArticuloManufacturado articuloManufacturado = optionalArticuloManufacturado.get();
+        articuloManufacturado.setDenominacion(articuloManufacturadoDto.getDenominacion());
+        articuloManufacturado.setDescripcion(articuloManufacturadoDto.getDescripcion());
+        articuloManufacturado.setTiempoEstimadoCocina(articuloManufacturadoDto.getTiempoEstimadoCocina());
+        articuloManufacturado.setFechaModificacion(new Date());
+        articuloManufacturado = this.save(articuloManufacturado);
 
-        return this.save(articuloManufacturado);
+        Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloManufacturado.getId());
+        articuloManufacturado.setUrlImagen((String) uploadData.get("url"));
+
+        articuloManufacturado = this.save(articuloManufacturado);
+
+        return articuloManufacturado;
     }
 
+    public void softDelete(Long id) throws ServicioException {
+        Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoRepository.findById(id);
+        if(optionalArticuloManufacturado.isEmpty()) {
+            throw new ServicioException("No existe un producto con el id seleccionado.");
+        }
+
+        ArticuloManufacturado articuloManufacturado = optionalArticuloManufacturado.get();
+        articuloManufacturado.setFechaBaja(new Date());
+
+        articuloManufacturadoRepository.save(articuloManufacturado);
+    }
+
+    public void hardDelete(Long id) throws IOException, ServicioException {
+        imagenService.deleteImage(id);
+        this.delete(id);
+    }
 }

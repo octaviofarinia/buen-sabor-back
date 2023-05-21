@@ -26,7 +26,6 @@ public class ArticuloManufacturado extends Base {
     @Column(name = "tiempo_estimado_cocina")
     private Integer tiempoEstimadoCocina;
 
-    @NotNull
     @Column(length = 500, name = "url_imagen")
     private String urlImagen;
 
