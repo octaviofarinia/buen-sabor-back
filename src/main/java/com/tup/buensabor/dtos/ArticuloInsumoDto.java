@@ -1,10 +1,14 @@
 package com.tup.buensabor.dtos;
 
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloDto;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Getter
+@Setter
 public class ArticuloInsumoDto {
     private Long id;
     private String denominacion;

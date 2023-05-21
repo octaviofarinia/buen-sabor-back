@@ -30,33 +30,6 @@ public abstract class BaseControllerImpl<E extends Base, S extends BaseServiceIm
         }
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody E object) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.save(object));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody E object) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.update(id, object));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        try {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(servicio.delete(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
-        }
-    }
-
     @GetMapping("/paged")
     public ResponseEntity<?> getAll(Pageable pageable) {
         try {

@@ -55,7 +55,7 @@ public class ArticuloManufacturadoController {
     @DeleteMapping(value = "/hard_delete/{id}")
     public ResponseEntity<?> hardDelete(@PathVariable(name = "id") Long id) {
         try {
-            articuloManufacturadoService.hardDelete(id);
+            articuloManufacturadoService.hardDeleteImage(id);
             return ResponseEntity.noContent().build();
         } catch (IOException | ServicioException e) {
             e.printStackTrace();

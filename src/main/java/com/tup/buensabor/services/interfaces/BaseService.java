@@ -14,5 +14,5 @@ public interface BaseService<E extends Base, ID extends Serializable> {
     E findById(ID id) throws ServicioException;
     E save(E entity) throws ServicioException;
     E update(ID id, E entity) throws ServicioException;
-    boolean delete(ID id) throws ServicioException;
+    boolean hardDelete(ID id) throws ServicioException;
 }

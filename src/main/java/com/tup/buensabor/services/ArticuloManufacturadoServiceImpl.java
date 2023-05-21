@@ -93,8 +93,9 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         articuloManufacturadoRepository.save(articuloManufacturado);
     }
 
-    public void hardDelete(Long id) throws IOException, ServicioException {
+    @Transactional
+    public void hardDeleteImage(Long id) throws IOException, ServicioException {
         imagenService.deleteImage(id);
-        this.delete(id);
+        this.hardDelete(id);
     }
 }

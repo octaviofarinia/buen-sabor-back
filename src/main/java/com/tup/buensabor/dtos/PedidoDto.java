@@ -2,10 +2,14 @@ package com.tup.buensabor.dtos;
 
 import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.enums.TipoEnvio;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Getter
+@Setter
 public class PedidoDto {
     private Date fechaPedido;
     private Integer numero;

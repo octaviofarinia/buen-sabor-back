@@ -77,7 +77,7 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
 
     @Override
     @Transactional
-    public boolean delete(ID id) throws ServicioException {
+    public boolean hardDelete(ID id) throws ServicioException {
         try {
             if (baseRepository.existsById(id)) {
                 baseRepository.deleteById(id);
