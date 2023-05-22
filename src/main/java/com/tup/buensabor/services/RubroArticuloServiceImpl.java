@@ -1,5 +1,6 @@
 package com.tup.buensabor.services;
 
+import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
 import com.tup.buensabor.entities.RubroArticulo;
@@ -53,9 +54,9 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         return dto;
     }
 
-    public RubroArticuloSimpleDto getOneSimple(Long id) {
+    public RubroArticuloCompleteDto getOneComplete(Long id) {
         RubroArticulo entity = rubroArticuloRepository.findById(id).get();
-        RubroArticuloSimpleDto dto = rubroArticuloMapper.toSimpleDTO(entity);
+        RubroArticuloCompleteDto dto = rubroArticuloMapper.toCompleteDTO(entity);
         return dto;
     }
 

@@ -8,5 +8,6 @@ import java.util.List;
 public class RubroArticuloDto {
     private Long id;
     private String denominacion;
+    private Long idRubroPadre;
     private List<RubroArticuloDto> subRubros;
 }

@@ -1,5 +1,6 @@
 package com.tup.buensabor.mappers;
 
+import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
 import com.tup.buensabor.entities.RubroArticulo;
@@ -21,14 +22,21 @@ public interface RubroArticuloMapper {
     @Mapping(source = "source.id", target = "id")
     RubroArticuloSimpleDto toSimpleDTO(RubroArticulo source);
 
+    @Mapping(source = "source.rubroPadre.id", target = "idRubroPadre")
+    @Mapping(source = "source.rubroPadre", target = "rubroPadre")
+    @Mapping(source = "source.id", target = "id")
+    RubroArticuloCompleteDto toCompleteDTO(RubroArticulo source);
     List<RubroArticuloSimpleDto> toSimpleDTOList(List<RubroArticulo> source);
 
     @Mapping(source = "id", target = "id")
+    @Mapping(source = "source.rubroPadre.id", target = "idRubroPadre")
     RubroArticuloDto toRubroArticuloDTO(RubroArticulo source, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     @DoIgnore
     default RubroArticuloDto toRubroArticuloDTO(RubroArticulo source) {
         return toRubroArticuloDTO(source, new CycleAvoidingMappingContext());
     }
+
+
 
 }

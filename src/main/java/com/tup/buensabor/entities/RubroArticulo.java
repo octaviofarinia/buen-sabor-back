@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 public class RubroArticulo extends Base {
 
-    
+
     @ManyToOne()
     @JoinColumn(name = "id_rubro_padre")
     private RubroArticulo rubroPadre;
