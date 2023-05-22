@@ -16,7 +16,7 @@ public class RubroArticuloController {
     private RubroArticuloServiceImpl servicio;
 
     @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody RubroArticuloSimpleDto rubroArticulo) {
+    public ResponseEntity<?> save(@RequestBody RubroArticuloCompleteDto rubroArticulo) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.save(rubroArticulo));
         } catch (Exception e) {

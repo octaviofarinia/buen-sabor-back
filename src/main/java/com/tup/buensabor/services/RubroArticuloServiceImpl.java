@@ -31,26 +31,26 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
     }
 
     @Transactional
-    public RubroArticuloSimpleDto save(RubroArticuloSimpleDto rubroDto) throws Exception {
+    public RubroArticuloCompleteDto save(RubroArticuloCompleteDto rubroDto) throws Exception {
         if(rubroDto.getIdRubroPadre() != null) {
             if(baseRepository.existsById(rubroDto.getIdRubroPadre())) {
                 RubroArticulo entity = new RubroArticulo(rubroDto.getDenominacion(), rubroArticuloRepository.findById(rubroDto.getIdRubroPadre()).get());
                 entity.setFechaAlta(new Date());
                 RubroArticulo entityPersisted = rubroArticuloRepository.save(entity);
-                return rubroArticuloMapper.toSimpleDTO(entityPersisted);
+                return rubroArticuloMapper.toCompleteDTO(entityPersisted);
             } else {
                 throw new ServicioException("No existe un RubroArticulo con id " + rubroDto.getIdRubroPadre());
             }
         } else {
             RubroArticulo entity = new RubroArticulo(rubroDto.getDenominacion(), null);
             entity.setFechaAlta(new Date());
-            return rubroArticuloMapper.toSimpleDTO(rubroArticuloRepository.save(entity));
+            return rubroArticuloMapper.toCompleteDTO(rubroArticuloRepository.save(entity));
         }
     }
 
-    public RubroArticuloDto getOne(Long id) {
+    public RubroArticuloCompleteDto getOne(Long id) {
         RubroArticulo entity = rubroArticuloRepository.findById(id).get();
-        RubroArticuloDto dto = rubroArticuloMapper.toRubroArticuloDTO(entity);
+        RubroArticuloCompleteDto dto = rubroArticuloMapper.toRubroArticuloDTO(entity);
         return dto;
     }
 
@@ -60,8 +60,8 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         return dto;
     }
 
-    public List<RubroArticuloDto> getAllParents() {
-        List<RubroArticuloDto> dtoList = new ArrayList<RubroArticuloDto>();
+    public List<RubroArticuloCompleteDto> getAllParents() {
+        List<RubroArticuloCompleteDto> dtoList = new ArrayList<RubroArticuloCompleteDto>();
         List<RubroArticulo> parentsList = rubroArticuloRepository.getAllParents();
 
         for (RubroArticulo rubroEntity : parentsList) {
@@ -96,6 +96,8 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
                 } else {
                     throw new ServicioException("No existe un RubroArticulo con id " + rubroDto.getIdRubroPadre());
                 }
+            }else{
+                entityDB.setRubroPadre(null);
             }
 
             entityDB.setDenominacion(rubroDto.getDenominacion());

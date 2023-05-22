@@ -30,10 +30,10 @@ public interface RubroArticuloMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "source.rubroPadre.id", target = "idRubroPadre")
-    RubroArticuloDto toRubroArticuloDTO(RubroArticulo source, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+    RubroArticuloCompleteDto toRubroArticuloDTO(RubroArticulo source, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     @DoIgnore
-    default RubroArticuloDto toRubroArticuloDTO(RubroArticulo source) {
+    default RubroArticuloCompleteDto toRubroArticuloDTO(RubroArticulo source) {
         return toRubroArticuloDTO(source, new CycleAvoidingMappingContext());
     }
 
