@@ -76,7 +76,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
     }
 
     @Transactional
-    public RubroArticuloSimpleDto update(Long id, RubroArticuloSimpleDto rubroDto) throws ServicioException {
+    public RubroArticuloCompleteDto update(Long id, RubroArticuloCompleteDto rubroDto) throws ServicioException {
         try {
             if (rubroDto.getId() == null) {
                 throw new ServicioException("La entidad a modificar debe contener un Id.");
@@ -101,7 +101,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
             entityDB.setDenominacion(rubroDto.getDenominacion());
             entityDB.setFechaModificacion(new Date());
 
-            return rubroArticuloMapper.toSimpleDTO(rubroArticuloRepository.save(entityDB));
+            return rubroArticuloMapper.toCompleteDTO(rubroArticuloRepository.save(entityDB));
         }catch (Exception e) {
             e.printStackTrace();
             throw new ServicioException(e.getMessage());
