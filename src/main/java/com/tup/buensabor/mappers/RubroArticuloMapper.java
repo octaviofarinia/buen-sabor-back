@@ -23,6 +23,7 @@ public interface RubroArticuloMapper {
 
     List<RubroArticuloSimpleDto> toSimpleDTOList(List<RubroArticulo> source);
 
+    @Mapping(source = "id", target = "id")
     RubroArticuloDto toRubroArticuloDTO(RubroArticulo source, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 
     @DoIgnore
