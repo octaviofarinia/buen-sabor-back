@@ -26,6 +26,8 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
     @Autowired
     private ImagenService imagenService;
 
+    private final String CLOUDINARY_FOLDER = "productos";
+
     private final ArticuloManufacturadoMapper articuloManufacturadoMapper = ArticuloManufacturadoMapper.getInstance();
 
     public ArticuloManufacturadoServiceImpl(BaseRepository<ArticuloManufacturado, Long> baseRepository) {
@@ -43,7 +45,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
         articuloManufacturado = this.save(articuloManufacturado);
 
-        Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloManufacturado.getId());
+        Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloManufacturado.getId(), CLOUDINARY_FOLDER);
         articuloManufacturado.setUrlImagen((String) uploadData.get("url"));
 
         articuloManufacturado = this.save(articuloManufacturado);
@@ -73,7 +75,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         articuloManufacturado.setFechaModificacion(new Date());
         articuloManufacturado = this.save(articuloManufacturado);
 
-        Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloManufacturado.getId());
+        Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloManufacturado.getId(), CLOUDINARY_FOLDER);
         articuloManufacturado.setUrlImagen((String) uploadData.get("url"));
 
         articuloManufacturado = this.save(articuloManufacturado);
@@ -95,7 +97,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
     @Transactional
     public void hardDeleteImage(Long id) throws IOException, ServicioException {
-        imagenService.deleteImage(id);
+        imagenService.deleteImage(id, CLOUDINARY_FOLDER);
         this.hardDelete(id);
     }
 }

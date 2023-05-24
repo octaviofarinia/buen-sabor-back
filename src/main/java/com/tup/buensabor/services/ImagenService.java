@@ -17,20 +17,20 @@ public class ImagenService {
     @Autowired
     private Cloudinary cloudinary;
 
-    public Map<String, Object> uploadImage(MultipartFile imagen, Long idProducto) throws IOException {
+    public Map<String, Object> uploadImage(MultipartFile imagen, Long idProducto, String folderName) throws IOException {
         File file = File.createTempFile("temp", null);
         imagen.transferTo(file);
 
         var params = ObjectUtils.asMap(
-                "public_id", "productos/"+idProducto,
+                "public_id", folderName+"/"+idProducto,
                 "overwrite", true,
                 "resource_type", "image"
         );
         return cloudinary.uploader().upload(file, params);
     }
 
-    public Map<String, Object> deleteImage(Long idProducto) throws IOException {
-        return cloudinary.uploader().destroy("productos/"+idProducto, ObjectUtils.asMap("resource_type","image"));
+    public Map<String, Object> deleteImage(Long idProducto, String folderName) throws IOException {
+        return cloudinary.uploader().destroy(folderName+"/"+idProducto, ObjectUtils.asMap("resource_type","image"));
     }
 
 }

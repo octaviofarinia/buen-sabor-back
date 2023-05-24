@@ -1,12 +1,63 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
+import com.tup.buensabor.dtos.ArticuloInsumoDto;
 import com.tup.buensabor.entities.ArticuloInsumo;
+import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.ArticuloInsumoServiceImpl;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "api/v1/articulos-insumo")
 public class ArticuloInsumoController extends BaseControllerImpl<ArticuloInsumo, ArticuloInsumoServiceImpl> {
+
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> save(@RequestPart("insumo") ArticuloInsumoDto insumo, @RequestParam("imagen") MultipartFile imagen) {
+        try {
+            ArticuloInsumo articuloInsumo = servicio.save(insumo, imagen);
+            return ResponseEntity.ok(articuloInsumo);
+        } catch (IOException | ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al cargar el insumo: " + e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> update(@RequestPart("insumo") ArticuloInsumoDto insumo, @RequestParam("imagen") MultipartFile imagen) {
+        try {
+            ArticuloInsumo articuloInsumo = servicio.update(insumo, imagen);
+            return ResponseEntity.ok(articuloInsumo);
+        } catch (IOException | ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al cargar el insumo: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
+        try {
+            servicio.softDelete(id);
+            return ResponseEntity.noContent().build();
+        } catch (ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al eliminar el insumo: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/hard_delete/{id}")
+    public ResponseEntity<?> hardDelete(@PathVariable(name = "id") Long id) {
+        try {
+            servicio.hardDeleteImage(id);
+            return ResponseEntity.noContent().build();
+        } catch (IOException | ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al eliminar el insumo: " + e.getMessage());
+        }
+    }
+
 }
