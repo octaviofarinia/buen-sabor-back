@@ -1,5 +1,6 @@
-package com.tup.buensabor.dtos;
+package com.tup.buensabor.dtos.usuario;
 
+import com.tup.buensabor.dtos.usuario.UsuarioDto;
 import lombok.Getter;
 import lombok.Setter;
 

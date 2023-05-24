@@ -1,4 +1,4 @@
-package com.tup.buensabor.dtos;
+package com.tup.buensabor.dtos.usuario;
 
 import com.tup.buensabor.enums.Rol;
 import lombok.Data;

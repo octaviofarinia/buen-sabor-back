@@ -26,6 +26,7 @@ public interface RubroArticuloMapper {
     @Mapping(source = "source.rubroPadre", target = "rubroPadre")
     @Mapping(source = "source.id", target = "id")
     RubroArticuloCompleteDto toCompleteDTO(RubroArticulo source);
+
     List<RubroArticuloSimpleDto> toSimpleDTOList(List<RubroArticulo> source);
 
     @Mapping(source = "id", target = "id")

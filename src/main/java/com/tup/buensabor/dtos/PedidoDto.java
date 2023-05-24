@@ -1,5 +1,6 @@
 package com.tup.buensabor.dtos;
 
+import com.tup.buensabor.dtos.usuario.ClienteDto;
 import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.enums.TipoEnvio;
 import lombok.Getter;
