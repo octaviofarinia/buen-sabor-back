@@ -28,6 +28,12 @@ public class Domicilio extends Base {
     @NotNull
     private String localidad;
 
+    @Column(name = "numero_vivienda")
+    private Integer numeroVivienda;
+
+    @Column(name = "piso_vivienda")
+    private Integer pisoVivienda;
+
     @NotNull
     @ManyToOne()
     @JoinColumn(name = "id_cliente")
