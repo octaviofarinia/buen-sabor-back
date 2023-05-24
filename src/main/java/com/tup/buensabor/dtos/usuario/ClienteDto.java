@@ -1,13 +1,13 @@
 package com.tup.buensabor.dtos.usuario;
 
 import com.tup.buensabor.dtos.usuario.UsuarioDto;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
 public class ClienteDto {
     private String nombre;
     private String apellido;

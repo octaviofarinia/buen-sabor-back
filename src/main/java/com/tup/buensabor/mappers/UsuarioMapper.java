@@ -16,6 +16,7 @@ public interface UsuarioMapper {
     UsuarioDto toDTO(Usuario source);
     Usuario toEntity(UsuarioDto source);
 
+
     List<UsuarioDto> toDTOsList(List<Usuario> source);
     List<Usuario> toEntitiesList(List<UsuarioDto> source);
 }

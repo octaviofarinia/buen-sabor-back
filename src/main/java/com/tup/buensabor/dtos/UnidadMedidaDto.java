@@ -10,8 +10,7 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
 public class UnidadMedidaDto {
     private String denominacion;
     private String abreviatura;
