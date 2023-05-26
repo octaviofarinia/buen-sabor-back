@@ -14,9 +14,4 @@ import java.util.Date;
 public class UnidadMedidaDto {
     private String denominacion;
     private String abreviatura;
-    private Date fechaAlta;
-
-    private Date fechaModificacion;
-
-    private Date fechaBaja;
 }

@@ -1,4 +1,4 @@
-package com.tup.buensabor.dtos;
+package com.tup.buensabor.dtos.articuloinsumo;
 
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloDto;
 import jakarta.validation.constraints.NotBlank;
@@ -13,14 +13,11 @@ import java.util.Date;
 public class ArticuloInsumoDto {
     private Long id;
     private String denominacion;
-    private String urlImage;
+    private String urlImagen;
     private BigDecimal precioCompra;
     private BigDecimal precioVenta;
     private BigDecimal stockActual;
     private BigDecimal stockMinimo;
-    private UnidadMedidaDto unidadMedida;
-    private RubroArticuloDto rubroArticulo;
-    private Date fechaAlta;
-    private Date fechaModificacion;
-    private Date fechaBaja;
+    private Long idUnidadMedida;
+    private Long idRubroArticulo;
 }

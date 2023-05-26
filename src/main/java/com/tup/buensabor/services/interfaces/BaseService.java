@@ -7,11 +7,13 @@ import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 public interface BaseService<E extends Base, ID extends Serializable> {
     List<E> findAll() throws ServicioException;
     Page<E> findAll(Pageable pageable) throws ServicioException;
     E findById(ID id) throws ServicioException;
+    Optional<E> findOptionalById(ID id) throws ServicioException;
     E save(E entity) throws ServicioException;
     E update(ID id, E entity) throws ServicioException;
     boolean hardDelete(ID id) throws ServicioException;

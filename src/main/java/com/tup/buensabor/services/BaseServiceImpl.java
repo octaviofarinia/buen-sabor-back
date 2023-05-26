@@ -32,12 +32,20 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
         }
     }
 
+    @Transactional
+    public Optional<E> findOptionalById(ID id) throws ServicioException {
+        try {
+            return baseRepository.findById(id);
+        }catch (Exception e) {
+            throw new ServicioException(e.getMessage());
+        }
+    }
+
     @Override
     @Transactional
     public E findById(ID id) throws ServicioException {
         try {
-            Optional<E> entityOptional = baseRepository.findById(id);
-            return entityOptional.get();
+            return baseRepository.findById(id).get();
         }catch (Exception e) {
             throw new ServicioException(e.getMessage());
         }

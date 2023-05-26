@@ -97,6 +97,11 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
     @Transactional
     public void hardDeleteImage(Long id) throws IOException, ServicioException {
+        Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoRepository.findById(id);
+        if(optionalArticuloManufacturado.isEmpty()) {
+            throw new ServicioException("No existe un producto con el id seleccionado.");
+        }
+
         imagenService.deleteImage(id, CLOUDINARY_FOLDER);
         this.hardDelete(id);
     }

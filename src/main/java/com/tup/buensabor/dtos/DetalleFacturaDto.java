@@ -1,8 +1,7 @@
 package com.tup.buensabor.dtos;
 
+import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoDto;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 

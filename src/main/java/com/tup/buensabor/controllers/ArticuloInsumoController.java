@@ -1,10 +1,13 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
-import com.tup.buensabor.dtos.ArticuloInsumoDto;
+import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoCompleteDto;
+import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoDto;
 import com.tup.buensabor.entities.ArticuloInsumo;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.ArticuloInsumoServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +17,33 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "api/v1/articulos-insumo")
-public class ArticuloInsumoController extends BaseControllerImpl<ArticuloInsumo, ArticuloInsumoServiceImpl> {
+public class ArticuloInsumoController {
+
+    @Autowired
+    private ArticuloInsumoServiceImpl servicio;
+
+    @GetMapping("")
+    public ResponseEntity<?> getAll() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.findAllDto());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOne(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.findByIdDto(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+        }
+    }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> save(@RequestPart("insumo") ArticuloInsumoDto insumo, @RequestParam("imagen") MultipartFile imagen) {
         try {
-            ArticuloInsumo articuloInsumo = servicio.save(insumo, imagen);
+            ArticuloInsumoCompleteDto articuloInsumo = servicio.save(insumo, imagen);
             return ResponseEntity.ok(articuloInsumo);
         } catch (IOException | ServicioException e) {
             e.printStackTrace();
@@ -30,7 +54,7 @@ public class ArticuloInsumoController extends BaseControllerImpl<ArticuloInsumo,
     @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> update(@RequestPart("insumo") ArticuloInsumoDto insumo, @RequestParam("imagen") MultipartFile imagen) {
         try {
-            ArticuloInsumo articuloInsumo = servicio.update(insumo, imagen);
+            ArticuloInsumoCompleteDto articuloInsumo = servicio.update(insumo, imagen);
             return ResponseEntity.ok(articuloInsumo);
         } catch (IOException | ServicioException e) {
             e.printStackTrace();
