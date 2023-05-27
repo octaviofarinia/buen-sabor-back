@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Data
-public class UnidadMedidaDto {
+public class UnidadMedidaDto extends BaseDto {
     private String denominacion;
     private String abreviatura;
 }

@@ -4,6 +4,7 @@ import com.tup.buensabor.dtos.UnidadMedidaDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
 import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
+import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.UnidadMedidaMapper;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.repositories.UnidadMedidaRepository;
@@ -16,26 +17,26 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class UnidadMedidaServiceImpl extends BaseServiceImpl<UnidadMedida, Long> implements UnidadMedidaService {
+public class UnidadMedidaServiceImpl extends BaseServiceImpl<UnidadMedida, UnidadMedidaDto, Long> implements UnidadMedidaService {
 
     @Autowired
     private UnidadMedidaRepository unidadMedidaRepository;
 
     private UnidadMedidaMapper unidadMedidaMapper = UnidadMedidaMapper.getInstance();
 
-    public UnidadMedidaServiceImpl(BaseRepository<UnidadMedida, Long> baseRepository) {
-        super(baseRepository);
+    public UnidadMedidaServiceImpl(BaseRepository<UnidadMedida, Long> baseRepository, BaseMapper<UnidadMedida, UnidadMedidaDto> baseMapper) {
+        super(baseRepository, baseMapper);
     }
 
     @Transactional
-    public UnidadMedida save(UnidadMedidaDto unidadMedidaDto) throws ServicioException {
+    public UnidadMedidaDto save(UnidadMedidaDto unidadMedidaDto) throws ServicioException {
         UnidadMedida unidadMedida = unidadMedidaMapper.toEntity(unidadMedidaDto);
         unidadMedida.setFechaAlta(new Date());
-        return save(unidadMedida);
+        return unidadMedidaMapper.toDTO(save(unidadMedida));
     }
 
     @Transactional
-    public UnidadMedida update(Long id, UnidadMedidaDto unidadMedidaDto) throws ServicioException {
+    public UnidadMedidaDto update(Long id, UnidadMedidaDto unidadMedidaDto) throws ServicioException {
         Optional<UnidadMedida> optionalUnidadMedida = baseRepository.findById(id);
         if(optionalUnidadMedida.isEmpty()) {
             throw new ServicioException("No se encontro la unidad de medida con el id dado.");
@@ -46,7 +47,7 @@ public class UnidadMedidaServiceImpl extends BaseServiceImpl<UnidadMedida, Long>
         unidadMedida.setAbreviatura(unidadMedidaDto.getAbreviatura());
         unidadMedida.setFechaModificacion(new Date());
 
-        return baseRepository.save(unidadMedida);
+        return unidadMedidaMapper.toDTO(baseRepository.save(unidadMedida));
     }
 
     @Transactional

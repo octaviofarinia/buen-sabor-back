@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface UnidadMedidaMapper {
+public interface UnidadMedidaMapper extends BaseMapper<UnidadMedida, UnidadMedidaDto> {
     static UnidadMedidaMapper getInstance() {
         return Mappers.getMapper(UnidadMedidaMapper.class);
     }
