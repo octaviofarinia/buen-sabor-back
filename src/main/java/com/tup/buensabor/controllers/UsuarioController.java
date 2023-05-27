@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "api/v1/usuarios")
-public class UsuarioController extends BaseControllerImpl<Usuario, UsuarioServiceImpl> {
+public class UsuarioController extends BaseControllerImpl<Usuario, UsuarioDto, UsuarioServiceImpl> {
 
     @PostMapping(value = "/post_register_save")
     public ResponseEntity<?> save(@RequestBody() UsuarioDto userDto) {

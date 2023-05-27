@@ -3,8 +3,10 @@ package com.tup.buensabor.services;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
+import com.tup.buensabor.entities.Base;
 import com.tup.buensabor.entities.RubroArticulo;
 import com.tup.buensabor.exceptions.ServicioException;
+import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.RubroArticuloMapper;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.repositories.RubroArticuloRepository;
@@ -19,15 +21,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Long> implements RubroArticuloService {
+public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, RubroArticuloSimpleDto, Long> implements RubroArticuloService {
 
     @Autowired
     private RubroArticuloRepository rubroArticuloRepository;
 
     private RubroArticuloMapper rubroArticuloMapper = RubroArticuloMapper.getInstance();
 
-    public RubroArticuloServiceImpl(BaseRepository<RubroArticulo, Long> baseRepository) {
-        super(baseRepository);
+    public RubroArticuloServiceImpl(BaseRepository<RubroArticulo, Long> baseRepository, BaseMapper<RubroArticulo, RubroArticuloSimpleDto> baseMapper) {
+        super(baseRepository, baseMapper);
     }
 
     @Transactional

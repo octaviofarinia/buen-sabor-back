@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Data
-public class DomicilioDto {
+public class DomicilioDto extends BaseDto {
     private String calle;
     private Integer numero;
     private String localidad;

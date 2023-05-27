@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Data
-public class ArticuloManufacturadoDto {
+public class ArticuloManufacturadoDto extends BaseDto {
     private Long id;
     private String denominacion;
     private String descripcion;

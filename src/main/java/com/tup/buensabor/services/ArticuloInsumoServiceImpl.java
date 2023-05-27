@@ -7,6 +7,7 @@ import com.tup.buensabor.entities.RubroArticulo;
 import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.ArticuloInsumoMapper;
+import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.repositories.ArticuloInsumoRepository;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.services.interfaces.ArticuloInsumoService;
@@ -24,7 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, Long> implements ArticuloInsumoService {
+public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, ArticuloInsumoCompleteDto, Long> implements ArticuloInsumoService {
 
     @Autowired
     private ArticuloInsumoRepository articuloInsumoRepository;
@@ -42,15 +43,15 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, L
 
     private final ArticuloInsumoMapper articuloInsumoMapper = ArticuloInsumoMapper.getInstance();
 
-    public ArticuloInsumoServiceImpl(BaseRepository<ArticuloInsumo, Long> baseRepository) {
-        super(baseRepository);
+    public ArticuloInsumoServiceImpl(BaseRepository<ArticuloInsumo, Long> baseRepository, BaseMapper<ArticuloInsumo, ArticuloInsumoCompleteDto> baseMapper) {
+        super(baseRepository, baseMapper);
     }
 
     @Transactional
     public List<ArticuloInsumoCompleteDto> findAllDto() throws ServicioException {
         try {
             List<ArticuloInsumo> entities = baseRepository.findAll();
-            return articuloInsumoMapper.toCompleteDTOList(entities);
+            return articuloInsumoMapper.toDTOsList(entities);
         }catch (Exception e) {
             throw new ServicioException(e.getMessage());
         }
@@ -64,7 +65,7 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, L
                 throw new ServicioException("No se encontro un insumo con el id seleccionado.");
             }
 
-            return articuloInsumoMapper.toCompleteDTO(optionalArticuloInsumo.get());
+            return articuloInsumoMapper.toDTO(optionalArticuloInsumo.get());
         }catch (Exception e) {
             throw new ServicioException(e.getMessage());
         }
@@ -99,7 +100,7 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, L
 
         articuloInsumo = this.save(articuloInsumo);
 
-        return articuloInsumoMapper.toCompleteDTO(articuloInsumo);
+        return articuloInsumoMapper.toDTO(articuloInsumo);
     }
 
     @Transactional
@@ -141,7 +142,7 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, L
 
         articuloInsumo = this.save(articuloInsumo);
 
-        return articuloInsumoMapper.toCompleteDTO(articuloInsumo);
+        return articuloInsumoMapper.toDTO(articuloInsumo);
     }
 
     public void softDelete(Long id) throws ServicioException {

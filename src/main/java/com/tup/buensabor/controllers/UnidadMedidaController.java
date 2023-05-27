@@ -18,7 +18,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "api/v1/unidades-medida")
-public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, UnidadMedidaServiceImpl> {
+public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, UnidadMedidaDto, UnidadMedidaServiceImpl> {
 
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody UnidadMedidaDto unidadMedidaDto) {

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class FacturaDto {
+public class FacturaDto extends BaseDto {
     private Date fechaFacturacion;
     private Integer numero;
     private BigDecimal montoDescuento;

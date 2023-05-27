@@ -1,11 +1,14 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
+import com.tup.buensabor.dtos.UnidadMedidaDto;
 import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoCompleteDto;
 import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoDto;
 import com.tup.buensabor.entities.ArticuloInsumo;
+import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.ArticuloInsumoServiceImpl;
+import com.tup.buensabor.services.UnidadMedidaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +20,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "api/v1/articulos-insumo")
-public class ArticuloInsumoController {
+public class ArticuloInsumoController extends BaseControllerImpl<ArticuloInsumo, ArticuloInsumoCompleteDto, ArticuloInsumoServiceImpl> {
 
     @Autowired
     private ArticuloInsumoServiceImpl servicio;

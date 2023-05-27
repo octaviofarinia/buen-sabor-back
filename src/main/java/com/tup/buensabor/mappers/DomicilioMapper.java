@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface DomicilioMapper {
+public interface DomicilioMapper extends BaseMapper<Domicilio, DomicilioDto> {
     static DomicilioMapper getInstance() {
         return Mappers.getMapper(DomicilioMapper.class);
     }

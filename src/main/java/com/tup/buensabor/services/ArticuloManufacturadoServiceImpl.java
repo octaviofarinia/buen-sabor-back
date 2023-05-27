@@ -4,6 +4,7 @@ import com.tup.buensabor.dtos.ArticuloManufacturadoDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.ArticuloManufacturadoMapper;
+import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.repositories.ArticuloManufacturadoRepository;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.services.interfaces.ArticuloManufacturadoService;
@@ -18,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloManufacturado, Long> implements ArticuloManufacturadoService {
+public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloManufacturado, ArticuloManufacturadoDto, Long> implements ArticuloManufacturadoService {
 
     @Autowired
     private ArticuloManufacturadoRepository articuloManufacturadoRepository;
@@ -30,8 +31,8 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
     private final ArticuloManufacturadoMapper articuloManufacturadoMapper = ArticuloManufacturadoMapper.getInstance();
 
-    public ArticuloManufacturadoServiceImpl(BaseRepository<ArticuloManufacturado, Long> baseRepository) {
-        super(baseRepository);
+    public ArticuloManufacturadoServiceImpl(BaseRepository<ArticuloManufacturado, Long> baseRepository, BaseMapper<ArticuloManufacturado, ArticuloManufacturadoDto> baseMapper) {
+        super(baseRepository, baseMapper);
     }
 
     @Transactional

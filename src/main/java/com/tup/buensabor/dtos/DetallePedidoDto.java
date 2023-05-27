@@ -6,7 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class DetallePedidoDto {
+public class DetallePedidoDto extends BaseDto {
     private Integer cantidad;
     private BigDecimal subtotal;
     private ArticuloInsumoDto articuloInsumo;

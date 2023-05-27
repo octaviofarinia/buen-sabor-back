@@ -3,6 +3,7 @@ package com.tup.buensabor.services;
 import com.tup.buensabor.dtos.usuario.UsuarioDto;
 import com.tup.buensabor.entities.Usuario;
 import com.tup.buensabor.exceptions.ServicioException;
+import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.UsuarioMapper;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.repositories.UsuarioRepository;
@@ -14,15 +15,15 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class UsuarioServiceImpl extends BaseServiceImpl<Usuario, Long> implements UsuarioService {
+public class UsuarioServiceImpl extends BaseServiceImpl<Usuario, UsuarioDto, Long> implements UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     private UsuarioMapper usuarioMapper = UsuarioMapper.getInstance();
 
-    public UsuarioServiceImpl(BaseRepository<Usuario, Long> baseRepository) {
-        super(baseRepository);
+    public UsuarioServiceImpl(BaseRepository<Usuario, Long> baseRepository, BaseMapper<Usuario, UsuarioDto> baseMapper) {
+        super(baseRepository, baseMapper);
     }
 
     public Usuario save(UsuarioDto userDto) throws ServicioException {

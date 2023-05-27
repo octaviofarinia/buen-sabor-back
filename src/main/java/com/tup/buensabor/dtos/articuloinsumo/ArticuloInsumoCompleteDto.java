@@ -1,5 +1,6 @@
 package com.tup.buensabor.dtos.articuloinsumo;
 
+import com.tup.buensabor.dtos.BaseDto;
 import com.tup.buensabor.dtos.UnidadMedidaDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
 import lombok.Data;
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class ArticuloInsumoCompleteDto {
+public class ArticuloInsumoCompleteDto extends BaseDto {
     private Long id;
     private String denominacion;
     private String urlImagen;

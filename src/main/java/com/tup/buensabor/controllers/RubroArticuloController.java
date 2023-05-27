@@ -2,6 +2,7 @@ package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
+import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.RubroArticuloServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,9 @@ public class RubroArticuloController {
     public ResponseEntity<?> save(@RequestBody RubroArticuloCompleteDto rubroArticulo) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.save(rubroArticulo));
-        } catch (Exception e) {
+        } catch (ServicioException servicioException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(servicioException.getMessage());
+        } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }
@@ -64,7 +67,9 @@ public class RubroArticuloController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RubroArticuloCompleteDto object) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.update(id, object));
-        } catch (Exception e) {
+        } catch (ServicioException servicioException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(servicioException.getMessage());
+        } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }
@@ -73,7 +78,9 @@ public class RubroArticuloController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(servicio.delete(id));
-        } catch (Exception e) {
+        } catch (ServicioException servicioException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(servicioException.getMessage());
+        } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }

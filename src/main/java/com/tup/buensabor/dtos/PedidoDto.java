@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class PedidoDto {
+public class PedidoDto extends BaseDto {
     private Date fechaPedido;
     private Integer numero;
     private Date horaEstimadaFinalizacion;
