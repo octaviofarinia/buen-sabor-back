@@ -1,9 +1,8 @@
 package com.tup.buensabor.mappers;
 
-import com.tup.buensabor.dtos.DetalleArticuloManufacturadoDto;
-import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
+import com.tup.buensabor.dtos.detallearticulomanufacturado.DetalleArticuloManufacturadoDto;
+import com.tup.buensabor.dtos.detallearticulomanufacturado.DetalleArticuloManufacturadoSimpleDto;
 import com.tup.buensabor.entities.DetalleArticuloManufacturado;
-import com.tup.buensabor.entities.RubroArticulo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -17,6 +16,8 @@ public interface DetalleArticuloManufacturadoMapper extends BaseMapper<DetalleAr
 
     DetalleArticuloManufacturadoDto toDTO(DetalleArticuloManufacturado source);
     DetalleArticuloManufacturado toEntity(DetalleArticuloManufacturadoDto source);
+
+    DetalleArticuloManufacturado toEntity(DetalleArticuloManufacturadoSimpleDto source);
 
     List<DetalleArticuloManufacturadoDto> toDTOsList(List<DetalleArticuloManufacturado> source);
     List<DetalleArticuloManufacturado> toEntitiesList(List<DetalleArticuloManufacturadoDto> source);

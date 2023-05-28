@@ -4,8 +4,6 @@ import com.tup.buensabor.dtos.usuario.ClienteDto;
 import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.enums.TipoEnvio;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;

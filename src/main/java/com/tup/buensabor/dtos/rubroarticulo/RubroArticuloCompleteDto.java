@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class RubroArticuloCompleteDto extends BaseDto {
-    private Long id;
     private RubroArticuloSimpleDto rubroPadre;
     private Long idRubroPadre;
     private String denominacion;

@@ -3,11 +3,8 @@ package com.tup.buensabor.controllers;
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
 import com.tup.buensabor.dtos.ArticuloManufacturadoDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
-import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.ArticuloManufacturadoServiceImpl;
-import com.tup.buensabor.services.UnidadMedidaServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +27,7 @@ public class ArticuloManufacturadoController extends BaseControllerImpl<Articulo
         }
     }
 
-    @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> update(@RequestPart("producto") ArticuloManufacturadoDto producto, @RequestParam("imagen") MultipartFile imagen) {
         try {
             ArticuloManufacturado articuloManufacturado = servicio.update(producto, imagen);

@@ -5,7 +5,6 @@ import com.tup.buensabor.dtos.usuario.UsuarioDto;
 import com.tup.buensabor.entities.Usuario;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.UsuarioServiceImpl;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

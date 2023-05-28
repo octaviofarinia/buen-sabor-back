@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -45,30 +44,6 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
 
     public ArticuloInsumoServiceImpl(BaseRepository<ArticuloInsumo, Long> baseRepository, BaseMapper<ArticuloInsumo, ArticuloInsumoCompleteDto> baseMapper) {
         super(baseRepository, baseMapper);
-    }
-
-    @Transactional
-    public List<ArticuloInsumoCompleteDto> findAllDto() throws ServicioException {
-        try {
-            List<ArticuloInsumo> entities = baseRepository.findAll();
-            return articuloInsumoMapper.toDTOsList(entities);
-        }catch (Exception e) {
-            throw new ServicioException(e.getMessage());
-        }
-    }
-
-    @Transactional
-    public ArticuloInsumoCompleteDto findByIdDto(Long id) throws ServicioException {
-        try {
-            Optional<ArticuloInsumo> optionalArticuloInsumo = articuloInsumoRepository.findById(id);
-            if(optionalArticuloInsumo.isEmpty()) {
-                throw new ServicioException("No se encontro un insumo con el id seleccionado.");
-            }
-
-            return articuloInsumoMapper.toDTO(optionalArticuloInsumo.get());
-        }catch (Exception e) {
-            throw new ServicioException(e.getMessage());
-        }
     }
 
     @Transactional

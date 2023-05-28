@@ -1,11 +1,8 @@
 package com.tup.buensabor.dtos.usuario;
 
 import com.tup.buensabor.dtos.BaseDto;
-import com.tup.buensabor.enums.Rol;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class UsuarioDto extends BaseDto {

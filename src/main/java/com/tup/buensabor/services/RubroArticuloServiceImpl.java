@@ -1,9 +1,7 @@
 package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
-import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
-import com.tup.buensabor.entities.Base;
 import com.tup.buensabor.entities.RubroArticulo;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
@@ -26,7 +24,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Rub
     @Autowired
     private RubroArticuloRepository rubroArticuloRepository;
 
-    private RubroArticuloMapper rubroArticuloMapper = RubroArticuloMapper.getInstance();
+    private final RubroArticuloMapper rubroArticuloMapper = RubroArticuloMapper.getInstance();
 
     public RubroArticuloServiceImpl(BaseRepository<RubroArticulo, Long> baseRepository, BaseMapper<RubroArticulo, RubroArticuloSimpleDto> baseMapper) {
         super(baseRepository, baseMapper);
@@ -86,7 +84,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Rub
 
             Optional<RubroArticulo> entityOptional = baseRepository.findById(id);
 
-            if(!entityOptional.isPresent()) {
+            if(entityOptional.isEmpty()) {
                 throw new ServicioException("No se encontro la entidad con el id dado.");
             }
 

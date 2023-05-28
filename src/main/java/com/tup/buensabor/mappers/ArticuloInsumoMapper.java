@@ -2,9 +2,7 @@ package com.tup.buensabor.mappers;
 
 import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoCompleteDto;
 import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoDto;
-import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
 import com.tup.buensabor.entities.ArticuloInsumo;
-import com.tup.buensabor.entities.RubroArticulo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

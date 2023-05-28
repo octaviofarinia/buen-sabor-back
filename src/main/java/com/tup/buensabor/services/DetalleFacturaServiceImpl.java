@@ -16,7 +16,7 @@ public class DetalleFacturaServiceImpl extends BaseServiceImpl<DetalleFactura, D
     @Autowired
     private DetalleFacturaRepository detalleFacturaRepository;
 
-    private DetalleFacturaMapper detalleFacturaMapper = DetalleFacturaMapper.getInstance();
+    private final DetalleFacturaMapper detalleFacturaMapper = DetalleFacturaMapper.getInstance();
 
     public DetalleFacturaServiceImpl(BaseRepository<DetalleFactura, Long> baseRepository, BaseMapper<DetalleFactura, DetalleFacturaDto> baseMapper) {
         super(baseRepository, baseMapper);

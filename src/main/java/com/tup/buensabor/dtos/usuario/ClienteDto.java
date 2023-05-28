@@ -1,10 +1,7 @@
 package com.tup.buensabor.dtos.usuario;
 
 import com.tup.buensabor.dtos.BaseDto;
-import com.tup.buensabor.dtos.usuario.UsuarioDto;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 

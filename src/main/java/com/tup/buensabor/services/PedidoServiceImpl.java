@@ -16,7 +16,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    private PedidoMapper pedidoMapper = PedidoMapper.getInstance();
+    private final PedidoMapper pedidoMapper = PedidoMapper.getInstance();
 
     public PedidoServiceImpl(BaseRepository<Pedido, Long> baseRepository, BaseMapper<Pedido, PedidoDto> baseMapper) {
         super(baseRepository, baseMapper);

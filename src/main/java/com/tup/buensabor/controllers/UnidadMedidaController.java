@@ -1,20 +1,12 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
-import com.tup.buensabor.dtos.ArticuloManufacturadoDto;
 import com.tup.buensabor.dtos.UnidadMedidaDto;
-import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
-import com.tup.buensabor.entities.ArticuloManufacturado;
 import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.UnidadMedidaServiceImpl;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping(path = "api/v1/unidades-medida")

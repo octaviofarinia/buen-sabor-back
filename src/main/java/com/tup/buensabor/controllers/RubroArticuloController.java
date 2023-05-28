@@ -1,7 +1,6 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
-import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.RubroArticuloServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

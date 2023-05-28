@@ -1,6 +1,5 @@
 package com.tup.buensabor.entities;
 
-import com.tup.buensabor.enums.Rol;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
