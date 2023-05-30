@@ -56,10 +56,6 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
     @Transactional
     public ArticuloManufacturado update(ArticuloManufacturadoDto articuloManufacturadoDto, MultipartFile imagen) throws IOException, ServicioException {
-        if (imagen.isEmpty()) {
-            throw new ServicioException("Debe seleccionar una imagen para el producto.");
-        }
-
         if (articuloManufacturadoDto.getId() == null || articuloManufacturadoDto.getId() <= 0) {
             throw new ServicioException("El campo id es obligatorio y mayor a cero.");
         }
@@ -76,10 +72,12 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         articuloManufacturado.setFechaModificacion(new Date());
         articuloManufacturado = this.save(articuloManufacturado);
 
-        Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloManufacturado.getId(), CLOUDINARY_FOLDER);
-        articuloManufacturado.setUrlImagen((String) uploadData.get("url"));
+        if(imagen != null) {
+            Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloManufacturado.getId(), CLOUDINARY_FOLDER);
+            articuloManufacturado.setUrlImagen((String) uploadData.get("url"));
 
-        articuloManufacturado = this.save(articuloManufacturado);
+            articuloManufacturado = this.save(articuloManufacturado);
+        }
 
         return articuloManufacturado;
     }

@@ -29,7 +29,7 @@ public class ArticuloInsumoController extends BaseControllerImpl<ArticuloInsumo,
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> update(@RequestPart("insumo") ArticuloInsumoDto insumo, @RequestParam("imagen") MultipartFile imagen) {
+    public ResponseEntity<?> update(@RequestPart("insumo") ArticuloInsumoDto insumo, @RequestParam(value = "imagen", required = false) MultipartFile imagen) {
         try {
             ArticuloInsumoCompleteDto articuloInsumo = servicio.update(insumo, imagen);
             return ResponseEntity.ok(articuloInsumo);

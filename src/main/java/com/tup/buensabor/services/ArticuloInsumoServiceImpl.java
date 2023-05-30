@@ -80,10 +80,6 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
 
     @Transactional
     public ArticuloInsumoCompleteDto update(ArticuloInsumoDto articuloInsumoDto, MultipartFile imagen) throws IOException, ServicioException {
-        if (imagen.isEmpty()) {
-            throw new ServicioException("Debe seleccionar una imagen para el insumo.");
-        }
-
         if (articuloInsumoDto.getId() == null || articuloInsumoDto.getId() <= 0) {
             throw new ServicioException("El campo id es obligatorio y mayor a cero.");
         }
@@ -112,10 +108,12 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
 
         articuloInsumo = this.save(articuloInsumo);
 
-        Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloInsumo.getId(), CLOUDINARY_FOLDER);
-        articuloInsumo.setUrlImagen((String) uploadData.get("url"));
+        if(imagen != null) {
+            Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloInsumo.getId(), CLOUDINARY_FOLDER);
+            articuloInsumo.setUrlImagen((String) uploadData.get("url"));
 
-        articuloInsumo = this.save(articuloInsumo);
+            articuloInsumo = this.save(articuloInsumo);
+        }
 
         return articuloInsumoMapper.toDTO(articuloInsumo);
     }

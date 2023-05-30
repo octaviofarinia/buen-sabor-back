@@ -28,7 +28,7 @@ public class ArticuloManufacturadoController extends BaseControllerImpl<Articulo
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> update(@RequestPart("producto") ArticuloManufacturadoDto producto, @RequestParam("imagen") MultipartFile imagen) {
+    public ResponseEntity<?> update(@RequestPart("producto") ArticuloManufacturadoDto producto, @RequestParam(value = "imagen", required = false) MultipartFile imagen) {
         try {
             ArticuloManufacturado articuloManufacturado = servicio.update(producto, imagen);
             return ResponseEntity.ok(articuloManufacturado);
