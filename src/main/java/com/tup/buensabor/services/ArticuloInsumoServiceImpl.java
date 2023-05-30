@@ -89,8 +89,8 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
             throw new ServicioException("No existe un insumo con el id seleccionado.");
         }
 
-        ArticuloInsumo articuloInsumo = optionalArticuloInsumo.get();
-        articuloInsumo.setDenominacion(articuloInsumoDto.getDenominacion());
+        ArticuloInsumo articuloInsumo = articuloInsumoMapper.toEntity(articuloInsumoDto);
+        articuloInsumo.setFechaAlta(optionalArticuloInsumo.get().getFechaAlta());
         articuloInsumo.setFechaModificacion(new Date());
 
         Optional<RubroArticulo> optionalRubroArticulo = rubroArticuloService.findOptionalById(articuloInsumoDto.getIdRubroArticulo());
