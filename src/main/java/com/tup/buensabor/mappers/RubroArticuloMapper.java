@@ -22,7 +22,8 @@ public interface RubroArticuloMapper extends BaseMapper<RubroArticulo, RubroArti
     @Mapping(source = "source.id", target = "id")
     RubroArticuloCompleteDto toCompleteDTO(RubroArticulo source);
 
-    List<RubroArticuloSimpleDto> toSimpleDTOList(List<RubroArticulo> source);
+
+    List<RubroArticuloCompleteDto> toCompleteDTOList(List<RubroArticulo> source);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "source.rubroPadre.id", target = "idRubroPadre")
