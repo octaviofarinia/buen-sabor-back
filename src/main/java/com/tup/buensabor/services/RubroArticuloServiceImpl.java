@@ -71,8 +71,8 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Rub
         return dtoList;
     }
 
-    public List<RubroArticuloSimpleDto> getAllSimple() {
-        return rubroArticuloMapper.toSimpleDTOList(rubroArticuloRepository.getAll());
+    public List<RubroArticuloCompleteDto> getAllSimple() {
+        return rubroArticuloMapper.toCompleteDTOList(rubroArticuloRepository.getAll());
     }
 
     @Transactional
