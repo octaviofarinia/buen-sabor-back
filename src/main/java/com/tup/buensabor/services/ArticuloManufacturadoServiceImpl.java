@@ -72,7 +72,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         articuloManufacturado.setFechaModificacion(new Date());
         articuloManufacturado = this.save(articuloManufacturado);
 
-        if(imagen != null) {
+        if(imagen != null && !imagen.isEmpty()) {
             Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloManufacturado.getId(), CLOUDINARY_FOLDER);
             articuloManufacturado.setUrlImagen((String) uploadData.get("url"));
 

@@ -108,7 +108,7 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
 
         articuloInsumo = this.save(articuloInsumo);
 
-        if(imagen != null) {
+        if(imagen != null && !imagen.isEmpty()) {
             Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloInsumo.getId(), CLOUDINARY_FOLDER);
             articuloInsumo.setUrlImagen((String) uploadData.get("url"));
 
