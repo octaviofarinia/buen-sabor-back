@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,6 +39,15 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
 
     public DetalleArticuloManufacturadoServiceImpl(BaseRepository<DetalleArticuloManufacturado, Long> baseRepository, BaseMapper<DetalleArticuloManufacturado, DetalleArticuloManufacturadoDto> baseMapper) {
         super(baseRepository, baseMapper);
+    }
+
+    public List<DetalleArticuloManufacturadoDto> getByIdArticuloManufacturado(Long id) throws ServicioException {
+        Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoService.findOptionalById(id);
+        if(optionalArticuloManufacturado.isEmpty()) {
+            throw new ServicioException("No existe un producto con el id seleccionado.");
+        }
+
+        return detalleArticuloManufacturadoMapper.toDTOsList(detalleArticuloManufacturadoRepository.getByIdArticuloManufacturado(id));
     }
 
     @Transactional
