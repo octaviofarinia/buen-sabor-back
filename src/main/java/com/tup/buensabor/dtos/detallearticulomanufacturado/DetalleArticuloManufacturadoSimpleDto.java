@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Data
 public class DetalleArticuloManufacturadoSimpleDto extends BaseDto {
     private BigDecimal cantidad;
-    private Long idUnidadMedida;
     private Long idArticuloInsumo;
     private Long idArticuloManufacturado;
 }

@@ -5,7 +5,6 @@ import com.tup.buensabor.dtos.detallearticulomanufacturado.DetalleArticuloManufa
 import com.tup.buensabor.entities.ArticuloInsumo;
 import com.tup.buensabor.entities.ArticuloManufacturado;
 import com.tup.buensabor.entities.DetalleArticuloManufacturado;
-import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.DetalleArticuloManufacturadoMapper;
@@ -52,11 +51,6 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
 
     @Transactional
     public DetalleArticuloManufacturadoDto save(DetalleArticuloManufacturadoSimpleDto detalleArticuloManufacturadoDto) throws IOException, ServicioException {
-        Optional<UnidadMedida> optionalUnidadMedida = unidadMedidaService.findOptionalById(detalleArticuloManufacturadoDto.getIdUnidadMedida());
-        if(optionalUnidadMedida.isEmpty()) {
-            throw new ServicioException("No se encontro la unidad de medida seleccionada.");
-        }
-
         Optional<ArticuloInsumo> optionalArticuloInsumo = articuloInsumoService.findOptionalById(detalleArticuloManufacturadoDto.getIdArticuloInsumo());
         if(optionalArticuloInsumo.isEmpty()) {
             throw new ServicioException("No se encontro el articulo seleccionado.");
@@ -69,7 +63,6 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
 
         DetalleArticuloManufacturado detalleArticuloManufacturado = detalleArticuloManufacturadoMapper.toEntity(detalleArticuloManufacturadoDto);
 
-        detalleArticuloManufacturado.setUnidadMedida(optionalUnidadMedida.get());
         detalleArticuloManufacturado.setArticuloInsumo(optionalArticuloInsumo.get());
         detalleArticuloManufacturado.setArticuloManufacturado(optionalArticuloManufacturado.get());
 
@@ -87,11 +80,6 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
             throw new ServicioException("No existe un detalle de articulo manufacturado con el id seleccionado.");
         }
 
-        Optional<UnidadMedida> optionalUnidadMedida = unidadMedidaService.findOptionalById(detalleArticuloManufacturadoDto.getIdUnidadMedida());
-        if(optionalUnidadMedida.isEmpty()) {
-            throw new ServicioException("No se encontro la unidad de medida seleccionada.");
-        }
-
         Optional<ArticuloInsumo> optionalArticuloInsumo = articuloInsumoService.findOptionalById(detalleArticuloManufacturadoDto.getIdArticuloInsumo());
         if(optionalArticuloInsumo.isEmpty()) {
             throw new ServicioException("No se encontro el articulo seleccionado.");
@@ -105,7 +93,6 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
         DetalleArticuloManufacturado detalleArticuloManufacturado = optionalDetalleArticuloManufacturado.get();
 
         detalleArticuloManufacturado.setCantidad(detalleArticuloManufacturadoDto.getCantidad());
-        detalleArticuloManufacturado.setUnidadMedida(optionalUnidadMedida.get());
         detalleArticuloManufacturado.setArticuloInsumo(optionalArticuloInsumo.get());
         detalleArticuloManufacturado.setArticuloManufacturado(optionalArticuloManufacturado.get());
 
