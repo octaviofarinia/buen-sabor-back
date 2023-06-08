@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface PedidoMapper {
+public interface PedidoMapper extends BaseMapper<Pedido, PedidoDto> {
     static PedidoMapper getInstance() {
         return Mappers.getMapper(PedidoMapper.class);
     }

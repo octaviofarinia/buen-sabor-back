@@ -1,6 +1,7 @@
 package com.tup.buensabor.controllers;
 
-import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
+import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
+import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.RubroArticuloServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,12 @@ public class RubroArticuloController {
     private RubroArticuloServiceImpl servicio;
 
     @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody RubroArticuloSimpleDto rubroArticulo) {
+    public ResponseEntity<?> save(@RequestBody RubroArticuloCompleteDto rubroArticulo) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.save(rubroArticulo));
-        } catch (Exception e) {
+        } catch (ServicioException servicioException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(servicioException.getMessage());
+        } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }
@@ -44,7 +47,7 @@ public class RubroArticuloController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.getOneSimple(id));
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.getOne(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
@@ -53,17 +56,19 @@ public class RubroArticuloController {
     @GetMapping("/{id}/complete")
     public ResponseEntity<?> getOneComplete(@PathVariable Long id) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.getOne(id));
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.getOneComplete(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RubroArticuloSimpleDto object) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RubroArticuloCompleteDto object) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.update(id, object));
-        } catch (Exception e) {
+        } catch (ServicioException servicioException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(servicioException.getMessage());
+        } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }
@@ -72,7 +77,9 @@ public class RubroArticuloController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(servicio.delete(id));
-        } catch (Exception e) {
+        } catch (ServicioException servicioException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(servicioException.getMessage());
+        } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }

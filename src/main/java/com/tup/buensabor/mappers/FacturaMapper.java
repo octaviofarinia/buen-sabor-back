@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface FacturaMapper {
+public interface FacturaMapper extends BaseMapper<Factura, FacturaDto> {
     static FacturaMapper getInstance() {
         return Mappers.getMapper(FacturaMapper.class);
     }

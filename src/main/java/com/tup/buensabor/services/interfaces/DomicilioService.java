@@ -1,7 +1,7 @@
 package com.tup.buensabor.services.interfaces;
 
+import com.tup.buensabor.dtos.DomicilioDto;
 import com.tup.buensabor.entities.Domicilio;
-import com.tup.buensabor.entities.RubroArticulo;
 
-public interface DomicilioService extends BaseService<Domicilio, Long> {
+public interface DomicilioService extends BaseService<Domicilio, DomicilioDto, Long> {
 }

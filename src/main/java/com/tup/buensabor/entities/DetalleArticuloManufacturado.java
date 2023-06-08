@@ -23,11 +23,6 @@ public class DetalleArticuloManufacturado extends Base {
 
     @NotNull
     @ManyToOne()
-    @JoinColumn(name = "id_unidad_medida")
-    private UnidadMedida unidadMedida;
-
-    @NotNull
-    @ManyToOne()
     @JoinColumn(name = "id_articulo_insumo")
     private ArticuloInsumo articuloInsumo;
 

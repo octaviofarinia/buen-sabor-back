@@ -1,8 +1,11 @@
 package com.tup.buensabor.dtos;
 
-import com.tup.buensabor.entities.Base;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-public class UnidadMedidaDto {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class UnidadMedidaDto extends BaseDto {
     private String denominacion;
     private String abreviatura;
 }

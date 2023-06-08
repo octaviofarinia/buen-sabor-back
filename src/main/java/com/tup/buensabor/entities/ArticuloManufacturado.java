@@ -2,11 +2,9 @@ package com.tup.buensabor.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -15,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ArticuloManufacturado extends Base {
 
     @NotNull
@@ -27,6 +26,16 @@ public class ArticuloManufacturado extends Base {
     @NotNull
     @Column(name = "tiempo_estimado_cocina")
     private Integer tiempoEstimadoCocina;
+
+    @NotNull
+    @Column(name = "precio_venta", precision = 10, scale = 2)
+    private BigDecimal precioVenta;
+
+    @Column(name = "costo", precision = 10, scale = 2)
+    private BigDecimal costo;
+
+    @Column(length = 500, name = "url_imagen")
+    private String urlImagen;
 
     @NotNull
     @Column(name = "fecha_alta")

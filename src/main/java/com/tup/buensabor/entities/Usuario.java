@@ -1,6 +1,5 @@
 package com.tup.buensabor.entities;
 
-import com.tup.buensabor.enums.Rol;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,21 +10,24 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity
-@Table(name = "usuario")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "usuario", uniqueConstraints = { @UniqueConstraint(columnNames = { "auth0_id", "identity_provider" }) })
 public class Usuario extends Base {
 
     @NotNull
-    @Column(name = "usuario", nullable = false)
-    private String usuario;
+    @Column(name = "auth0_id", nullable = false)
+    private String auth0Identifier;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "rol", nullable = false)
-    private Rol rol;
+    @Column(name = "identity_provider", nullable = false)
+    private String identityProvider;
+
+    @NotNull
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @NotNull
     @Column(name = "fecha_alta")

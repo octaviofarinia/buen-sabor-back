@@ -1,9 +1,10 @@
 package com.tup.buensabor.services;
 
-import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloDto;
+import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
 import com.tup.buensabor.entities.RubroArticulo;
 import com.tup.buensabor.exceptions.ServicioException;
+import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.RubroArticuloMapper;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.repositories.RubroArticuloRepository;
@@ -18,49 +19,49 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Long> implements RubroArticuloService {
+public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, RubroArticuloSimpleDto, Long> implements RubroArticuloService {
 
     @Autowired
     private RubroArticuloRepository rubroArticuloRepository;
 
-    private RubroArticuloMapper rubroArticuloMapper = RubroArticuloMapper.getInstance();
+    private final RubroArticuloMapper rubroArticuloMapper = RubroArticuloMapper.getInstance();
 
-    public RubroArticuloServiceImpl(BaseRepository<RubroArticulo, Long> baseRepository) {
-        super(baseRepository);
+    public RubroArticuloServiceImpl(BaseRepository<RubroArticulo, Long> baseRepository, BaseMapper<RubroArticulo, RubroArticuloSimpleDto> baseMapper) {
+        super(baseRepository, baseMapper);
     }
 
     @Transactional
-    public RubroArticuloSimpleDto save(RubroArticuloSimpleDto rubroDto) throws Exception {
+    public RubroArticuloCompleteDto save(RubroArticuloCompleteDto rubroDto) throws Exception {
         if(rubroDto.getIdRubroPadre() != null) {
             if(baseRepository.existsById(rubroDto.getIdRubroPadre())) {
                 RubroArticulo entity = new RubroArticulo(rubroDto.getDenominacion(), rubroArticuloRepository.findById(rubroDto.getIdRubroPadre()).get());
                 entity.setFechaAlta(new Date());
                 RubroArticulo entityPersisted = rubroArticuloRepository.save(entity);
-                return rubroArticuloMapper.toSimpleDTO(entityPersisted);
+                return rubroArticuloMapper.toCompleteDTO(entityPersisted);
             } else {
                 throw new ServicioException("No existe un RubroArticulo con id " + rubroDto.getIdRubroPadre());
             }
         } else {
             RubroArticulo entity = new RubroArticulo(rubroDto.getDenominacion(), null);
             entity.setFechaAlta(new Date());
-            return rubroArticuloMapper.toSimpleDTO(rubroArticuloRepository.save(entity));
+            return rubroArticuloMapper.toCompleteDTO(rubroArticuloRepository.save(entity));
         }
     }
 
-    public RubroArticuloDto getOne(Long id) {
+    public RubroArticuloCompleteDto getOne(Long id) {
         RubroArticulo entity = rubroArticuloRepository.findById(id).get();
-        RubroArticuloDto dto = rubroArticuloMapper.toRubroArticuloDTO(entity);
+        RubroArticuloCompleteDto dto = rubroArticuloMapper.toRubroArticuloDTO(entity);
         return dto;
     }
 
-    public RubroArticuloSimpleDto getOneSimple(Long id) {
+    public RubroArticuloCompleteDto getOneComplete(Long id) {
         RubroArticulo entity = rubroArticuloRepository.findById(id).get();
-        RubroArticuloSimpleDto dto = rubroArticuloMapper.toSimpleDTO(entity);
+        RubroArticuloCompleteDto dto = rubroArticuloMapper.toCompleteDTO(entity);
         return dto;
     }
 
-    public List<RubroArticuloDto> getAllParents() {
-        List<RubroArticuloDto> dtoList = new ArrayList<RubroArticuloDto>();
+    public List<RubroArticuloCompleteDto> getAllParents() {
+        List<RubroArticuloCompleteDto> dtoList = new ArrayList<RubroArticuloCompleteDto>();
         List<RubroArticulo> parentsList = rubroArticuloRepository.getAllParents();
 
         for (RubroArticulo rubroEntity : parentsList) {
@@ -70,12 +71,12 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
         return dtoList;
     }
 
-    public List<RubroArticuloSimpleDto> getAllSimple() {
-        return rubroArticuloMapper.toSimpleDTOList(rubroArticuloRepository.getAll());
+    public List<RubroArticuloCompleteDto> getAllSimple() {
+        return rubroArticuloMapper.toCompleteDTOList(rubroArticuloRepository.getAll());
     }
 
     @Transactional
-    public RubroArticuloSimpleDto update(Long id, RubroArticuloSimpleDto rubroDto) throws ServicioException {
+    public RubroArticuloCompleteDto update(Long id, RubroArticuloCompleteDto rubroDto) throws ServicioException {
         try {
             if (rubroDto.getId() == null) {
                 throw new ServicioException("La entidad a modificar debe contener un Id.");
@@ -83,7 +84,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
 
             Optional<RubroArticulo> entityOptional = baseRepository.findById(id);
 
-            if(!entityOptional.isPresent()) {
+            if(entityOptional.isEmpty()) {
                 throw new ServicioException("No se encontro la entidad con el id dado.");
             }
 
@@ -95,12 +96,14 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Lon
                 } else {
                     throw new ServicioException("No existe un RubroArticulo con id " + rubroDto.getIdRubroPadre());
                 }
+            }else{
+                entityDB.setRubroPadre(null);
             }
 
             entityDB.setDenominacion(rubroDto.getDenominacion());
             entityDB.setFechaModificacion(new Date());
 
-            return rubroArticuloMapper.toSimpleDTO(rubroArticuloRepository.save(entityDB));
+            return rubroArticuloMapper.toCompleteDTO(rubroArticuloRepository.save(entityDB));
         }catch (Exception e) {
             e.printStackTrace();
             throw new ServicioException(e.getMessage());

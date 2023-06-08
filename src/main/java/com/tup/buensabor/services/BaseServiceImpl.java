@@ -1,7 +1,9 @@
 package com.tup.buensabor.services;
 
+import com.tup.buensabor.dtos.BaseDto;
 import com.tup.buensabor.entities.Base;
 import com.tup.buensabor.exceptions.ServicioException;
+import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.services.interfaces.BaseService;
 import jakarta.transaction.Transactional;
@@ -10,24 +12,35 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> implements BaseService<E, ID> {
+public abstract class BaseServiceImpl<E extends Base, D extends BaseDto, ID extends Serializable> implements BaseService<E, D, ID> {
     protected BaseRepository<E, ID> baseRepository;
 
-    public BaseServiceImpl(BaseRepository<E, ID> baseRepository) {
+    protected BaseMapper<E, D> baseMapper;
+
+    public BaseServiceImpl(BaseRepository<E, ID> baseRepository, BaseMapper<E, D> baseMapper) {
         this.baseRepository = baseRepository;
+        this.baseMapper = baseMapper;
     }
 
     @Override
     @Transactional
-    public List<E> findAll() throws ServicioException {
+    public List<D> findAll() throws ServicioException {
         try {
             List<E> entities = baseRepository.findAll();
-            return entities;
+            return baseMapper.toDTOsList(entities);
+        }catch (Exception e) {
+            throw new ServicioException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public Optional<E> findOptionalById(ID id) throws ServicioException {
+        try {
+            return baseRepository.findById(id);
         }catch (Exception e) {
             throw new ServicioException(e.getMessage());
         }
@@ -35,10 +48,9 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
 
     @Override
     @Transactional
-    public E findById(ID id) throws ServicioException {
+    public D findById(ID id) throws ServicioException {
         try {
-            Optional<E> entityOptional = baseRepository.findById(id);
-            return entityOptional.get();
+            return baseMapper.toDTO(baseRepository.findById(id).get());
         }catch (Exception e) {
             throw new ServicioException(e.getMessage());
         }
@@ -65,12 +77,11 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
 
             Optional<E> entityOptional = baseRepository.findById(id);
 
-            if(!entityOptional.isPresent()) {
+            if(entityOptional.isEmpty()) {
                 throw new ServicioException("No se encontro la entidad con el id dado.");
             }
 
-            E entityDB = baseRepository.save(entity);
-            return entityDB;
+            return baseRepository.save(entity);
         }catch (Exception e) {
             throw new ServicioException(e.getMessage());
         }
@@ -78,7 +89,7 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
 
     @Override
     @Transactional
-    public boolean delete(ID id) throws ServicioException {
+    public boolean hardDelete(ID id) throws ServicioException {
         try {
             if (baseRepository.existsById(id)) {
                 baseRepository.deleteById(id);
@@ -95,8 +106,7 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
     @Transactional
     public Page<E> findAll(Pageable pageable) throws ServicioException {
         try {
-            Page<E> entities = baseRepository.findAll(pageable);
-            return entities;
+            return baseRepository.findAll(pageable);
         }catch (Exception e) {
             throw new ServicioException(e.getMessage());
         }
