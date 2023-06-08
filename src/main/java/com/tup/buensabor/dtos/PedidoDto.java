@@ -4,11 +4,13 @@ import com.tup.buensabor.dtos.usuario.ClienteDto;
 import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.enums.TipoEnvio;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class PedidoDto extends BaseDto {
     private Date fechaPedido;
     private Integer numero;

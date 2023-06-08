@@ -29,10 +29,6 @@ public class ArticuloInsumo extends Base {
     private BigDecimal precioCompra;
 
     @NotNull
-    @Column(name = "precio_venta", precision = 10, scale = 2)
-    private BigDecimal precioVenta;
-
-    @NotNull
     @Column(name = "stock_actual", precision = 10, scale = 2)
     private BigDecimal stockActual;
 

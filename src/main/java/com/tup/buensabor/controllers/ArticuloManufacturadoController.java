@@ -34,7 +34,7 @@ public class ArticuloManufacturadoController extends BaseControllerImpl<Articulo
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> save(@RequestPart("producto") ArticuloManufacturadoDto producto, @RequestParam("imagen") MultipartFile imagen) {
         try {
-            ArticuloManufacturado articuloManufacturado = servicio.save(producto, imagen);
+            ArticuloManufacturadoDto articuloManufacturado = servicio.save(producto, imagen);
             return ResponseEntity.ok(articuloManufacturado);
         } catch (IOException | ServicioException e) {
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class ArticuloManufacturadoController extends BaseControllerImpl<Articulo
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> update(@RequestPart("producto") ArticuloManufacturadoDto producto, @RequestParam(value = "imagen", required = false) MultipartFile imagen) {
         try {
-            ArticuloManufacturado articuloManufacturado = servicio.update(producto, imagen);
+            ArticuloManufacturadoDto articuloManufacturado = servicio.update(producto, imagen);
             return ResponseEntity.ok(articuloManufacturado);
         } catch (IOException | ServicioException e) {
             e.printStackTrace();

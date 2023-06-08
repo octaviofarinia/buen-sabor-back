@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -25,6 +26,13 @@ public class ArticuloManufacturado extends Base {
     @NotNull
     @Column(name = "tiempo_estimado_cocina")
     private Integer tiempoEstimadoCocina;
+
+    @NotNull
+    @Column(name = "precio_venta", precision = 10, scale = 2)
+    private BigDecimal precioVenta;
+
+    @Column(name = "costo", precision = 10, scale = 2)
+    private BigDecimal costo;
 
     @Column(length = 500, name = "url_imagen")
     private String urlImagen;

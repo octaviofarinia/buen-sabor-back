@@ -36,7 +36,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
     }
 
     @Transactional
-    public ArticuloManufacturado save(ArticuloManufacturadoDto articuloManufacturadoDto, MultipartFile imagen) throws IOException, ServicioException {
+    public ArticuloManufacturadoDto save(ArticuloManufacturadoDto articuloManufacturadoDto, MultipartFile imagen) throws IOException, ServicioException {
         if (imagen.isEmpty()) {
             throw new ServicioException("Debe seleccionar una imagen para el producto");
         }
@@ -51,11 +51,11 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
         articuloManufacturado = this.save(articuloManufacturado);
 
-        return articuloManufacturado;
+        return articuloManufacturadoMapper.toDTO(articuloManufacturado);
     }
 
     @Transactional
-    public ArticuloManufacturado update(ArticuloManufacturadoDto articuloManufacturadoDto, MultipartFile imagen) throws IOException, ServicioException {
+    public ArticuloManufacturadoDto update(ArticuloManufacturadoDto articuloManufacturadoDto, MultipartFile imagen) throws IOException, ServicioException {
         if (articuloManufacturadoDto.getId() == null || articuloManufacturadoDto.getId() <= 0) {
             throw new ServicioException("El campo id es obligatorio y mayor a cero.");
         }
@@ -69,6 +69,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         articuloManufacturado.setDenominacion(articuloManufacturadoDto.getDenominacion());
         articuloManufacturado.setDescripcion(articuloManufacturadoDto.getDescripcion());
         articuloManufacturado.setTiempoEstimadoCocina(articuloManufacturadoDto.getTiempoEstimadoCocina());
+        articuloManufacturado.setPrecioVenta(articuloManufacturadoDto.getPrecioVenta());
         articuloManufacturado.setFechaModificacion(new Date());
         articuloManufacturado = this.save(articuloManufacturado);
 
@@ -79,7 +80,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
             articuloManufacturado = this.save(articuloManufacturado);
         }
 
-        return articuloManufacturado;
+        return articuloManufacturadoMapper.toDTO(articuloManufacturado);
     }
 
     public void softDelete(Long id) throws ServicioException {
