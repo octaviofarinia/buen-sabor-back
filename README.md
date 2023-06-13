@@ -4,7 +4,7 @@ Los clientes tienen a disposición un menú que describe para cada una de las co
 
 Este proyecto implementa los endpoints rest a los que accedera el frontend para poder dar servicio a las funcionalidades requeridas por el cliente. Este servicio ha sido desarrollado con Java 17, Spring Boot 3 y MySQL.
 
-Link Wireframes: https://drive.google.com/file/d/15P6zSAH-_4s2YB7L-Eg59qmKg4Tn8sKm/view?usp=sharing
+Link Wireframes: https://drive.google.com/file/d/1ScBXKwO0oVhv_P_5ruZph6G3cvs7tEjg/view?usp=sharing
 
 ## Público Objetivo:
 El público objetivo de este proyecto es para todas las edades (sin embargo el rango etario esperado es 15 a 50 años). Ya que está aplicación brinda un servicio que lo puede hacer cualquier persona que tenga la aplicación y también que de opciones de formas de pago (efectivo,tarjeta,billetera virtual) para ampliar a la mayor cantidad posible de personas.
