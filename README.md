@@ -4,7 +4,7 @@ Los clientes tienen a disposición un menú que describe para cada una de las co
 
 Este proyecto implementa los endpoints rest a los que accedera el frontend para poder dar servicio a las funcionalidades requeridas por el cliente. Este servicio ha sido desarrollado con Java 17, Spring Boot 3 y MySQL.
 
-Link Wireframes: https://drive.google.com/file/d/1ScBXKwO0oVhv_P_5ruZph6G3cvs7tEjg/view?usp=sharing
+Link Figma: [https://drive.google.com/file/d/1ScBXKwO0oVhv_P_5ruZph6G3cvs7tEjg/view?usp=sharing](https://www.figma.com/file/QJ3mQ4kL4IE47FQeHrrJ6R/El-Buen-Sabor?type=design&node-id=0-1)
 
 ## Público Objetivo:
 El público objetivo de este proyecto es para todas las edades (sin embargo el rango etario esperado es 15 a 50 años). Ya que está aplicación brinda un servicio que lo puede hacer cualquier persona que tenga la aplicación y también que de opciones de formas de pago (efectivo,tarjeta,billetera virtual) para ampliar a la mayor cantidad posible de personas.
