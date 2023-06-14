@@ -1,13 +1,12 @@
 # El Buen Sabor
-El Buen Sabor es un delivery de comidas, ofrece a sus clientes una amplia variedad de bebidas y de comidas de fabricación propia. 
-Los clientes tienen a disposición un menú que describe para cada una de las comidas, el nombre, los ingredientes y el precio. Los clientes realizan sus pedidos en el mostrador del local mediante una PC o pueden hacerlo en forma remota desde su casa o su celular personal.
+El Buen Sabor es un delivery y take away de comidas, ofrece a sus clientes una amplia variedad de bebidas y de comidas de fabricación propia. Los clientes tienen a disposición un menú que describe para cada una de las comidas, el nombre, los ingredientes y el precio. Los clientes realizan sus pedidos en el mostrador del local mediante una PC o pueden hacerlo en forma remota desde su casa o su celular personal.
 
-Este proyecto implementa los endpoints rest a los que accedera el frontend para poder dar servicio a las funcionalidades requeridas por el cliente. Este servicio ha sido desarrollado con Java 17, Spring Boot 3 y MySQL.
+Este proyecto implementa los endpoints rest a los que accedera el frontend para poder dar servicio a las funcionalidades requeridas. Este servicio ha sido desarrollado con Java 17, Spring Boot 3 y MySQL.
 
-Link Wireframes: https://drive.google.com/file/d/1ScBXKwO0oVhv_P_5ruZph6G3cvs7tEjg/view?usp=sharing
+Link Figma: [https://drive.google.com/file/d/1ScBXKwO0oVhv_P_5ruZph6G3cvs7tEjg/view?usp=sharing](https://www.figma.com/file/QJ3mQ4kL4IE47FQeHrrJ6R/El-Buen-Sabor?type=design&node-id=0-1)
 
 ## Público Objetivo:
-El público objetivo de este proyecto es para todas las edades (sin embargo el rango etario esperado es 15 a 50 años). Ya que está aplicación brinda un servicio que lo puede hacer cualquier persona que tenga la aplicación y también que de opciones de formas de pago (efectivo,tarjeta,billetera virtual) para ampliar a la mayor cantidad posible de personas.
+El público objetivo de este proyecto es para todas las edades (sin embargo el rango etario esperado es 15 a 50 años). Ya que está aplicación brinda un servicio que lo puede utilizar cualquier persona que tenga acceso a la aplicación, ademas se brindan opciones de pago (efectivo,tarjeta,billetera virtual) para ampliar a la mayor cantidad posible de personas.
 
 ## Inspiraciones: 
 Pedidos Ya: Esta es la web que mayor inspiración nos da ya que cumple con todas las funcionalidades que estamos buscando implementar.
@@ -37,7 +36,9 @@ Hice un curso de desarrollo web en Coder y actualmente hago uno de Javascript en
 
 Conocimientos:
 - Java: medio
-- HTML/CSS/Boostrap: medio
+- HTML/CSS/Boostrap: avanzado
 - SASS: basico
 - JS: basico
 - Git: medio
+- Thymeleaf: medio
+- Ingles: intermedio
