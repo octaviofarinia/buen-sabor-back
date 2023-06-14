@@ -36,7 +36,9 @@ Hice un curso de desarrollo web en Coder y actualmente hago uno de Javascript en
 
 Conocimientos:
 - Java: medio
-- HTML/CSS/Boostrap: medio
+- HTML/CSS/Boostrap: avanzado
 - SASS: basico
 - JS: basico
 - Git: medio
+- Thymeleaf: medio
+- Ingles: intermedio
