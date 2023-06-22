@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -63,8 +65,19 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
 
         DetalleArticuloManufacturado detalleArticuloManufacturado = detalleArticuloManufacturadoMapper.toEntity(detalleArticuloManufacturadoDto);
 
-        detalleArticuloManufacturado.setArticuloInsumo(optionalArticuloInsumo.get());
-        detalleArticuloManufacturado.setArticuloManufacturado(optionalArticuloManufacturado.get());
+        ArticuloInsumo articuloInsumo = optionalArticuloInsumo.get();
+        ArticuloManufacturado articuloManufacturado = optionalArticuloManufacturado.get();
+
+        BigDecimal costo = Optional.ofNullable(articuloManufacturado.getCosto()).orElse(BigDecimal.ZERO);
+        BigDecimal cantidad = Optional.ofNullable(detalleArticuloManufacturado.getCantidad()).orElse(BigDecimal.ZERO);
+        BigDecimal precioCompra = Optional.ofNullable(articuloInsumo.getPrecioCompra()).orElse(BigDecimal.ZERO);
+
+        if (!Objects.isNull(costo) && !Objects.isNull(cantidad) && !Objects.isNull(precioCompra)) {
+            articuloManufacturado.setCosto(costo.add(cantidad.multiply(precioCompra)));
+        }
+
+        detalleArticuloManufacturado.setArticuloInsumo(articuloInsumo);
+        detalleArticuloManufacturado.setArticuloManufacturado(articuloManufacturado);
 
         return detalleArticuloManufacturadoMapper.toDTO(this.save(detalleArticuloManufacturado));
     }
@@ -92,11 +105,62 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
 
         DetalleArticuloManufacturado detalleArticuloManufacturado = optionalDetalleArticuloManufacturado.get();
 
+        BigDecimal oldQuantity = Optional.ofNullable(detalleArticuloManufacturado.getCantidad()).orElse(BigDecimal.ZERO);
+
         detalleArticuloManufacturado.setCantidad(detalleArticuloManufacturadoDto.getCantidad());
-        detalleArticuloManufacturado.setArticuloInsumo(optionalArticuloInsumo.get());
-        detalleArticuloManufacturado.setArticuloManufacturado(optionalArticuloManufacturado.get());
+
+        ArticuloInsumo articuloInsumo = optionalArticuloInsumo.get();
+        ArticuloManufacturado articuloManufacturado = optionalArticuloManufacturado.get();
+
+        BigDecimal costo = Optional.ofNullable(articuloManufacturado.getCosto()).orElse(BigDecimal.ZERO);
+        BigDecimal newQuantity = Optional.ofNullable(detalleArticuloManufacturado.getCantidad()).orElse(BigDecimal.ZERO);
+        BigDecimal precioCompra = Optional.ofNullable(articuloInsumo.getPrecioCompra()).orElse(BigDecimal.ZERO);
+
+        if (!Objects.isNull(costo) && !Objects.isNull(oldQuantity) && !Objects.isNull(newQuantity) && !Objects.isNull(precioCompra)) {
+            articuloManufacturado.setCosto(costo.subtract(oldQuantity.multiply(precioCompra)).add(newQuantity.multiply(precioCompra)));
+        }
+
+        detalleArticuloManufacturado.setArticuloInsumo(articuloInsumo);
+        detalleArticuloManufacturado.setArticuloManufacturado(articuloManufacturado);
 
         return detalleArticuloManufacturadoMapper.toDTO(this.save(detalleArticuloManufacturado));
+    }
+
+    @Override
+    public boolean hardDelete(Long id) throws ServicioException {
+        try {
+            if (detalleArticuloManufacturadoRepository.existsById(id)) {
+                DetalleArticuloManufacturado detalleArticuloManufacturado = detalleArticuloManufacturadoRepository.findById(id).get();
+
+                Optional<ArticuloInsumo> optionalArticuloInsumo = articuloInsumoService.findOptionalById(detalleArticuloManufacturado.getArticuloInsumo().getId());
+                if(optionalArticuloInsumo.isEmpty()) {
+                    throw new ServicioException("No se encontro un articulo para el detalle a eliminar.");
+                }
+
+                Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoService.findOptionalById(detalleArticuloManufacturado.getArticuloManufacturado().getId());
+                if(optionalArticuloManufacturado.isEmpty()) {
+                    throw new ServicioException("No se encontro un articulo manufacturado para el detalle a eliminar.");
+                }
+
+                ArticuloInsumo articuloInsumo = optionalArticuloInsumo.get();
+                ArticuloManufacturado articuloManufacturado = optionalArticuloManufacturado.get();
+
+                BigDecimal costo = Optional.ofNullable(articuloManufacturado.getCosto()).orElse(BigDecimal.ZERO);
+                BigDecimal cantidad = Optional.ofNullable(detalleArticuloManufacturado.getCantidad()).orElse(BigDecimal.ZERO);
+                BigDecimal precioCompra = Optional.ofNullable(articuloInsumo.getPrecioCompra()).orElse(BigDecimal.ZERO);
+
+                if (!Objects.isNull(costo) && !Objects.isNull(cantidad) && !Objects.isNull(precioCompra)) {
+                    articuloManufacturado.setCosto(costo.subtract(cantidad.multiply(precioCompra)));
+                }
+
+                detalleArticuloManufacturadoRepository.deleteById(id);
+                return true;
+            }else {
+                throw new Exception("No existe la entidad");
+            }
+        }catch (Exception e) {
+            throw new ServicioException(e.getMessage());
+        }
     }
 
 }
