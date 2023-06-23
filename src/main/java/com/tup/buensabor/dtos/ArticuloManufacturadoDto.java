@@ -13,7 +13,6 @@ public class ArticuloManufacturadoDto extends BaseDto {
     private String descripcion;
     private Integer tiempoEstimadoCocina;
     private BigDecimal precioVenta;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private BigDecimal costo;
     private String urlImagen;
     private String fechaBaja;

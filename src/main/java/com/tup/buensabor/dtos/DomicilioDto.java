@@ -11,10 +11,11 @@ import java.util.Date;
 public class DomicilioDto extends BaseDto {
     private String calle;
     private Integer numero;
+    private Integer codigoPostal;
     private String localidad;
-    private Integer numeroVivienda;
-    private Integer pisoVivienda;
-    private ClienteDto cliente;
+    private Integer numeroDpto;
+    private Integer pisoDpto;
+    private String auth0Id;
     private Date fechaAlta;
     private Date fechaModificacion;
     private Date fechaBaja;

@@ -26,13 +26,17 @@ public class Domicilio extends Base {
     private Integer numero;
 
     @NotNull
+    @Column(precision = 4)
+    private Integer codigoPostal;
+
+    @NotNull
     private String localidad;
 
     @Column(name = "numero_vivienda")
-    private Integer numeroVivienda;
+    private Integer numeroDpto;
 
     @Column(name = "piso_vivienda")
-    private Integer pisoVivienda;
+    private Integer pisoDpto;
 
     @NotNull
     @ManyToOne()
