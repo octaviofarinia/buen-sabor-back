@@ -1,14 +1,17 @@
 package com.tup.buensabor.websocket;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
+import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.websocket.messages.UpdateEstadoPedidoMessage;
 import lombok.extern.log4j.Log4j2;
 import org.cloudinary.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -18,6 +21,9 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/v1/pedidos-ws")
 public class PedidoWSController extends BaseControllerImpl<PedidoWS, PedidoWSDto, PedidoWSServiceImpl> {
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody PedidoWSDto pedidoWSDto) {
@@ -48,15 +54,18 @@ public class PedidoWSController extends BaseControllerImpl<PedidoWS, PedidoWSDto
         }
     }
 
-    @MessageMapping("/cambiar-estado")
-    @SendTo("/pedidos")
-    public UpdateEstadoPedidoMessage updateEstado(@Payload UpdateEstadoPedidoMessage message) {
-        log.info("MENSAJE: " + message);
+    @PutMapping("/cambiar-estado")
+    public ResponseEntity<?> updateEstado(@RequestParam(name = "id") Long id, @RequestParam(name = "estado")EstadoPedido estado) {
         try {
-            servicio.updateEstado(message.getId(), message.getEstado());
-            return message;
+            log.info("UPDATE ESTADO: " + id + " | " + estado);
+            servicio.updateEstado(id, estado);
+            log.info("SENDING MESSAGE");
+            simpMessagingTemplate.convertAndSend("/pedidos", new UpdateEstadoPedidoMessage(id, estado));
+
+            return ResponseEntity.ok().build();
         } catch (ServicioException e) {
-            return null;
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error al crear el pedidoWS: " + e.getMessage());
         }
     }
 
