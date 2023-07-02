@@ -19,7 +19,7 @@ public abstract class BaseControllerImpl<E extends Base, D extends BaseDto, S ex
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.findAll());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }
 
@@ -28,7 +28,7 @@ public abstract class BaseControllerImpl<E extends Base, D extends BaseDto, S ex
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.findById(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }
 
@@ -37,7 +37,7 @@ public abstract class BaseControllerImpl<E extends Base, D extends BaseDto, S ex
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.findAll(pageable));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }
 }
