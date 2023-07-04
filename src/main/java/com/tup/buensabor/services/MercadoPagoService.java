@@ -21,12 +21,12 @@ import java.util.List;
 @Service
 public class MercadoPagoService {
 
-    @Value("mercadopago.access_token")
+    @Value("${mercadopago.access_token}")
     private String mpAccessToken;
 
     @PostConstruct
     public void initMPConfig() {
-        MercadoPagoConfig.setAccessToken("PROD_ACCESS_TOKEN");
+        MercadoPagoConfig.setAccessToken(mpAccessToken);
     }
 
     public Preference createPreference() {
