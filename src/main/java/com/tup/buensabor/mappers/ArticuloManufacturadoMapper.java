@@ -1,6 +1,6 @@
 package com.tup.buensabor.mappers;
 
-import com.tup.buensabor.dtos.ArticuloManufacturadoDto;
+import com.tup.buensabor.dtos.articulomanufacturado.ArticuloManufacturadoDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

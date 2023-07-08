@@ -1,6 +1,6 @@
 package com.tup.buensabor.services;
 
-import com.tup.buensabor.dtos.FacturaDto;
+import com.tup.buensabor.dtos.factura.FacturaDto;
 import com.tup.buensabor.entities.Factura;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.FacturaMapper;

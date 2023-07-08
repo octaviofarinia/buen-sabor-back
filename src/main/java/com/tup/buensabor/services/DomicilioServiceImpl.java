@@ -1,9 +1,7 @@
 package com.tup.buensabor.services;
 
-import com.tup.buensabor.dtos.DomicilioDto;
-import com.tup.buensabor.dtos.DomicilioDto;
+import com.tup.buensabor.dtos.domicilio.DomicilioDto;
 import com.tup.buensabor.entities.Cliente;
-import com.tup.buensabor.entities.Domicilio;
 import com.tup.buensabor.entities.Domicilio;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;

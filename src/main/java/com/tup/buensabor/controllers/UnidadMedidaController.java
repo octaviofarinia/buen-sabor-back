@@ -1,7 +1,7 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
-import com.tup.buensabor.dtos.UnidadMedidaDto;
+import com.tup.buensabor.dtos.unidadmedida.UnidadMedidaDto;
 import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.UnidadMedidaServiceImpl;

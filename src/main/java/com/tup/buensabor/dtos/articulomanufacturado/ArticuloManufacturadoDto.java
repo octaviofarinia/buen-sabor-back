@@ -1,6 +1,7 @@
-package com.tup.buensabor.dtos;
+package com.tup.buensabor.dtos.articulomanufacturado;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.tup.buensabor.dtos.BaseDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

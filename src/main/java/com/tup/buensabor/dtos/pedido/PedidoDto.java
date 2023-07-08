@@ -1,5 +1,8 @@
-package com.tup.buensabor.dtos;
+package com.tup.buensabor.dtos.pedido;
 
+import com.tup.buensabor.dtos.BaseDto;
+import com.tup.buensabor.dtos.domicilio.DomicilioDto;
+import com.tup.buensabor.dtos.factura.FacturaDto;
 import com.tup.buensabor.dtos.usuario.ClienteDto;
 import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.enums.TipoEnvio;

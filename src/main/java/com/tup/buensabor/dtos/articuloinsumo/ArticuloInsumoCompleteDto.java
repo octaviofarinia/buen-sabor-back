@@ -1,7 +1,7 @@
 package com.tup.buensabor.dtos.articuloinsumo;
 
 import com.tup.buensabor.dtos.BaseDto;
-import com.tup.buensabor.dtos.UnidadMedidaDto;
+import com.tup.buensabor.dtos.unidadmedida.UnidadMedidaDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

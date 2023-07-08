@@ -1,5 +1,6 @@
 package com.tup.buensabor.services;
 
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
@@ -24,6 +25,15 @@ public class MercadoPagoService {
     @Value("${mercadopago.access_token}")
     private String mpAccessToken;
 
+    @Value("${mercadopago.back_url.success}")
+    private String mpSuccessBackUrl;
+
+    @Value("${mercadopago.back_url.pending}")
+    private String mpPendingBackUrl;
+
+    @Value("${mercadopago.back_url.failure}")
+    private String mpFailureBackUrl;
+
     @PostConstruct
     public void initMPConfig() {
         MercadoPagoConfig.setAccessToken(mpAccessToken);
@@ -45,7 +55,15 @@ public class MercadoPagoService {
             List<PreferenceItemRequest> items = new ArrayList<>();
             items.add(itemRequest);
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                    .items(items).build();
+                    .items(items)
+                    .backUrls(
+                            PreferenceBackUrlsRequest.builder()
+                                    .success(mpSuccessBackUrl)
+                                    .pending(mpPendingBackUrl)
+                                    .failure(mpFailureBackUrl)
+                                    .build()
+                    )
+                    .build();
             PreferenceClient client = new PreferenceClient();
             Preference preference = client.create(preferenceRequest);
             return preference;

@@ -1,6 +1,6 @@
 package com.tup.buensabor.services;
 
-import com.tup.buensabor.dtos.PedidoDto;
+import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.Pedido;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.PedidoMapper;
@@ -21,6 +21,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     public PedidoServiceImpl(BaseRepository<Pedido, Long> baseRepository, BaseMapper<Pedido, PedidoDto> baseMapper) {
         super(baseRepository, baseMapper);
     }
+
 
 
 }

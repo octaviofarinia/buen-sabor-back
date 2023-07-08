@@ -26,9 +26,6 @@ public class Pedido extends Base {
     private Date fechaPedido;
 
     @NotNull
-    private Integer numero;
-
-    @NotNull
     @Column(name = "hora_estimada_finalizacion")
     @Temporal(TemporalType.TIME)
     private Date horaEstimadaFinalizacion;

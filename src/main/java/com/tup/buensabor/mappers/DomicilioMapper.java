@@ -1,6 +1,6 @@
 package com.tup.buensabor.mappers;
 
-import com.tup.buensabor.dtos.DomicilioDto;
+import com.tup.buensabor.dtos.domicilio.DomicilioDto;
 import com.tup.buensabor.entities.Domicilio;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

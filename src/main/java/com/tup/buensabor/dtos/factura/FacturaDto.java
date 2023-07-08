@@ -1,5 +1,6 @@
-package com.tup.buensabor.dtos;
+package com.tup.buensabor.dtos.factura;
 
+import com.tup.buensabor.dtos.BaseDto;
 import com.tup.buensabor.enums.FormaPago;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,12 +12,11 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 public class FacturaDto extends BaseDto {
     private Date fechaFacturacion;
-    private Integer numero;
-    private BigDecimal montoDescuento;
+    private Long paymenteId;
+    private Long merchantOrderId;
+    private String preferenceId;
     private FormaPago formaPago;
-    private String numeroTarjeta;
     private BigDecimal totalVenta;
-    private BigDecimal totalCosto;
     private Date fechaAlta;
     private Date fechaModificacion;
     private Date fechaBaja;

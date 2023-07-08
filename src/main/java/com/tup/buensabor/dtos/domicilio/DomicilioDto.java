@@ -1,5 +1,6 @@
-package com.tup.buensabor.dtos;
+package com.tup.buensabor.dtos.domicilio;
 
+import com.tup.buensabor.dtos.BaseDto;
 import com.tup.buensabor.dtos.usuario.ClienteDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

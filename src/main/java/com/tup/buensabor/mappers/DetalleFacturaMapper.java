@@ -1,6 +1,6 @@
 package com.tup.buensabor.mappers;
 
-import com.tup.buensabor.dtos.DetalleFacturaDto;
+import com.tup.buensabor.dtos.detallefactura.DetalleFacturaDto;
 import com.tup.buensabor.entities.DetalleFactura;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

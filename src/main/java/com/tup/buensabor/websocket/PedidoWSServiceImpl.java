@@ -1,7 +1,5 @@
 package com.tup.buensabor.websocket;
 
-import com.tup.buensabor.dtos.UnidadMedidaDto;
-import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;

@@ -1,11 +1,10 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
-import com.tup.buensabor.dtos.DomicilioDto;
+import com.tup.buensabor.dtos.domicilio.DomicilioDto;
 import com.tup.buensabor.entities.Domicilio;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.DomicilioServiceImpl;
-import io.swagger.v3.oas.annotations.headers.Header;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

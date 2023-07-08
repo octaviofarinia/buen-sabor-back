@@ -1,6 +1,6 @@
 package com.tup.buensabor.services;
 
-import com.tup.buensabor.dtos.DetallePedidoDto;
+import com.tup.buensabor.dtos.detallepedido.DetallePedidoDto;
 import com.tup.buensabor.entities.DetallePedido;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.DetallePedidoMapper;
