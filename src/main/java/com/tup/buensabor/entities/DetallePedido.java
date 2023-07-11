@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "detalle_factura")
+@Table(name = "detalle_pedido")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -25,18 +25,20 @@ public class DetallePedido extends Base {
     private BigDecimal subtotal;
 
     @NotNull
+    @Column(name = "subtotal_costo", precision = 10, scale = 2)
+    private BigDecimal subtotalCosto;
+
     @ManyToOne()
     @JoinColumn(name = "id_articulo_insumo")
     private ArticuloInsumo articuloInsumo;
 
-    @NotNull
     @ManyToOne()
     @JoinColumn(name = "id_articulo_manufacturado")
     private ArticuloManufacturado articuloManufacturado;
 
     @NotNull
     @ManyToOne()
-    @JoinColumn(name = "id_factura")
-    private Factura factura;
+    @JoinColumn(name = "id_pedido")
+    private Pedido pedido;
 
 }

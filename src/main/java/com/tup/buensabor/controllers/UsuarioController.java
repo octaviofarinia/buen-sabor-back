@@ -21,7 +21,6 @@ public class UsuarioController extends BaseControllerImpl<Usuario, UsuarioDto, U
             servicio.postRegisterSave(userDto);
             return ResponseEntity.ok().body("Usuario persistido correctamente.");
         } catch (ServicioException e) {
-            e.printStackTrace();
             return ResponseEntity.internalServerError().body("Error al persistir usuario: " + e.getMessage());
         }
     }

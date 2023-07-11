@@ -16,12 +16,11 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 public class PedidoDto extends BaseDto {
     private Date fechaPedido;
-    private Integer numero;
     private Date horaEstimadaFinalizacion;
     private BigDecimal total;
+    private BigDecimal totalCosto;
     private EstadoPedido estado;
     private TipoEnvio tipoEnvio;
-    private FacturaDto factura;
     private DomicilioDto domicilioEntrega;
     private ClienteDto cliente;
     private Date fechaAlta;

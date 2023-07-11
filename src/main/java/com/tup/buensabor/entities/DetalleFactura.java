@@ -24,19 +24,17 @@ public class DetalleFactura extends Base {
     @Column(name = "subtotal", precision = 10, scale = 2)
     private BigDecimal subtotal;
 
-    @NotNull
     @ManyToOne()
     @JoinColumn(name = "id_articulo_insumo")
     private ArticuloInsumo articuloInsumo;
 
-    @NotNull
     @ManyToOne()
     @JoinColumn(name = "id_articulo_manufacturado")
     private ArticuloManufacturado articuloManufacturado;
 
     @NotNull
     @ManyToOne()
-    @JoinColumn(name = "id_pedido")
-    private Pedido pedido;
+    @JoinColumn(name = "id_factura")
+    private Factura factura;
 
 }

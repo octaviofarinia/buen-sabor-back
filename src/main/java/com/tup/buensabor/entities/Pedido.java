@@ -35,6 +35,10 @@ public class Pedido extends Base {
     private BigDecimal total;
 
     @NotNull
+    @Column(name = "total_costo", precision = 10, scale = 2)
+    private BigDecimal totalCosto;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     private EstadoPedido estado;
 
@@ -42,11 +46,6 @@ public class Pedido extends Base {
     @Column(name = "tipo_envio")
     @Enumerated(EnumType.STRING)
     private TipoEnvio tipoEnvio;
-
-    @NotNull
-    @OneToOne
-    @JoinColumn(name = "id_factura")
-    private Factura factura;
 
     @NotNull
     @ManyToOne()
