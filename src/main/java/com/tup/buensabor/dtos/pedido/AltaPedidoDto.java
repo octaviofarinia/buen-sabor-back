@@ -10,7 +10,6 @@ import java.util.List;
 
 @Data
 public class AltaPedidoDto {
-    private BigDecimal total;
     private String mpStatus;
     private TipoEnvio tipoEnvio;
     private AltaPedidoFacturaDto factura;

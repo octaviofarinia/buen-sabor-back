@@ -18,14 +18,9 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -76,19 +71,23 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         }
         Cliente cliente = clienteOptional.get();
 
-        LocalDateTime dateTime = LocalDateTime.now().plus(Duration.of(altaPedidoDto.getTiempoEstimadoFinalizacion(), ChronoUnit.MINUTES));
-        Date horaEstimadaFinalizacion = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
+        LocalDateTime dateTime = LocalDateTime.now(ZoneOffset.UTC).plus(Duration.of(altaPedidoDto.getTiempoEstimadoFinalizacion(), ChronoUnit.MINUTES));
+        Date horaEstimadaFinalizacion = Date.from(dateTime.toInstant(ZoneOffset.UTC));
+
+        Instant now = Instant.now();
+        Date fechaPedido = Date.from(now);
 
         Pedido pedido = new Pedido();
         pedido.setDomicilioEntrega(domicilio);
         pedido.setCliente(cliente);
-        pedido.setFechaPedido(new Date());
+        pedido.setFechaPedido(fechaPedido);
         pedido.setHoraEstimadaFinalizacion(horaEstimadaFinalizacion);
         pedido.setEstado(EstadoPedido.PAGADO);
         pedido.setTipoEnvio(altaPedidoDto.getTipoEnvio());
         pedido.setTotalCosto(totalCosto);
         pedido.setTotal(total);
-        pedido.setFechaAlta(new Date());
+
+        pedido.setFechaAlta(fechaPedido);
 
         pedido = this.save(pedido);
 

@@ -27,7 +27,7 @@ public class Pedido extends Base {
 
     @NotNull
     @Column(name = "hora_estimada_finalizacion")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date horaEstimadaFinalizacion;
 
     @NotNull

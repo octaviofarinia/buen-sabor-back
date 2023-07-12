@@ -3,6 +3,8 @@ package com.tup.buensabor.mappers;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
 import com.tup.buensabor.entities.RubroArticulo;
+import com.tup.buensabor.mappers.utils.CycleAvoidingMappingContext;
+import com.tup.buensabor.mappers.utils.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

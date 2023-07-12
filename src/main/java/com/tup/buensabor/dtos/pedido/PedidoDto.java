@@ -1,5 +1,6 @@
 package com.tup.buensabor.dtos.pedido;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tup.buensabor.dtos.BaseDto;
 import com.tup.buensabor.dtos.domicilio.DomicilioDto;
 import com.tup.buensabor.dtos.factura.FacturaDto;
@@ -10,13 +11,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class PedidoDto extends BaseDto {
-    private Date fechaPedido;
-    private Date horaEstimadaFinalizacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Argentina/Buenos_Aires")
+    private OffsetDateTime fechaPedido;
+    @JsonFormat(pattern = "HH:mm:ss", timezone = "America/Argentina/Buenos_Aires")
+    private OffsetDateTime  horaEstimadaFinalizacion;
     private BigDecimal total;
     private BigDecimal totalCosto;
     private EstadoPedido estado;
