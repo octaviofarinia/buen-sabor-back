@@ -1,8 +1,8 @@
 package com.tup.buensabor.dtos.detallearticulomanufacturado;
 
-import com.tup.buensabor.dtos.articulomanufacturado.ArticuloManufacturadoDto;
 import com.tup.buensabor.dtos.BaseDto;
 import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoDto;
+import com.tup.buensabor.dtos.articulomanufacturado.ArticuloManufacturadoDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

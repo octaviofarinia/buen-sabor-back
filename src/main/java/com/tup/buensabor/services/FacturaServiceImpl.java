@@ -2,7 +2,6 @@ package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.factura.AltaPedidoFacturaDto;
 import com.tup.buensabor.dtos.factura.FacturaDto;
-import com.tup.buensabor.entities.DetalleFactura;
 import com.tup.buensabor.entities.DetallePedido;
 import com.tup.buensabor.entities.Factura;
 import com.tup.buensabor.entities.Pedido;
@@ -12,7 +11,6 @@ import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.FacturaMapper;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.repositories.FacturaRepository;
-import com.tup.buensabor.services.interfaces.DetalleFacturaService;
 import com.tup.buensabor.services.interfaces.FacturaService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

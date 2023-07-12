@@ -1,5 +1,6 @@
 package com.tup.buensabor.services;
 
+import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
@@ -8,7 +9,6 @@ import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
-import com.tup.buensabor.dtos.detallepedido.DetallePedidoDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
 import com.tup.buensabor.exceptions.ServicioException;
 import jakarta.annotation.PostConstruct;
@@ -17,9 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.mercadopago.MercadoPagoConfig;
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
