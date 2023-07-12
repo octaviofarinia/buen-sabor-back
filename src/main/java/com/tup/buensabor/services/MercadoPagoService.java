@@ -7,8 +7,13 @@ import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
+import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
+import com.tup.buensabor.dtos.detallepedido.DetallePedidoDto;
+import com.tup.buensabor.entities.ArticuloManufacturado;
+import com.tup.buensabor.exceptions.ServicioException;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +22,14 @@ import com.mercadopago.MercadoPagoConfig;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Service
 public class MercadoPagoService {
+
+    @Autowired
+    private ArticuloManufacturadoServiceImpl articuloManufacturadoService;
 
     @Value("${mercadopago.access_token}")
     private String mpAccessToken;
@@ -39,38 +48,50 @@ public class MercadoPagoService {
         MercadoPagoConfig.setAccessToken(mpAccessToken);
     }
 
-    public Preference createPreference() {
-        try {
-            PreferenceItemRequest itemRequest =
-                    PreferenceItemRequest.builder()
-                            .id("1234")
-                            .title("Games")
-                            .description("PS5")
-                            .pictureUrl("http://picture.com/PS5")
-                            .categoryId("games")
-                            .quantity(2)
-                            .currencyId("BRL")
-                            .unitPrice(new BigDecimal("4000"))
-                            .build();
-            List<PreferenceItemRequest> items = new ArrayList<>();
+    public Preference createPreference(List<AltaPedidoDetallePedidoDto> detallesPedido) throws ServicioException, MPException, MPApiException {
+        List<PreferenceItemRequest> items = new ArrayList<>();
+
+        for (AltaPedidoDetallePedidoDto detalleDto : detallesPedido) {
+            PreferenceItemRequest itemRequest = getItemRequest(detalleDto);
             items.add(itemRequest);
-            PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                    .items(items)
-                    .backUrls(
-                            PreferenceBackUrlsRequest.builder()
-                                    .success(mpSuccessBackUrl)
-                                    .pending(mpPendingBackUrl)
-                                    .failure(mpFailureBackUrl)
-                                    .build()
-                    )
-                    .build();
-            PreferenceClient client = new PreferenceClient();
-            Preference preference = client.create(preferenceRequest);
-            return preference;
-        } catch (MPException | MPApiException e) {
-            log.error(e);
-            return null;
         }
+
+        PreferenceRequest preferenceRequest = PreferenceRequest.builder()
+                .items(items)
+                .autoReturn("approved")
+                .backUrls(
+                        PreferenceBackUrlsRequest.builder()
+                                .success(mpSuccessBackUrl)
+                                .pending(mpPendingBackUrl)
+                                .failure(mpFailureBackUrl)
+                                .build()
+                )
+                .build();
+        PreferenceClient client = new PreferenceClient();
+        return client.create(preferenceRequest);
+    }
+
+    private PreferenceItemRequest getItemRequest(AltaPedidoDetallePedidoDto detalleDto) throws ServicioException {
+
+        if (detalleDto.getCantidad() == null || detalleDto.getCantidad() <= 0) {
+            throw new ServicioException("La cantidad a comprar debe ser mayor a cero.");
+        }
+
+        Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoService.findOptionalById(detalleDto.getIdArticuloManufacturado());
+        if (optionalArticuloManufacturado.isEmpty()) {
+            throw new ServicioException("No existe un articulo manufacturado con el id " + detalleDto.getIdArticuloManufacturado());
+        }
+        ArticuloManufacturado articuloManufacturado = optionalArticuloManufacturado.get();
+
+        return PreferenceItemRequest.builder()
+                .id(String.valueOf(articuloManufacturado.getId()))
+                .title(articuloManufacturado.getDenominacion())
+                .description(articuloManufacturado.getDescripcion())
+                .pictureUrl(articuloManufacturado.getUrlImagen())
+                .quantity(detalleDto.getCantidad())
+                .currencyId("ARS")
+                .unitPrice(articuloManufacturado.getPrecioVenta())
+                .build();
     }
 
 }

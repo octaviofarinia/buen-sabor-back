@@ -1,8 +1,12 @@
 package com.tup.buensabor.controllers;
 
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoCompleteDto;
 import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoDto;
+import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
+import com.tup.buensabor.entities.DetallePedido;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.MercadoPagoService;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Log4j2
 @RestController
@@ -23,12 +28,12 @@ public class MercadoPagoController {
     private MercadoPagoService mercadoPagoService;
 
     @PostMapping(value = "/create-preference")
-    public ResponseEntity<?> createPreference() {
+    public ResponseEntity<?> createPreference(@RequestBody List<AltaPedidoDetallePedidoDto> detallesPedido) {
         try {
             log.info("CREATE PREFERENCE");
-            Preference preference = mercadoPagoService.createPreference();
+            Preference preference = mercadoPagoService.createPreference(detallesPedido);
             return ResponseEntity.ok().body(preference);
-        } catch (Exception e) {
+        } catch (MPException | ServicioException | MPApiException e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("Error al crear preferencia: " + e.getMessage());
         }
