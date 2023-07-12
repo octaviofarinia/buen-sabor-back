@@ -1,7 +1,6 @@
 package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
-import com.tup.buensabor.dtos.detallepedido.DetallePedidoDto;
 import com.tup.buensabor.dtos.pedido.AltaPedidoDto;
 import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.*;
@@ -14,7 +13,6 @@ import com.tup.buensabor.repositories.PedidoRepository;
 import com.tup.buensabor.services.interfaces.PedidoService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -51,7 +49,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     }
 
     @Transactional
-    public void altaPostPago(AltaPedidoDto altaPedidoDto) throws ServicioException {
+    public Pedido altaPostPago(AltaPedidoDto altaPedidoDto) throws ServicioException {
         AtomicReference<BigDecimal> totalCostoAtomicReference = new AtomicReference<>(BigDecimal.ZERO);
         AtomicReference<BigDecimal> totalAtomicReference =  new AtomicReference<>(BigDecimal.ZERO);
 
@@ -97,6 +95,8 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         }
 
         facturaService.saveFacturaFromPedidoAlta(pedido, detallesPedido, altaPedidoDto.getFactura());
+
+        return pedido;
     }
 
     private List<DetallePedido> getValidDetallesPedido(List<AltaPedidoDetallePedidoDto> productos, AtomicReference<BigDecimal> totalReference, AtomicReference<BigDecimal> totalCostoReference) throws ServicioException {
@@ -139,4 +139,19 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         return detallesPedido;
     }
 
+    public void updateEstado(Long id, EstadoPedido estado) throws ServicioException {
+        Optional<Pedido> optionalPedido = baseRepository.findById(id);
+        if(optionalPedido.isEmpty()) {
+            throw new ServicioException("No se encontro el pedido con el id dado.");
+        }
+
+        if(estado == null) {
+            throw new ServicioException("El estado nuevo no puede ser nulo.");
+        }
+
+        Pedido pedido = optionalPedido.get();
+        pedido.setEstado(estado);
+        pedido.setFechaModificacion(new Date());
+        baseRepository.save(pedido);
+    }
 }
