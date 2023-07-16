@@ -8,11 +8,15 @@ import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.PedidoServiceImpl;
 import com.tup.buensabor.websocket.messages.PedidoNotificationMessage;
+import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Log4j2
 @RestController
@@ -21,6 +25,16 @@ public class PedidoController extends BaseControllerImpl<Pedido, PedidoDto, Pedi
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
+
+    @GetMapping("/listar")
+    public ResponseEntity<?> getAllFiltrados(@RequestParam(name = "estado", required = false) EstadoPedido estado) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.findAll(estado));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+        }
+    }
 
     @PostMapping(value = "")
     public ResponseEntity<?> save(@RequestBody AltaPedidoDto altaPedidoDto) {

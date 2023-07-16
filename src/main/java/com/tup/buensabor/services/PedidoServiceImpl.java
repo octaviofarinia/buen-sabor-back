@@ -12,6 +12,8 @@ import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.repositories.PedidoRepository;
 import com.tup.buensabor.services.interfaces.PedidoService;
 import jakarta.transaction.Transactional;
+import org.apache.commons.lang.StringUtils;
+import org.mapstruct.ap.shaded.freemarker.template.utility.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -159,5 +161,13 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         pedido.setEstado(estado);
         pedido.setFechaModificacion(new Date());
         baseRepository.save(pedido);
+    }
+
+    public List<PedidoDto> findAll(EstadoPedido estado) throws ServicioException {
+        if(estado != null && StringUtils.isNotBlank(estado.name())) {
+            return baseMapper.toDTOsList(pedidoRepository.findAllByEstado(estado));
+        }
+
+        return findAll();
     }
 }
