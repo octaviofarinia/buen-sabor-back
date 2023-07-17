@@ -1,6 +1,5 @@
 package com.tup.buensabor.repositories;
 
-import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.Pedido;
 import com.tup.buensabor.enums.EstadoPedido;
 import org.springframework.data.jpa.repository.Query;

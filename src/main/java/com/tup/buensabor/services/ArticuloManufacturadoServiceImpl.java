@@ -27,7 +27,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
     @Autowired
     private ImagenService imagenService;
 
-    private final String CLOUDINARY_FOLDER = "productos";
+    private static final String CLOUDINARY_FOLDER = "productos";
 
     private final ArticuloManufacturadoMapper articuloManufacturadoMapper = ArticuloManufacturadoMapper.getInstance();
 

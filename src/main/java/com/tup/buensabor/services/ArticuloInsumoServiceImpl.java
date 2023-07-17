@@ -38,7 +38,7 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
     @Autowired
     private UnidadMedidaService unidadMedidaService;
 
-    private final String CLOUDINARY_FOLDER = "insumos";
+    private static final String CLOUDINARY_FOLDER = "insumos";
 
     private final ArticuloInsumoMapper articuloInsumoMapper = ArticuloInsumoMapper.getInstance();
 

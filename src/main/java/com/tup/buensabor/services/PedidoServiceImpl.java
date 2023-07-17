@@ -13,7 +13,6 @@ import com.tup.buensabor.repositories.PedidoRepository;
 import com.tup.buensabor.services.interfaces.PedidoService;
 import jakarta.transaction.Transactional;
 import org.apache.commons.lang.StringUtils;
-import org.mapstruct.ap.shaded.freemarker.template.utility.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -108,7 +107,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     }
 
     private List<DetallePedido> getValidDetallesPedido(List<AltaPedidoDetallePedidoDto> productos, AtomicReference<BigDecimal> totalReference, AtomicReference<BigDecimal> totalCostoReference) throws ServicioException {
-        if(productos.size() <= 0) {
+        if(productos.size() == 0) {
             throw new ServicioException("Debe seleccionar al menos un producto para realizar un pedido.");
         }
 
