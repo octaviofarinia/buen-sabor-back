@@ -1,7 +1,9 @@
 package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.articulomanufacturado.ArticuloManufacturadoDto;
+import com.tup.buensabor.dtos.detallearticulomanufacturado.DetalleArticuloManufacturadoDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
+import com.tup.buensabor.entities.DetalleArticuloManufacturado;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.ArticuloManufacturadoMapper;
 import com.tup.buensabor.mappers.BaseMapper;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -34,6 +37,17 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
     public ArticuloManufacturadoServiceImpl(BaseRepository<ArticuloManufacturado, Long> baseRepository, BaseMapper<ArticuloManufacturado, ArticuloManufacturadoDto> baseMapper) {
         super(baseRepository, baseMapper);
+    }
+
+    @Transactional
+    public List<ArticuloManufacturadoDto> findAll(String nombre) throws ServicioException {
+        try {
+            List<ArticuloManufacturado> entities = articuloManufacturadoRepository.findAllByNombre(nombre);
+            return baseMapper.toDTOsList(entities);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new ServicioException(e.getMessage());
+        }
     }
 
     @Transactional

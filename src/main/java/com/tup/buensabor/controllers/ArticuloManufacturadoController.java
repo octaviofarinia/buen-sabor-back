@@ -3,10 +3,12 @@ package com.tup.buensabor.controllers;
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
 import com.tup.buensabor.dtos.articulomanufacturado.ArticuloManufacturadoDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
+import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.ArticuloManufacturadoServiceImpl;
 import com.tup.buensabor.services.DetalleArticuloManufacturadoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,15 @@ public class ArticuloManufacturadoController extends BaseControllerImpl<Articulo
 
     @Autowired
     private DetalleArticuloManufacturadoServiceImpl detalleArticuloManufacturadoService;
+
+    @GetMapping("/listar")
+    public ResponseEntity<?> getAllFiltrados(@RequestParam(name = "filtro", required = false, defaultValue = "") String nombre) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.findAll(nombre));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+        }
+    }
 
     @GetMapping(value = "/{id}/detalles")
     public ResponseEntity<?> getDetalles(@PathVariable(name = "id") Long id) {
