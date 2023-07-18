@@ -5,6 +5,7 @@ import com.tup.buensabor.dtos.pedido.AltaPedidoDto;
 import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.*;
 import com.tup.buensabor.enums.EstadoPedido;
+import com.tup.buensabor.enums.FormaPago;
 import com.tup.buensabor.enums.TipoEnvio;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
@@ -59,6 +60,8 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
 
     @Transactional
     public Pedido altaPostPago(AltaPedidoDto altaPedidoDto) throws ServicioException {
+        Pedido pedido = new Pedido();
+
         AtomicReference<BigDecimal> totalCostoAtomicReference = new AtomicReference<>(BigDecimal.ZERO);
         AtomicReference<BigDecimal> totalAtomicReference =  new AtomicReference<>(BigDecimal.ZERO);
 
@@ -82,18 +85,22 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         }
         Cliente cliente = clienteOptional.get();
 
+        if(FormaPago.EFECTIVO.equals(altaPedidoDto.getFactura().getFormaPago())) {
+            pedido.setEstado(EstadoPedido.PENDIENTE);
+        } else {
+            pedido.setEstado(EstadoPedido.PAGADO);
+        }
+
         LocalDateTime dateTime = LocalDateTime.now(ZoneOffset.UTC).plus(Duration.of(altaPedidoDto.getTiempoEstimadoFinalizacion(), ChronoUnit.MINUTES));
         Date horaEstimadaFinalizacion = Date.from(dateTime.toInstant(ZoneOffset.UTC));
 
         Instant now = Instant.now();
         Date fechaPedido = Date.from(now);
 
-        Pedido pedido = new Pedido();
         pedido.setDomicilioEntrega(domicilio);
         pedido.setCliente(cliente);
         pedido.setFechaPedido(fechaPedido);
         pedido.setHoraEstimadaFinalizacion(horaEstimadaFinalizacion);
-        pedido.setEstado(EstadoPedido.PAGADO);
         pedido.setTipoEnvio(altaPedidoDto.getTipoEnvio());
         pedido.setTotalCosto(totalCosto);
         pedido.setTotal(total);
