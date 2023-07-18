@@ -36,7 +36,8 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
     @Autowired
     private ArticuloManufacturadoServiceImpl articuloManufacturadoService;
 
-    private final DetalleArticuloManufacturadoMapper detalleArticuloManufacturadoMapper = DetalleArticuloManufacturadoMapper.getInstance();
+    @Autowired
+    private DetalleArticuloManufacturadoMapper detalleArticuloManufacturadoMapper;
 
     public DetalleArticuloManufacturadoServiceImpl(BaseRepository<DetalleArticuloManufacturado, Long> baseRepository, BaseMapper<DetalleArticuloManufacturado, DetalleArticuloManufacturadoDto> baseMapper) {
         super(baseRepository, baseMapper);

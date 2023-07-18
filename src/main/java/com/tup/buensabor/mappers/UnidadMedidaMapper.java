@@ -2,17 +2,13 @@ package com.tup.buensabor.mappers;
 
 import com.tup.buensabor.dtos.unidadmedida.UnidadMedidaDto;
 import com.tup.buensabor.entities.UnidadMedida;
+import com.tup.buensabor.mappers.utils.DateMapper;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {DateMapper.class})
 public interface UnidadMedidaMapper extends BaseMapper<UnidadMedida, UnidadMedidaDto> {
-    static UnidadMedidaMapper getInstance() {
-        return Mappers.getMapper(UnidadMedidaMapper.class);
-    }
-
     UnidadMedidaDto toDTO(UnidadMedida source);
     UnidadMedida toEntity(UnidadMedidaDto source);
 

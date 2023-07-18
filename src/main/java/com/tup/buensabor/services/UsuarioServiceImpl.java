@@ -27,7 +27,8 @@ public class UsuarioServiceImpl extends BaseServiceImpl<Usuario, UsuarioDto, Lon
     @Autowired
     private ClienteServiceImpl clienteService;
 
-    private final UsuarioMapper usuarioMapper = UsuarioMapper.getInstance();
+    @Autowired
+    private UsuarioMapper usuarioMapper;
 
     public UsuarioServiceImpl(BaseRepository<Usuario, Long> baseRepository, BaseMapper<Usuario, UsuarioDto> baseMapper) {
         super(baseRepository, baseMapper);

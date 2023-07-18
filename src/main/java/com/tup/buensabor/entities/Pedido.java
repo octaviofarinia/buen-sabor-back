@@ -47,7 +47,6 @@ public class Pedido extends Base {
     @Enumerated(EnumType.STRING)
     private TipoEnvio tipoEnvio;
 
-    @NotNull
     @ManyToOne()
     @JoinColumn(name = "id_domicilio_entrega")
     private Domicilio domicilioEntrega;

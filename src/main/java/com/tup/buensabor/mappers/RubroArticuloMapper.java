@@ -4,21 +4,16 @@ import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloCompleteDto;
 import com.tup.buensabor.dtos.rubroarticulo.RubroArticuloSimpleDto;
 import com.tup.buensabor.entities.RubroArticulo;
 import com.tup.buensabor.mappers.utils.CycleAvoidingMappingContext;
+import com.tup.buensabor.mappers.utils.DateMapper;
 import com.tup.buensabor.mappers.utils.DoIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {DateMapper.class})
 public interface RubroArticuloMapper extends BaseMapper<RubroArticulo, RubroArticuloSimpleDto> {
-
-    static RubroArticuloMapper getInstance() {
-        return Mappers.getMapper(RubroArticuloMapper.class);
-    }
-
     @Mapping(source = "source.rubroPadre.id", target = "idRubroPadre")
     @Mapping(source = "source.rubroPadre", target = "rubroPadre")
     @Mapping(source = "source.id", target = "id")

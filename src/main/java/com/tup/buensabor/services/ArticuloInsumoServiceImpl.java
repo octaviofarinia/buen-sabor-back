@@ -40,7 +40,8 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
 
     private static final String CLOUDINARY_FOLDER = "insumos";
 
-    private final ArticuloInsumoMapper articuloInsumoMapper = ArticuloInsumoMapper.getInstance();
+    @Autowired
+    private ArticuloInsumoMapper articuloInsumoMapper;
 
     public ArticuloInsumoServiceImpl(BaseRepository<ArticuloInsumo, Long> baseRepository, BaseMapper<ArticuloInsumo, ArticuloInsumoCompleteDto> baseMapper) {
         super(baseRepository, baseMapper);

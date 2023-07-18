@@ -26,7 +26,8 @@ public class DomicilioServiceImpl extends BaseServiceImpl<Domicilio, DomicilioDt
     @Autowired
     private ClienteServiceImpl clienteService;
 
-    private final DomicilioMapper domicilioMapper = DomicilioMapper.getInstance();
+    @Autowired
+    private DomicilioMapper domicilioMapper;
 
     public DomicilioServiceImpl(BaseRepository<Domicilio, Long> baseRepository, BaseMapper<Domicilio, DomicilioDto> baseMapper) {
         super(baseRepository, baseMapper);

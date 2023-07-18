@@ -21,7 +21,8 @@ public class UnidadMedidaServiceImpl extends BaseServiceImpl<UnidadMedida, Unida
     @Autowired
     private UnidadMedidaRepository unidadMedidaRepository;
 
-    private final UnidadMedidaMapper unidadMedidaMapper = UnidadMedidaMapper.getInstance();
+    @Autowired
+    private UnidadMedidaMapper unidadMedidaMapper;
 
     public UnidadMedidaServiceImpl(BaseRepository<UnidadMedida, Long> baseRepository, BaseMapper<UnidadMedida, UnidadMedidaDto> baseMapper) {
         super(baseRepository, baseMapper);

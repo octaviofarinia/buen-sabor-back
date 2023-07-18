@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -26,7 +25,10 @@ public class PedidoDto extends BaseDto {
     private TipoEnvio tipoEnvio;
     private DomicilioDto domicilioEntrega;
     private ClienteDto cliente;
-    private Date fechaAlta;
-    private Date fechaModificacion;
-    private Date fechaBaja;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Argentina/Buenos_Aires")
+    private OffsetDateTime fechaAlta;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Argentina/Buenos_Aires")
+    private OffsetDateTime fechaModificacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Argentina/Buenos_Aires")
+    private OffsetDateTime fechaBaja;
 }

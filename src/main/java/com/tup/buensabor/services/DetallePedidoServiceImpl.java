@@ -16,7 +16,8 @@ public class DetallePedidoServiceImpl extends BaseServiceImpl<DetallePedido, Det
     @Autowired
     private DetallePedidoRepository detallePedidoRepository;
 
-    private final DetallePedidoMapper detallePedidoMapper = DetallePedidoMapper.getInstance();
+    @Autowired
+    private DetallePedidoMapper detallePedidoMapper;
 
     public DetallePedidoServiceImpl(BaseRepository<DetallePedido, Long> baseRepository, BaseMapper<DetallePedido, DetallePedidoDto> baseMapper) {
         super(baseRepository, baseMapper);

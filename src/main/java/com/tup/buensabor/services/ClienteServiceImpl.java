@@ -20,7 +20,8 @@ public class ClienteServiceImpl extends BaseServiceImpl<Cliente, ClienteDto, Lon
     @Autowired
     private ClienteRepository clienteRepository;
 
-    private final ClienteMapper clienteMapper = ClienteMapper.getInstance();
+    @Autowired
+    private ClienteMapper clienteMapper;
 
     public ClienteServiceImpl(BaseRepository<Cliente, Long> baseRepository, BaseMapper<Cliente, ClienteDto> baseMapper) {
         super(baseRepository, baseMapper);

@@ -28,7 +28,8 @@ public class FacturaServiceImpl extends BaseServiceImpl<Factura, FacturaDto, Lon
     @Autowired
     private FacturaRepository facturaRepository;
 
-    private final FacturaMapper facturaMapper = FacturaMapper.getInstance();
+    @Autowired
+    private FacturaMapper facturaMapper;
 
     public FacturaServiceImpl(BaseRepository<Factura, Long> baseRepository, BaseMapper<Factura, FacturaDto> baseMapper) {
         super(baseRepository, baseMapper);

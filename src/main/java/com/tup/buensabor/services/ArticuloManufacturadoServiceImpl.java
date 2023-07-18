@@ -29,7 +29,8 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
 
     private static final String CLOUDINARY_FOLDER = "productos";
 
-    private final ArticuloManufacturadoMapper articuloManufacturadoMapper = ArticuloManufacturadoMapper.getInstance();
+    @Autowired
+    private ArticuloManufacturadoMapper articuloManufacturadoMapper;
 
     public ArticuloManufacturadoServiceImpl(BaseRepository<ArticuloManufacturado, Long> baseRepository, BaseMapper<ArticuloManufacturado, ArticuloManufacturadoDto> baseMapper) {
         super(baseRepository, baseMapper);

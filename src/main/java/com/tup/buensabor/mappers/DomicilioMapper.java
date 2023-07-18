@@ -2,18 +2,14 @@ package com.tup.buensabor.mappers;
 
 import com.tup.buensabor.dtos.domicilio.DomicilioDto;
 import com.tup.buensabor.entities.Domicilio;
+import com.tup.buensabor.mappers.utils.DateMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {DateMapper.class})
 public interface DomicilioMapper extends BaseMapper<Domicilio, DomicilioDto> {
-    static DomicilioMapper getInstance() {
-        return Mappers.getMapper(DomicilioMapper.class);
-    }
-
     @Mapping(source = "source.cliente.usuario.auth0Id", target = "auth0Id")
     DomicilioDto toDTO(Domicilio source);
     Domicilio toEntity(DomicilioDto source);

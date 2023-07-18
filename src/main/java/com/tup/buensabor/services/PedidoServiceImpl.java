@@ -5,6 +5,7 @@ import com.tup.buensabor.dtos.pedido.AltaPedidoDto;
 import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.*;
 import com.tup.buensabor.enums.EstadoPedido;
+import com.tup.buensabor.enums.TipoEnvio;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.PedidoMapper;
@@ -49,7 +50,8 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    private final PedidoMapper pedidoMapper = PedidoMapper.getInstance();
+    @Autowired
+    private PedidoMapper pedidoMapper;
 
     public PedidoServiceImpl(BaseRepository<Pedido, Long> baseRepository, BaseMapper<Pedido, PedidoDto> baseMapper) {
         super(baseRepository, baseMapper);
@@ -64,11 +66,15 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         BigDecimal total = totalAtomicReference.get();
         BigDecimal totalCosto = totalCostoAtomicReference.get();
 
-        Optional<Domicilio> domicilioOptional = domicilioService.findOptionalById(altaPedidoDto.getIdDomicilioEntrega());
-        if(domicilioOptional.isEmpty()) {
-            throw new ServicioException("No se encontro un domicilio con el id " + altaPedidoDto.getIdDomicilioEntrega());
+
+        Domicilio domicilio = null;
+        if(!TipoEnvio.TAKE_AWAY.equals(altaPedidoDto.getTipoEnvio())) {
+            Optional<Domicilio> domicilioOptional = domicilioService.findOptionalById(altaPedidoDto.getIdDomicilioEntrega());
+            if(domicilioOptional.isEmpty()) {
+                throw new ServicioException("No se encontro un domicilio con el id " + altaPedidoDto.getIdDomicilioEntrega());
+            }
+            domicilio = domicilioOptional.get();
         }
-        Domicilio domicilio = domicilioOptional.get();
 
         Optional<Cliente> clienteOptional = clienteService.findOptionalByAuth0Id(altaPedidoDto.getAuth0Id());
         if(clienteOptional.isEmpty()) {
