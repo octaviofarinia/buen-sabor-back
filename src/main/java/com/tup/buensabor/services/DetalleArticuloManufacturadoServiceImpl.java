@@ -164,4 +164,5 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
         }
     }
 
+
 }

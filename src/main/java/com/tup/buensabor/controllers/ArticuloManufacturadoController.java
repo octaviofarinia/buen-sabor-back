@@ -3,7 +3,6 @@ package com.tup.buensabor.controllers;
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
 import com.tup.buensabor.dtos.articulomanufacturado.ArticuloManufacturadoDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
-import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.ArticuloManufacturadoServiceImpl;
 import com.tup.buensabor.services.DetalleArticuloManufacturadoServiceImpl;

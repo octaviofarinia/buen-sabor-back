@@ -2,14 +2,13 @@ package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoCompleteDto;
 import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoDto;
-import com.tup.buensabor.entities.ArticuloInsumo;
-import com.tup.buensabor.entities.RubroArticulo;
-import com.tup.buensabor.entities.UnidadMedida;
+import com.tup.buensabor.entities.*;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.ArticuloInsumoMapper;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.repositories.ArticuloInsumoRepository;
 import com.tup.buensabor.repositories.BaseRepository;
+import com.tup.buensabor.repositories.DetalleArticuloManufacturadoRepository;
 import com.tup.buensabor.services.interfaces.ArticuloInsumoService;
 import com.tup.buensabor.services.interfaces.RubroArticuloService;
 import com.tup.buensabor.services.interfaces.UnidadMedidaService;
@@ -19,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,6 +29,9 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
 
     @Autowired
     private ArticuloInsumoRepository articuloInsumoRepository;
+
+    @Autowired
+    private DetalleArticuloManufacturadoRepository detalleArticuloManufacturadoRepository;
 
     @Autowired
     private ImagenService imagenService;
@@ -142,4 +146,21 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
         this.hardDelete(id);
     }
 
+    public void restarStock(DetallePedido detallePedido) throws ServicioException {
+        List<DetalleArticuloManufacturado> ingredientes = detalleArticuloManufacturadoRepository.getByIdArticuloManufacturado(detallePedido.getArticuloManufacturado().getId());
+
+        for (DetalleArticuloManufacturado ingrediente : ingredientes) {
+            BigDecimal cantidadEnStock = ingrediente.getArticuloInsumo().getStockActual();
+            BigDecimal cantidadRequerida = ingrediente.getCantidad();
+            BigDecimal cantidadProductos = BigDecimal.valueOf(detallePedido.getCantidad());
+
+            if(cantidadEnStock.compareTo(cantidadRequerida.multiply(cantidadProductos)) < 0) {
+                throw new ServicioException("No hay stock suficiente para realizar el pedido.");
+            }
+
+            ArticuloInsumo articuloInsumo = ingrediente.getArticuloInsumo();
+            articuloInsumo.setStockActual(cantidadEnStock.subtract(cantidadRequerida.multiply(cantidadProductos)));
+            articuloInsumoRepository.save(articuloInsumo);
+        }
+    }
 }

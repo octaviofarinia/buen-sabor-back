@@ -40,6 +40,9 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     private ArticuloManufacturadoServiceImpl articuloManufacturadoService;
 
     @Autowired
+    private ArticuloInsumoServiceImpl articuloInsumoService;
+
+    @Autowired
     private ClienteServiceImpl clienteService;
 
     @Autowired
@@ -58,7 +61,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         super(baseRepository, baseMapper);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ServicioException.class)
     public Pedido altaPostPago(AltaPedidoDto altaPedidoDto) throws ServicioException {
         Pedido pedido = new Pedido();
 
@@ -112,6 +115,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         for(DetallePedido detallePedido : detallesPedido) {
             detallePedido.setPedido(pedido);
             detallePedidoService.save(detallePedido);
+            articuloInsumoService.restarStock(detallePedido);
         }
 
         facturaService.saveFacturaFromPedidoAlta(pedido, detallesPedido, altaPedidoDto.getFactura());
