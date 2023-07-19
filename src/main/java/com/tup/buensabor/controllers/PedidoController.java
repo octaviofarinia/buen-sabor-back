@@ -61,7 +61,7 @@ public class PedidoController extends BaseControllerImpl<Pedido, PedidoDto, Pedi
         }
     }
 
-    @GetMapping("/validar-stock")
+    @PutMapping("/validar-stock")
     public ResponseEntity<?> validarStock(@RequestBody List<AltaPedidoDetallePedidoDto> productos) {
         try {
             boolean isValid = servicio.validarStock(productos);
