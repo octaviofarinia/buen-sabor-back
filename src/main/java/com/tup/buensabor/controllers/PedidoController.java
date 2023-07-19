@@ -1,6 +1,7 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
+import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
 import com.tup.buensabor.dtos.pedido.AltaPedidoDto;
 import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.Pedido;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Log4j2
 @RestController
@@ -55,6 +58,17 @@ public class PedidoController extends BaseControllerImpl<Pedido, PedidoDto, Pedi
         } catch (ServicioException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("Error al crear el pedidoWS: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/validar-stock")
+    public ResponseEntity<?> validarStock(@RequestBody List<AltaPedidoDetallePedidoDto> productos) {
+        try {
+            boolean isValid = servicio.validarStock(productos);
+            return ResponseEntity.ok(isValid);
+        } catch (ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error al validar el pedido: " + e.getMessage());
         }
     }
 

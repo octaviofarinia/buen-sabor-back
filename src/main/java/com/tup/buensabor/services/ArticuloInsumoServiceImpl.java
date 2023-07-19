@@ -163,4 +163,20 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
             articuloInsumoRepository.save(articuloInsumo);
         }
     }
+
+    public boolean validarStock(DetallePedido detallePedido) throws ServicioException {
+        List<DetalleArticuloManufacturado> ingredientes = detalleArticuloManufacturadoRepository.getByIdArticuloManufacturado(detallePedido.getArticuloManufacturado().getId());
+
+        for (DetalleArticuloManufacturado ingrediente : ingredientes) {
+            BigDecimal cantidadEnStock = ingrediente.getArticuloInsumo().getStockActual();
+            BigDecimal cantidadRequerida = ingrediente.getCantidad();
+            BigDecimal cantidadProductos = BigDecimal.valueOf(detallePedido.getCantidad());
+
+            if(cantidadEnStock.compareTo(cantidadRequerida.multiply(cantidadProductos)) < 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

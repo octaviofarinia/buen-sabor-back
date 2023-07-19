@@ -186,4 +186,15 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
 
         return findAll();
     }
+
+    public boolean validarStock(List<AltaPedidoDetallePedidoDto> productos) throws ServicioException {
+        List<DetallePedido> productosEntity = this.getValidDetallesPedido(productos, new AtomicReference<>(BigDecimal.ZERO), new AtomicReference<>(BigDecimal.ZERO));
+
+        for (DetallePedido detallePedido : productosEntity) {
+            if(!articuloInsumoService.validarStock(detallePedido)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
