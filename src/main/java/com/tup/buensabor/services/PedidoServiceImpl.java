@@ -118,7 +118,9 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
             articuloInsumoService.restarStock(detallePedido);
         }
 
-        facturaService.saveFacturaFromPedidoAlta(pedido, detallesPedido, altaPedidoDto.getFactura());
+        if(!FormaPago.EFECTIVO.equals(altaPedidoDto.getFactura().getFormaPago())) {
+            facturaService.saveFacturaFromPedidoAlta(pedido, detallesPedido, altaPedidoDto.getFactura());
+        }
 
         return pedido;
     }
@@ -163,20 +165,28 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         return detallesPedido;
     }
 
+    @Transactional(rollbackOn = ServicioException.class)
     public void updateEstado(Long id, EstadoPedido estado) throws ServicioException {
         Optional<Pedido> optionalPedido = baseRepository.findById(id);
         if(optionalPedido.isEmpty()) {
             throw new ServicioException("No se encontro el pedido con el id dado.");
         }
-
         if(estado == null) {
             throw new ServicioException("El estado nuevo no puede ser nulo.");
         }
 
         Pedido pedido = optionalPedido.get();
+        if(pedido.getEstado().equals(EstadoPedido.PAGADO)) {
+            throw new ServicioException("No se puede modificar el estado de un pedido ya pagado.");
+        }
+
         pedido.setEstado(estado);
         pedido.setFechaModificacion(new Date());
         baseRepository.save(pedido);
+
+        if(estado.equals(EstadoPedido.PAGADO)) {
+            facturaService.saveFacturaAfterPagoEfectivo(pedido);
+        }
     }
 
     public List<PedidoDto> findAll(EstadoPedido estado) throws ServicioException {

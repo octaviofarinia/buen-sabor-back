@@ -10,6 +10,7 @@ import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.FacturaMapper;
 import com.tup.buensabor.repositories.BaseRepository;
+import com.tup.buensabor.repositories.DetallePedidoRepository;
 import com.tup.buensabor.repositories.FacturaRepository;
 import com.tup.buensabor.services.interfaces.FacturaService;
 import org.apache.commons.lang.StringUtils;
@@ -24,6 +25,9 @@ public class FacturaServiceImpl extends BaseServiceImpl<Factura, FacturaDto, Lon
 
     @Autowired
     private DetalleFacturaServiceImpl detalleFacturaService;
+
+    @Autowired
+    private DetallePedidoRepository detallePedidoRepository;
 
     @Autowired
     private FacturaRepository facturaRepository;
@@ -71,5 +75,24 @@ public class FacturaServiceImpl extends BaseServiceImpl<Factura, FacturaDto, Lon
                 throw new ServicioException("El campo mpPaymentType es obligatorio cuando el metodo de pago es MERCADO_PAGO.");
             }
         }
+    }
+
+    public Factura saveFacturaAfterPagoEfectivo(Pedido pedido) throws ServicioException {
+        Factura factura = new Factura();
+
+        factura.setFechaFacturacion(pedido.getFechaPedido());
+        factura.setFechaAlta(new Date());
+        factura.setTotalVenta(pedido.getTotal());
+        factura.setPedido(pedido);
+
+        factura = this.save(factura);
+
+        List<DetallePedido> detallesPedidos = detallePedidoRepository.findAllByPedidoId(pedido.getId());
+
+        for(DetallePedido detallePedido : detallesPedidos) {
+            detalleFacturaService.saveDetalleFromPedido(detallePedido, factura);
+        }
+
+        return factura;
     }
 }
