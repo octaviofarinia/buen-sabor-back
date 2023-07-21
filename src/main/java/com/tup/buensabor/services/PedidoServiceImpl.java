@@ -1,6 +1,7 @@
 package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
+import com.tup.buensabor.dtos.factura.FacturaDto;
 import com.tup.buensabor.dtos.pedido.AltaPedidoDto;
 import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.*;
@@ -11,6 +12,7 @@ import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.PedidoMapper;
 import com.tup.buensabor.repositories.BaseRepository;
+import com.tup.buensabor.repositories.DetallePedidoRepository;
 import com.tup.buensabor.repositories.PedidoRepository;
 import com.tup.buensabor.services.interfaces.PedidoService;
 import jakarta.transaction.Transactional;
@@ -55,6 +57,9 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     private PedidoRepository pedidoRepository;
 
     @Autowired
+    private DetallePedidoRepository detallePedidoRepository;
+
+    @Autowired
     private PedidoMapper pedidoMapper;
 
     public PedidoServiceImpl(BaseRepository<Pedido, Long> baseRepository, BaseMapper<Pedido, PedidoDto> baseMapper) {
@@ -89,7 +94,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         Cliente cliente = clienteOptional.get();
 
         if(FormaPago.EFECTIVO.equals(altaPedidoDto.getFactura().getFormaPago())) {
-            pedido.setEstado(EstadoPedido.PENDIENTE);
+            pedido.setEstado(EstadoPedido.PENDIENTE_PAGO);
         } else {
             pedido.setEstado(EstadoPedido.PAGADO);
         }
@@ -176,8 +181,12 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         }
 
         Pedido pedido = optionalPedido.get();
-        if(pedido.getEstado().equals(EstadoPedido.PAGADO)) {
-            throw new ServicioException("No se puede modificar el estado de un pedido ya pagado.");
+        if(pedido.getEstado().equals(EstadoPedido.CANCELADO)) {
+            throw new ServicioException("No se puede modificar el estado de un pedido para el cual se emitio una nota de credito.");
+        } else if(pedido.getEstado().equals(EstadoPedido.COMPLETADO)) {
+            throw new ServicioException("No se puede modificar el estado de un pedido que ya fue entregado.");
+        } else if(estado.equals(EstadoPedido.PAGADO) && !pedido.getEstado().equals(EstadoPedido.PENDIENTE_PAGO)) {
+            throw new ServicioException("No se puede marcar como Pagado un pedido que este en un estado distinto a PENDIENTE_PAGO");
         }
 
         pedido.setEstado(estado);
@@ -207,4 +216,49 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         }
         return true;
     }
+
+    @Transactional(rollbackOn = ServicioException.class)
+    public FacturaDto anular(Long idPedido) throws ServicioException {
+        Optional<Pedido> optionalPedido = pedidoRepository.findById(idPedido);
+        if(optionalPedido.isEmpty()) {
+            throw new ServicioException("No se encontro el pedido con el id dado.");
+        }
+
+        Pedido pedido = optionalPedido.get();
+
+        this.retornarStock(pedido);
+
+        if(pedido.getEstado().equals(EstadoPedido.PAGADO)) {
+            pedido.setEstado(EstadoPedido.CANCELADO);
+            pedido.setFechaBaja(new Date());
+
+            pedido = pedidoRepository.save(pedido);
+            return facturaService.crearNotaCredito(pedido);
+        } else {
+            pedido.setEstado(EstadoPedido.RECHAZADO);
+            pedido.setFechaBaja(new Date());
+
+            pedidoRepository.save(pedido);
+            return null;
+        }
+    }
+
+    private void retornarStock(Pedido pedido) throws ServicioException {
+        List<DetallePedido> detallesPedidos = detallePedidoRepository.findAllByPedidoId(pedido.getId());
+
+        for (DetallePedido detallePedido : detallesPedidos) {
+            articuloInsumoService.retornarStock(detallePedido);
+        }
+    }
+
+    @Transactional(rollbackOn = ServicioException.class)
+    public FacturaDto anularFromFactura(Long idFactura) throws ServicioException {
+        Optional<Factura> optionalFactura = facturaService.findOptionalById(idFactura);
+        if(optionalFactura.isEmpty()) {
+            throw new ServicioException("No se encontro factura para el id dado.");
+        }
+        Factura factura = optionalFactura.get();
+        return this.anular(factura.getPedido().getId());
+    }
+
 }

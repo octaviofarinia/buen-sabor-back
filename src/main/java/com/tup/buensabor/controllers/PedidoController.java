@@ -2,6 +2,7 @@ package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
 import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
+import com.tup.buensabor.dtos.factura.FacturaDto;
 import com.tup.buensabor.dtos.pedido.AltaPedidoDto;
 import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.Pedido;
@@ -57,7 +58,24 @@ public class PedidoController extends BaseControllerImpl<Pedido, PedidoDto, Pedi
             return ResponseEntity.ok().build();
         } catch (ServicioException e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error al crear el pedidoWS: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error al crear cambiar el estado del pedido: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/anular")
+    public ResponseEntity<?> anularPedido(@RequestParam(name = "id") Long id) {
+        try {
+            FacturaDto facturaAnulada = servicio.anular(id);
+            simpMessagingTemplate.convertAndSend("/pedidos", new PedidoNotificationMessage(id));
+
+            if(facturaAnulada != null) {
+                return ResponseEntity.ok(facturaAnulada);
+            } else {
+                return ResponseEntity.ok().build();
+            }
+        } catch (ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error al crear cambiar el estado del pedido: " + e.getMessage());
         }
     }
 

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FacturaServiceImpl extends BaseServiceImpl<Factura, FacturaDto, Long> implements FacturaService {
@@ -78,12 +79,17 @@ public class FacturaServiceImpl extends BaseServiceImpl<Factura, FacturaDto, Lon
     }
 
     public Factura saveFacturaAfterPagoEfectivo(Pedido pedido) throws ServicioException {
+        if(facturaRepository.existsByPedidoId(pedido.getId())) {
+            throw new ServicioException("Ya existe una factura para el pedido dado.");
+        }
+
         Factura factura = new Factura();
 
         factura.setFechaFacturacion(pedido.getFechaPedido());
         factura.setFechaAlta(new Date());
         factura.setTotalVenta(pedido.getTotal());
         factura.setPedido(pedido);
+        factura.setFormaPago(FormaPago.EFECTIVO);
 
         factura = this.save(factura);
 
@@ -95,4 +101,18 @@ public class FacturaServiceImpl extends BaseServiceImpl<Factura, FacturaDto, Lon
 
         return factura;
     }
+
+    public FacturaDto crearNotaCredito(Pedido pedido) throws ServicioException {
+        Optional<Factura> optionalFactura = facturaRepository.findByPedidoId(pedido.getId());
+        if(optionalFactura.isEmpty()) {
+            throw new ServicioException("No se encontro factura para el pedido dado.");
+        }
+
+        Factura factura = optionalFactura.get();
+        factura.setFechaModificacion(new Date());
+        factura.setFechaBaja(new Date());
+
+        return facturaMapper.toDTO(factura);
+    }
+
 }
