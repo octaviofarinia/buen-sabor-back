@@ -1,6 +1,7 @@
 package com.tup.buensabor.entities;
 
 import com.tup.buensabor.enums.EstadoPedido;
+import com.tup.buensabor.enums.FormaPago;
 import com.tup.buensabor.enums.TipoEnvio;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -46,6 +47,11 @@ public class Pedido extends Base {
     @Column(name = "tipo_envio")
     @Enumerated(EnumType.STRING)
     private TipoEnvio tipoEnvio;
+
+    @NotNull
+    @Column(name = "forma_pago")
+    @Enumerated(EnumType.STRING)
+    private FormaPago formaPago;
 
     @ManyToOne()
     @JoinColumn(name = "id_domicilio_entrega")

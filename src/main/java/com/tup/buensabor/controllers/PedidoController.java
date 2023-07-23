@@ -40,7 +40,7 @@ public class PedidoController extends BaseControllerImpl<Pedido, PedidoDto, Pedi
     @PostMapping(value = "")
     public ResponseEntity<?> save(@RequestBody AltaPedidoDto altaPedidoDto) {
         try {
-            Pedido pedido = servicio.altaPostPago(altaPedidoDto);
+            Pedido pedido = servicio.altaPedido(altaPedidoDto);
             simpMessagingTemplate.convertAndSend("/pedidos", new PedidoNotificationMessage(pedido.getId()));
             return ResponseEntity.ok().build();
         } catch (Exception e) {
