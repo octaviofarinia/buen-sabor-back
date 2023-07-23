@@ -16,28 +16,4 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "api/v1/facturas")
 public class FacturaController extends BaseControllerImpl<Factura, FacturaDto, FacturaServiceImpl> {
-
-    @Autowired
-    private PedidoServiceImpl pedidoService;
-
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
-
-    @PostMapping("/anular")
-    public ResponseEntity<?> anularFactura(@RequestParam(name = "id") Long id) {
-        try {
-            FacturaDto facturaAnulada = pedidoService.anularFromFactura(id);
-            simpMessagingTemplate.convertAndSend("/pedidos", new PedidoNotificationMessage(id));
-
-            if(facturaAnulada != null) {
-                return ResponseEntity.ok(facturaAnulada);
-            } else {
-                return ResponseEntity.ok().build();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error al anular la factura: " + e.getMessage());
-        }
-    }
-
 }

@@ -1,7 +1,10 @@
 package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.articulomanufacturado.ArticuloManufacturadoDto;
+import com.tup.buensabor.dtos.pedido.PedidoDto;
+import com.tup.buensabor.dtos.ranking.ArticuloManufacturadoRankingDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
+import com.tup.buensabor.entities.Pedido;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.ArticuloManufacturadoMapper;
 import com.tup.buensabor.mappers.BaseMapper;
@@ -14,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -118,4 +124,35 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         imagenService.deleteImage(id, CLOUDINARY_FOLDER);
         this.hardDelete(id);
     }
+
+    public List<ArticuloManufacturadoRankingDto> ranking(Date desde, Date hasta) throws ServicioException {
+        try {
+            if (desde == null) {
+                desde = new Date(Long.MIN_VALUE);
+            }
+            if (hasta == null) {
+                hasta = new Date();
+            }
+
+            LocalDateTime startOfDay = desde.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                    .atStartOfDay();
+
+            LocalDateTime endOfDay = hasta.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                    .atTime(23, 59, 59);
+
+            List<ArticuloManufacturadoRankingDto> lista = articuloManufacturadoRepository.ranking(
+                    Date.from(startOfDay.toInstant(ZoneOffset.UTC)),
+                    Date.from(endOfDay.toInstant(ZoneOffset.UTC)));
+
+            return lista;
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new ServicioException(e.getMessage());
+        }
+    }
+
 }

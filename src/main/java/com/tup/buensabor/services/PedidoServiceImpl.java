@@ -1,6 +1,8 @@
 package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
+import com.tup.buensabor.dtos.detallepedido.DetallePedidoDto;
+import com.tup.buensabor.dtos.detallepedido.DetallePedidoSimpleDto;
 import com.tup.buensabor.dtos.factura.FacturaDto;
 import com.tup.buensabor.dtos.pedido.AltaPedidoDto;
 import com.tup.buensabor.dtos.pedido.PedidoDto;
@@ -195,7 +197,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
 
         switch (newEstado) {
             case PAGADO, COMPLETADO -> {
-                pedido.setEstado(newEstado);
+                pedido.setEstado(EstadoPedido.COMPLETADO);
                 pedido.setFechaModificacion(new Date());
                 pedido = pedidoRepository.save(pedido);
                 facturaService.saveFacturaAfterPagoEfectivo(pedido);
@@ -306,14 +308,13 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         }
     }
 
-    @Transactional(rollbackOn = ServicioException.class)
-    public FacturaDto anularFromFactura(Long idFactura) throws ServicioException {
-        Optional<Factura> optionalFactura = facturaService.findOptionalById(idFactura);
-        if (optionalFactura.isEmpty()) {
-            throw new ServicioException("No se encontro factura para el id dado.");
+    public List<DetallePedidoSimpleDto> getDetallesByIdPedido(Long idPedido) throws ServicioException {
+        Optional<Pedido> optionalPedido = this.findOptionalById(idPedido);
+        if(optionalPedido.isEmpty()) {
+            throw new ServicioException("No existe un pedido con el id seleccionado.");
         }
-        Factura factura = optionalFactura.get();
-        return this.anular(factura.getPedido().getId());
+
+        return detallePedidoService.getByPedido(optionalPedido.get());
     }
 
 }

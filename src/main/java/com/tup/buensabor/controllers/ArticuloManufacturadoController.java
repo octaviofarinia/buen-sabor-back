@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 
 @RestController
 @RequestMapping(path = "api/v1/articulos-manufacturados")
@@ -82,6 +83,16 @@ public class ArticuloManufacturadoController extends BaseControllerImpl<Articulo
         } catch (IOException | ServicioException e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("Error al eliminar el producto: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/ranking")
+    public ResponseEntity<?> ranking(@RequestParam(name = "desde", required = false) Date desde, @RequestParam(name = "hasta", required = false) Date hasta) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.ranking(desde, hasta));
+        } catch (ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }
     }
 

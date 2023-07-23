@@ -8,6 +8,7 @@ import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.Pedido;
 import com.tup.buensabor.enums.EstadoPedido;
 import com.tup.buensabor.exceptions.ServicioException;
+import com.tup.buensabor.services.DetallePedidoServiceImpl;
 import com.tup.buensabor.services.PedidoServiceImpl;
 import com.tup.buensabor.websocket.messages.PedidoNotificationMessage;
 import lombok.extern.log4j.Log4j2;
@@ -17,12 +18,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Log4j2
 @RestController
 @RequestMapping(path = "api/v1/pedidos")
 public class PedidoController extends BaseControllerImpl<Pedido, PedidoDto, PedidoServiceImpl> {
+
+    DetallePedidoServiceImpl detallePedidoService;
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
@@ -62,23 +66,6 @@ public class PedidoController extends BaseControllerImpl<Pedido, PedidoDto, Pedi
         }
     }
 
-    @PutMapping("/anular")
-    public ResponseEntity<?> anularPedido(@RequestParam(name = "id") Long id) {
-        try {
-            FacturaDto facturaAnulada = servicio.anular(id);
-            simpMessagingTemplate.convertAndSend("/pedidos", new PedidoNotificationMessage(id));
-
-            if(facturaAnulada != null) {
-                return ResponseEntity.ok(facturaAnulada);
-            } else {
-                return ResponseEntity.ok().build();
-            }
-        } catch (ServicioException e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error al crear cambiar el estado del pedido: " + e.getMessage());
-        }
-    }
-
     @PutMapping("/validar-stock")
     public ResponseEntity<?> validarStock(@RequestBody List<AltaPedidoDetallePedidoDto> productos) {
         try {
@@ -87,6 +74,16 @@ public class PedidoController extends BaseControllerImpl<Pedido, PedidoDto, Pedi
         } catch (ServicioException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("Error al validar el pedido: " + e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/{id}/detalles")
+    public ResponseEntity<?> getDetalles(@PathVariable(name = "id") Long id) {
+        try {
+            return ResponseEntity.ok(servicio.getDetallesByIdPedido(id));
+        } catch (ServicioException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
