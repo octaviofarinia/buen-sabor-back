@@ -15,9 +15,10 @@ import java.time.OffsetDateTime;
 public class FacturaDto extends BaseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Argentina/Buenos_Aires")
     private OffsetDateTime fechaFacturacion;
-    private Long paymenteId;
-    private Long merchantOrderId;
-    private String preferenceId;
+    private Long mpPaymentId;
+    private Long mpMerchantOrderId;
+    private String mpPreferenceId;
+    private String mpPaymentType;
     private FormaPago formaPago;
     private BigDecimal totalVenta;
     private PedidoDto pedido;

@@ -10,6 +10,7 @@ import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.FacturaMapper;
 import com.tup.buensabor.repositories.BaseRepository;
+import com.tup.buensabor.repositories.DetallePedidoRepository;
 import com.tup.buensabor.repositories.FacturaRepository;
 import com.tup.buensabor.services.interfaces.FacturaService;
 import org.apache.commons.lang.StringUtils;
@@ -18,12 +19,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FacturaServiceImpl extends BaseServiceImpl<Factura, FacturaDto, Long> implements FacturaService {
 
     @Autowired
     private DetalleFacturaServiceImpl detalleFacturaService;
+
+    @Autowired
+    private DetallePedidoRepository detallePedidoRepository;
 
     @Autowired
     private FacturaRepository facturaRepository;
@@ -72,4 +77,42 @@ public class FacturaServiceImpl extends BaseServiceImpl<Factura, FacturaDto, Lon
             }
         }
     }
+
+    public Factura saveFacturaAfterPagoEfectivo(Pedido pedido) throws ServicioException {
+        if(facturaRepository.existsByPedidoId(pedido.getId())) {
+            throw new ServicioException("Ya existe una factura para el pedido dado.");
+        }
+
+        Factura factura = new Factura();
+
+        factura.setFechaFacturacion(pedido.getFechaPedido());
+        factura.setFechaAlta(new Date());
+        factura.setTotalVenta(pedido.getTotal());
+        factura.setPedido(pedido);
+        factura.setFormaPago(FormaPago.EFECTIVO);
+
+        factura = this.save(factura);
+
+        List<DetallePedido> detallesPedidos = detallePedidoRepository.findAllByPedidoId(pedido.getId());
+
+        for(DetallePedido detallePedido : detallesPedidos) {
+            detalleFacturaService.saveDetalleFromPedido(detallePedido, factura);
+        }
+
+        return factura;
+    }
+
+    public FacturaDto crearNotaCredito(Pedido pedido) throws ServicioException {
+        Optional<Factura> optionalFactura = facturaRepository.findByPedidoId(pedido.getId());
+        if(optionalFactura.isEmpty()) {
+            throw new ServicioException("No se encontro factura para el pedido dado.");
+        }
+
+        Factura factura = optionalFactura.get();
+        factura.setFechaModificacion(new Date());
+        factura.setFechaBaja(new Date());
+
+        return facturaMapper.toDTO(factura);
+    }
+
 }

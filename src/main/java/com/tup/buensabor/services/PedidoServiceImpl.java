@@ -1,6 +1,7 @@
 package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
+import com.tup.buensabor.dtos.factura.FacturaDto;
 import com.tup.buensabor.dtos.pedido.AltaPedidoDto;
 import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.*;
@@ -11,6 +12,7 @@ import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.PedidoMapper;
 import com.tup.buensabor.repositories.BaseRepository;
+import com.tup.buensabor.repositories.DetallePedidoRepository;
 import com.tup.buensabor.repositories.PedidoRepository;
 import com.tup.buensabor.services.interfaces.PedidoService;
 import jakarta.transaction.Transactional;
@@ -55,6 +57,9 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     private PedidoRepository pedidoRepository;
 
     @Autowired
+    private DetallePedidoRepository detallePedidoRepository;
+
+    @Autowired
     private PedidoMapper pedidoMapper;
 
     public PedidoServiceImpl(BaseRepository<Pedido, Long> baseRepository, BaseMapper<Pedido, PedidoDto> baseMapper) {
@@ -62,11 +67,11 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     }
 
     @Transactional(rollbackOn = ServicioException.class)
-    public Pedido altaPostPago(AltaPedidoDto altaPedidoDto) throws ServicioException {
+    public Pedido altaPedido(AltaPedidoDto altaPedidoDto) throws ServicioException {
         Pedido pedido = new Pedido();
 
         AtomicReference<BigDecimal> totalCostoAtomicReference = new AtomicReference<>(BigDecimal.ZERO);
-        AtomicReference<BigDecimal> totalAtomicReference =  new AtomicReference<>(BigDecimal.ZERO);
+        AtomicReference<BigDecimal> totalAtomicReference = new AtomicReference<>(BigDecimal.ZERO);
 
         List<DetallePedido> detallesPedido = getValidDetallesPedido(altaPedidoDto.getProductos(), totalAtomicReference, totalCostoAtomicReference);
         BigDecimal total = totalAtomicReference.get();
@@ -74,22 +79,22 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
 
 
         Domicilio domicilio = null;
-        if(!TipoEnvio.TAKE_AWAY.equals(altaPedidoDto.getTipoEnvio())) {
+        if (!TipoEnvio.TAKE_AWAY.equals(altaPedidoDto.getTipoEnvio())) {
             Optional<Domicilio> domicilioOptional = domicilioService.findOptionalById(altaPedidoDto.getIdDomicilioEntrega());
-            if(domicilioOptional.isEmpty()) {
+            if (domicilioOptional.isEmpty()) {
                 throw new ServicioException("No se encontro un domicilio con el id " + altaPedidoDto.getIdDomicilioEntrega());
             }
             domicilio = domicilioOptional.get();
         }
 
         Optional<Cliente> clienteOptional = clienteService.findOptionalByAuth0Id(altaPedidoDto.getAuth0Id());
-        if(clienteOptional.isEmpty()) {
+        if (clienteOptional.isEmpty()) {
             throw new ServicioException("No se encontro un cliente con el Auth0Id " + altaPedidoDto.getAuth0Id());
         }
         Cliente cliente = clienteOptional.get();
 
-        if(FormaPago.EFECTIVO.equals(altaPedidoDto.getFactura().getFormaPago())) {
-            pedido.setEstado(EstadoPedido.PENDIENTE);
+        if (FormaPago.EFECTIVO.equals(altaPedidoDto.getFactura().getFormaPago())) {
+            pedido.setEstado(EstadoPedido.PENDIENTE_PAGO);
         } else {
             pedido.setEstado(EstadoPedido.PAGADO);
         }
@@ -105,6 +110,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         pedido.setFechaPedido(fechaPedido);
         pedido.setHoraEstimadaFinalizacion(horaEstimadaFinalizacion);
         pedido.setTipoEnvio(altaPedidoDto.getTipoEnvio());
+        pedido.setFormaPago(altaPedidoDto.getFactura().getFormaPago());
         pedido.setTotalCosto(totalCosto);
         pedido.setTotal(total);
 
@@ -112,19 +118,21 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
 
         pedido = this.save(pedido);
 
-        for(DetallePedido detallePedido : detallesPedido) {
+        for (DetallePedido detallePedido : detallesPedido) {
             detallePedido.setPedido(pedido);
             detallePedidoService.save(detallePedido);
             articuloInsumoService.restarStock(detallePedido);
         }
 
-        facturaService.saveFacturaFromPedidoAlta(pedido, detallesPedido, altaPedidoDto.getFactura());
+        if (!FormaPago.EFECTIVO.equals(altaPedidoDto.getFactura().getFormaPago())) {
+            facturaService.saveFacturaFromPedidoAlta(pedido, detallesPedido, altaPedidoDto.getFactura());
+        }
 
         return pedido;
     }
 
     private List<DetallePedido> getValidDetallesPedido(List<AltaPedidoDetallePedidoDto> productos, AtomicReference<BigDecimal> totalReference, AtomicReference<BigDecimal> totalCostoReference) throws ServicioException {
-        if(productos.size() == 0) {
+        if (productos.size() == 0) {
             throw new ServicioException("Debe seleccionar al menos un producto para realizar un pedido.");
         }
 
@@ -134,12 +142,12 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         List<DetallePedido> detallesPedido = new ArrayList<>();
         for (AltaPedidoDetallePedidoDto detalleAlta : productos) {
             Optional<ArticuloManufacturado> articuloManufacturadoOptional = articuloManufacturadoService.findOptionalById(detalleAlta.getIdArticuloManufacturado());
-            if(articuloManufacturadoOptional.isEmpty()) {
+            if (articuloManufacturadoOptional.isEmpty()) {
                 throw new ServicioException("No existe un articulo manufacturado con el id " + detalleAlta.getIdArticuloManufacturado() + ".");
             }
 
             Integer cantidad = detalleAlta.getCantidad();
-            if(cantidad == null || cantidad <= 0) {
+            if (cantidad == null || cantidad <= 0) {
                 throw new ServicioException("No se puede seleccionar una cantidad menor o igual a cero - id: " + detalleAlta.getIdArticuloManufacturado() + "  cantidad: " + cantidad);
             }
 
@@ -163,24 +171,90 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         return detallesPedido;
     }
 
+    @Transactional(rollbackOn = ServicioException.class)
     public void updateEstado(Long id, EstadoPedido estado) throws ServicioException {
         Optional<Pedido> optionalPedido = baseRepository.findById(id);
-        if(optionalPedido.isEmpty()) {
+        if (optionalPedido.isEmpty()) {
             throw new ServicioException("No se encontro el pedido con el id dado.");
         }
-
-        if(estado == null) {
+        if (estado == null) {
             throw new ServicioException("El estado nuevo no puede ser nulo.");
         }
 
         Pedido pedido = optionalPedido.get();
-        pedido.setEstado(estado);
-        pedido.setFechaModificacion(new Date());
-        baseRepository.save(pedido);
+        switch (pedido.getFormaPago()) {
+            case EFECTIVO -> updateEstadoEfectivo(estado, pedido);
+            case MERCADO_PAGO -> updateEstadoMercadoPago(estado, pedido);
+        }
+    }
+
+    public void updateEstadoEfectivo(EstadoPedido newEstado, Pedido pedido) throws ServicioException {
+        if(!pedido.getEstado().isValidNextState(newEstado, FormaPago.EFECTIVO)) {
+            throw new ServicioException(pedido.getEstado() + " -> " + newEstado + " es una transicion de estados invalida en pedidos en EFECTIVO");
+        }
+
+        switch (newEstado) {
+            case PAGADO, COMPLETADO -> {
+                pedido.setEstado(newEstado);
+                pedido.setFechaModificacion(new Date());
+                pedido = pedidoRepository.save(pedido);
+                facturaService.saveFacturaAfterPagoEfectivo(pedido);
+            }
+            case PENDIENTE_PAGO, PENDIENTE_ENVIO, PREPARACION, EN_CAMINO -> {
+                pedido.setEstado(newEstado);
+                pedido.setFechaModificacion(new Date());
+                pedidoRepository.save(pedido);
+            }
+            case CANCELADO -> {
+                this.retornarStock(pedido);
+                pedido.setEstado(newEstado);
+                pedido.setFechaModificacion(new Date());
+                pedido.setFechaBaja(new Date());
+                pedidoRepository.save(pedido);
+            }
+            case NOTA_CREDITO -> {
+                this.retornarStock(pedido);
+                pedido.setEstado(newEstado);
+                pedido.setFechaModificacion(new Date());
+                pedido.setFechaBaja(new Date());
+                pedido = pedidoRepository.save(pedido);
+                facturaService.crearNotaCredito(pedido);
+            }
+            default -> throw new ServicioException("Invalid state");
+        }
+    }
+
+    public void updateEstadoMercadoPago(EstadoPedido newEstado, Pedido pedido) throws ServicioException {
+        if(!pedido.getEstado().isValidNextState(newEstado, FormaPago.MERCADO_PAGO)) {
+            throw new ServicioException(pedido.getEstado() + " -> " + newEstado + " es una transicion de estados invalida en pedidos de MERCADO_PAGO");
+        }
+
+        switch (newEstado) {
+            case PAGADO, PREPARACION, PENDIENTE_ENVIO, EN_CAMINO, COMPLETADO -> {
+                pedido.setEstado(newEstado);
+                pedido.setFechaModificacion(new Date());
+                pedidoRepository.save(pedido);
+            }
+            case NOTA_CREDITO -> {
+                if (pedido.getEstado().equals(EstadoPedido.PAGADO)) {
+                    this.retornarStock(pedido);
+                }
+                pedido.setEstado(newEstado);
+                pedido.setFechaModificacion(new Date());
+                pedido.setFechaBaja(new Date());
+                pedido = pedidoRepository.save(pedido);
+                facturaService.crearNotaCredito(pedido);
+            }
+            case PENDIENTE_PAGO ->
+                    throw new ServicioException("Estado PENDIENTE_PAGO en pedidos de MERCADO_PAGO no implementado a traves de metodo updateEstado.");
+            case CANCELADO ->
+                    throw new ServicioException("Estado CANCELADO en pedidos de MERCADO_PAGO no implementado a traves de metodo updateEstado.");
+            default -> throw new ServicioException("Estado seleccionado invalido.");
+        }
     }
 
     public List<PedidoDto> findAll(EstadoPedido estado) throws ServicioException {
-        if(estado != null && StringUtils.isNotBlank(estado.name())) {
+        if (estado != null && StringUtils.isNotBlank(estado.name())) {
             return baseMapper.toDTOsList(pedidoRepository.findAllByEstado(estado));
         }
 
@@ -191,10 +265,55 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         List<DetallePedido> productosEntity = this.getValidDetallesPedido(productos, new AtomicReference<>(BigDecimal.ZERO), new AtomicReference<>(BigDecimal.ZERO));
 
         for (DetallePedido detallePedido : productosEntity) {
-            if(!articuloInsumoService.validarStock(detallePedido)) {
+            if (!articuloInsumoService.validarStock(detallePedido)) {
                 return false;
             }
         }
         return true;
     }
+
+    @Transactional(rollbackOn = ServicioException.class)
+    public FacturaDto anular(Long idPedido) throws ServicioException {
+        Optional<Pedido> optionalPedido = pedidoRepository.findById(idPedido);
+        if (optionalPedido.isEmpty()) {
+            throw new ServicioException("No se encontro el pedido con el id dado.");
+        }
+
+        Pedido pedido = optionalPedido.get();
+
+        this.retornarStock(pedido);
+
+        if (pedido.getEstado().equals(EstadoPedido.PAGADO)) {
+            pedido.setEstado(EstadoPedido.NOTA_CREDITO);
+            pedido.setFechaBaja(new Date());
+
+            pedido = pedidoRepository.save(pedido);
+            return facturaService.crearNotaCredito(pedido);
+        } else {
+            pedido.setEstado(EstadoPedido.CANCELADO);
+            pedido.setFechaBaja(new Date());
+
+            pedidoRepository.save(pedido);
+            return null;
+        }
+    }
+
+    private void retornarStock(Pedido pedido) throws ServicioException {
+        List<DetallePedido> detallesPedidos = detallePedidoRepository.findAllByPedidoId(pedido.getId());
+
+        for (DetallePedido detallePedido : detallesPedidos) {
+            articuloInsumoService.retornarStock(detallePedido);
+        }
+    }
+
+    @Transactional(rollbackOn = ServicioException.class)
+    public FacturaDto anularFromFactura(Long idFactura) throws ServicioException {
+        Optional<Factura> optionalFactura = facturaService.findOptionalById(idFactura);
+        if (optionalFactura.isEmpty()) {
+            throw new ServicioException("No se encontro factura para el id dado.");
+        }
+        Factura factura = optionalFactura.get();
+        return this.anular(factura.getPedido().getId());
+    }
+
 }

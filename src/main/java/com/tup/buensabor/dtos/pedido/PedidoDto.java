@@ -5,6 +5,7 @@ import com.tup.buensabor.dtos.BaseDto;
 import com.tup.buensabor.dtos.domicilio.DomicilioDto;
 import com.tup.buensabor.dtos.usuario.ClienteDto;
 import com.tup.buensabor.enums.EstadoPedido;
+import com.tup.buensabor.enums.FormaPago;
 import com.tup.buensabor.enums.TipoEnvio;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +24,7 @@ public class PedidoDto extends BaseDto {
     private BigDecimal totalCosto;
     private EstadoPedido estado;
     private TipoEnvio tipoEnvio;
+    private FormaPago formaPago;
     private DomicilioDto domicilioEntrega;
     private ClienteDto cliente;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Argentina/Buenos_Aires")
