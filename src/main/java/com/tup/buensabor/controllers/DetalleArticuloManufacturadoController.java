@@ -16,7 +16,7 @@ import java.io.IOException;
 @RequestMapping(path = "api/v1/detalles-articulos-manufacturados")
 public class DetalleArticuloManufacturadoController extends BaseControllerImpl<DetalleArticuloManufacturado, DetalleArticuloManufacturadoDto, DetalleArticuloManufacturadoServiceImpl> {
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @PostMapping(value = "")
     public ResponseEntity<?> save(@RequestBody() DetalleArticuloManufacturadoSimpleDto detalle) {
         try {
@@ -28,7 +28,7 @@ public class DetalleArticuloManufacturadoController extends BaseControllerImpl<D
         }
     }
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@RequestBody() DetalleArticuloManufacturadoSimpleDto detalle) {
         try {
@@ -40,7 +40,7 @@ public class DetalleArticuloManufacturadoController extends BaseControllerImpl<D
         }
     }
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         try {

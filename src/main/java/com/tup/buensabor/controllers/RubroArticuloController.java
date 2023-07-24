@@ -16,7 +16,7 @@ public class RubroArticuloController {
     @Autowired
     private RubroArticuloServiceImpl servicio;
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody RubroArticuloCompleteDto rubroArticulo) {
         try {
@@ -64,7 +64,7 @@ public class RubroArticuloController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RubroArticuloCompleteDto object) {
         try {
@@ -76,7 +76,7 @@ public class RubroArticuloController {
         }
     }
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {

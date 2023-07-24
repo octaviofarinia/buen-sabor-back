@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "api/v1/unidades-medida")
 public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, UnidadMedidaDto, UnidadMedidaServiceImpl> {
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody UnidadMedidaDto unidadMedidaDto) {
         try {
@@ -23,7 +23,7 @@ public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, Uni
         }
     }
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") Long id, @RequestBody UnidadMedidaDto unidadMedidaDto) {
         try {
@@ -33,7 +33,7 @@ public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, Uni
         }
     }
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         try {
@@ -45,7 +45,7 @@ public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, Uni
         }
     }
 
-    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @DeleteMapping(value = "/hard_delete/{id}")
     public ResponseEntity<?> hardDelete(@PathVariable(name = "id") Long id) {
         try {
