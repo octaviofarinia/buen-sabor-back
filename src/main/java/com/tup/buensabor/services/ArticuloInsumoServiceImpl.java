@@ -193,4 +193,22 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
 
         return true;
     }
+
+    public ArticuloInsumoCompleteDto updateStock(Long idInsumo, BigDecimal stock, BigDecimal precio) throws ServicioException {
+        Optional<ArticuloInsumo> optionalArticuloInsumo = articuloInsumoRepository.findById(idInsumo);
+        if(optionalArticuloInsumo.isEmpty()) {
+            throw new ServicioException("No existe un insumo con el id seleccionado.");
+        }
+
+        ArticuloInsumo articuloInsumo = optionalArticuloInsumo.get();
+        articuloInsumo.setStockActual(articuloInsumo.getStockActual().add(stock));
+
+        if(precio != null) {
+            articuloInsumo.setPrecioCompra(precio);
+        }
+
+        articuloInsumoRepository.save(articuloInsumo);
+
+        return articuloInsumoMapper.toDTO(articuloInsumo);
+    }
 }
