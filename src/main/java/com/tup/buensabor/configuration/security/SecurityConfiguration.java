@@ -3,6 +3,7 @@ package com.tup.buensabor.configuration.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,7 +40,8 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/articulos-manufacturados", "/api/v1/articulos-manufacturados/**").permitAll()
+                .requestMatchers("/**").authenticated()
                 .and().oauth2ResourceServer()
                     .jwt()
                         .decoder(jwtDecoder())
