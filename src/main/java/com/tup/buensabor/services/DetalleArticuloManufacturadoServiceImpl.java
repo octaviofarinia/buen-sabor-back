@@ -1,5 +1,6 @@
 package com.tup.buensabor.services;
 
+import com.tup.buensabor.dtos.detallearticulomanufacturado.DetalleArticuloManufacturadoCompleteDto;
 import com.tup.buensabor.dtos.detallearticulomanufacturado.DetalleArticuloManufacturadoDto;
 import com.tup.buensabor.dtos.detallearticulomanufacturado.DetalleArticuloManufacturadoSimpleDto;
 import com.tup.buensabor.entities.ArticuloInsumo;
@@ -8,6 +9,7 @@ import com.tup.buensabor.entities.DetalleArticuloManufacturado;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.DetalleArticuloManufacturadoMapper;
+import com.tup.buensabor.mappers.UnidadMedidaMapper;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.repositories.DetalleArticuloManufacturadoRepository;
 import com.tup.buensabor.services.interfaces.DetalleArticuloManufacturadoService;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,7 +34,7 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
     private ArticuloInsumoServiceImpl articuloInsumoService;
 
     @Autowired
-    private UnidadMedidaServiceImpl unidadMedidaService;
+    private UnidadMedidaMapper unidadMedidaMapper;
 
     @Autowired
     private ArticuloManufacturadoServiceImpl articuloManufacturadoService;
@@ -43,13 +46,21 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
         super(baseRepository, baseMapper);
     }
 
-    public List<DetalleArticuloManufacturadoDto> getByIdArticuloManufacturado(Long id) throws ServicioException {
+    public List<DetalleArticuloManufacturadoCompleteDto> getByIdArticuloManufacturado(Long id) throws ServicioException {
         Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoService.findOptionalById(id);
         if(optionalArticuloManufacturado.isEmpty()) {
             throw new ServicioException("No existe un producto con el id seleccionado.");
         }
 
-        return detalleArticuloManufacturadoMapper.toDTOsList(detalleArticuloManufacturadoRepository.getByIdArticuloManufacturado(id));
+        List<DetalleArticuloManufacturadoCompleteDto> detallesDto = new ArrayList<>();
+        List<DetalleArticuloManufacturado> detallesEntity = detalleArticuloManufacturadoRepository.getByIdArticuloManufacturado(id);
+        for (DetalleArticuloManufacturado detalleEntity : detallesEntity) {
+            DetalleArticuloManufacturadoCompleteDto dto = detalleArticuloManufacturadoMapper.toCompleteDTO(detalleEntity);
+            dto.setUnidadMedida(unidadMedidaMapper.toDTO(detalleEntity.getArticuloInsumo().getUnidadMedida()));
+            detallesDto.add(dto);
+        }
+
+        return detallesDto;
     }
 
     @Transactional
