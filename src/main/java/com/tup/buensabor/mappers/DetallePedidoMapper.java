@@ -4,7 +4,6 @@ import com.tup.buensabor.dtos.detallepedido.DetallePedidoDto;
 import com.tup.buensabor.dtos.detallepedido.DetallePedidoSimpleDto;
 import com.tup.buensabor.entities.DetallePedido;
 import com.tup.buensabor.mappers.utils.DateMapper;
-import org.hibernate.annotations.Source;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

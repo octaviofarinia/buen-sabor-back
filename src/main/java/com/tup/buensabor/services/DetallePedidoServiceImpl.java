@@ -2,21 +2,17 @@ package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.detallepedido.DetallePedidoDto;
 import com.tup.buensabor.dtos.detallepedido.DetallePedidoSimpleDto;
-import com.tup.buensabor.entities.ArticuloManufacturado;
 import com.tup.buensabor.entities.DetallePedido;
 import com.tup.buensabor.entities.Pedido;
-import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.mappers.DetallePedidoMapper;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.repositories.DetallePedidoRepository;
 import com.tup.buensabor.services.interfaces.DetallePedidoService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DetallePedidoServiceImpl extends BaseServiceImpl<DetallePedido, DetallePedidoDto, Long> implements DetallePedidoService {

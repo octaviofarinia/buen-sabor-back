@@ -1,10 +1,8 @@
 package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.articulomanufacturado.ArticuloManufacturadoDto;
-import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.dtos.ranking.ArticuloManufacturadoRankingDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
-import com.tup.buensabor.entities.Pedido;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.ArticuloManufacturadoMapper;
 import com.tup.buensabor.mappers.BaseMapper;
