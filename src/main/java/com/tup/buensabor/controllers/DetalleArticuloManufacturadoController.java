@@ -7,6 +7,7 @@ import com.tup.buensabor.entities.DetalleArticuloManufacturado;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.DetalleArticuloManufacturadoServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -14,7 +15,8 @@ import java.io.IOException;
 @RestController
 @RequestMapping(path = "api/v1/detalles-articulos-manufacturados")
 public class DetalleArticuloManufacturadoController extends BaseControllerImpl<DetalleArticuloManufacturado, DetalleArticuloManufacturadoDto, DetalleArticuloManufacturadoServiceImpl> {
-    
+
+    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
     @PostMapping(value = "")
     public ResponseEntity<?> save(@RequestBody() DetalleArticuloManufacturadoSimpleDto detalle) {
         try {
@@ -26,6 +28,7 @@ public class DetalleArticuloManufacturadoController extends BaseControllerImpl<D
         }
     }
 
+    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@RequestBody() DetalleArticuloManufacturadoSimpleDto detalle) {
         try {
@@ -37,6 +40,7 @@ public class DetalleArticuloManufacturadoController extends BaseControllerImpl<D
         }
     }
 
+    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         try {

@@ -6,6 +6,7 @@ import com.tup.buensabor.services.RubroArticuloServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class RubroArticuloController {
     @Autowired
     private RubroArticuloServiceImpl servicio;
 
+    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody RubroArticuloCompleteDto rubroArticulo) {
         try {
@@ -62,6 +64,7 @@ public class RubroArticuloController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RubroArticuloCompleteDto object) {
         try {
@@ -73,6 +76,7 @@ public class RubroArticuloController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority(administrador, logistica)")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
