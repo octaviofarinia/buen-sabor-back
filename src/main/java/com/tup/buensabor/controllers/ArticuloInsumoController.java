@@ -62,7 +62,7 @@ public class ArticuloInsumoController extends BaseControllerImpl<ArticuloInsumo,
         }
     }
 
-    @PutMapping(value = "/update-stock/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/update-stock/{id}")
     public ResponseEntity<?> updateStock(@RequestParam("idInsumo") Long idInsumo, @RequestParam("stock") BigDecimal stock, @RequestParam(value = "precio", required = false) BigDecimal precio) {
         try {
             ArticuloInsumoCompleteDto articuloInsumo = servicio.updateStock(idInsumo, stock, precio);
