@@ -24,7 +24,8 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Rub
     @Autowired
     private RubroArticuloRepository rubroArticuloRepository;
 
-    private final RubroArticuloMapper rubroArticuloMapper = RubroArticuloMapper.getInstance();
+    @Autowired
+    private RubroArticuloMapper rubroArticuloMapper;
 
     public RubroArticuloServiceImpl(BaseRepository<RubroArticulo, Long> baseRepository, BaseMapper<RubroArticulo, RubroArticuloSimpleDto> baseMapper) {
         super(baseRepository, baseMapper);

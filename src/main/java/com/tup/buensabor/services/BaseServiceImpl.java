@@ -33,6 +33,7 @@ public abstract class BaseServiceImpl<E extends Base, D extends BaseDto, ID exte
             List<E> entities = baseRepository.findAll();
             return baseMapper.toDTOsList(entities);
         }catch (Exception e) {
+            e.printStackTrace();
             throw new ServicioException(e.getMessage());
         }
     }
@@ -63,6 +64,7 @@ public abstract class BaseServiceImpl<E extends Base, D extends BaseDto, ID exte
             entity = baseRepository.save(entity);
             return entity;
         }catch (Exception e) {
+            e.printStackTrace();
             throw new ServicioException(e.getMessage());
         }
     }

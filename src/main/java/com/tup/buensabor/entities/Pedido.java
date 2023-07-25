@@ -1,6 +1,7 @@
 package com.tup.buensabor.entities;
 
 import com.tup.buensabor.enums.EstadoPedido;
+import com.tup.buensabor.enums.FormaPago;
 import com.tup.buensabor.enums.TipoEnvio;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -26,16 +27,17 @@ public class Pedido extends Base {
     private Date fechaPedido;
 
     @NotNull
-    private Integer numero;
-
-    @NotNull
     @Column(name = "hora_estimada_finalizacion")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date horaEstimadaFinalizacion;
 
     @NotNull
     @Column(name = "total", precision = 10, scale = 2)
     private BigDecimal total;
+
+    @NotNull
+    @Column(name = "total_costo", precision = 10, scale = 2)
+    private BigDecimal totalCosto;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -47,11 +49,10 @@ public class Pedido extends Base {
     private TipoEnvio tipoEnvio;
 
     @NotNull
-    @OneToOne
-    @JoinColumn(name = "id_factura")
-    private Factura factura;
+    @Column(name = "forma_pago")
+    @Enumerated(EnumType.STRING)
+    private FormaPago formaPago;
 
-    @NotNull
     @ManyToOne()
     @JoinColumn(name = "id_domicilio_entrega")
     private Domicilio domicilioEntrega;

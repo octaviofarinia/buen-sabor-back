@@ -9,9 +9,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class UsuarioDto extends BaseDto {
     @NotBlank
-    private String auth0Identifier;
-    @NotBlank
-    private String identityProvider;
+    private String auth0Id;
     @NotBlank
     private String username;
+    @NotBlank
+    private String email;
 }

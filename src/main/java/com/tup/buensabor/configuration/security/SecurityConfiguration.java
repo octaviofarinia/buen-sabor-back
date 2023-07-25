@@ -3,6 +3,7 @@ package com.tup.buensabor.configuration.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,7 +40,9 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/**").permitAll()
+                .requestMatchers("/api/v1/ws", "/api/v1/ws/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/articulos-manufacturados", "/api/v1/articulos-manufacturados/**", "/api/v1/detalles-articulos-manufacturados", "/api/v1/detalles-articulos-manufacturados/**").permitAll()
+                .requestMatchers("/**").authenticated()
                 .and().oauth2ResourceServer()
                     .jwt()
                         .decoder(jwtDecoder())
@@ -53,7 +56,7 @@ public class SecurityConfiguration {
         configuration.setAllowedOrigins(Arrays.asList(corsAllowedOrigins));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type","auth0Id"));
         configuration.setExposedHeaders(Arrays.asList("X-Get-Header"));
         configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -77,7 +80,7 @@ public class SecurityConfiguration {
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
-        converter.setAuthoritiesClaimName("permissions");
+        converter.setAuthoritiesClaimName("https://buensaborback.com/roles");
         converter.setAuthorityPrefix("");
 
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();

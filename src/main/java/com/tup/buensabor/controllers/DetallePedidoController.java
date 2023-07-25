@@ -1,7 +1,7 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
-import com.tup.buensabor.dtos.DetallePedidoDto;
+import com.tup.buensabor.dtos.detallepedido.DetallePedidoDto;
 import com.tup.buensabor.entities.DetallePedido;
 import com.tup.buensabor.services.DetallePedidoServiceImpl;
 import org.springframework.web.bind.annotation.RequestMapping;

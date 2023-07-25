@@ -1,6 +1,7 @@
 package com.tup.buensabor.services;
 
-import com.tup.buensabor.dtos.ArticuloManufacturadoDto;
+import com.tup.buensabor.dtos.articulomanufacturado.ArticuloManufacturadoDto;
+import com.tup.buensabor.dtos.ranking.ArticuloManufacturadoRankingDto;
 import com.tup.buensabor.entities.ArticuloManufacturado;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.ArticuloManufacturadoMapper;
@@ -14,7 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,12 +32,24 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
     @Autowired
     private ImagenService imagenService;
 
-    private final String CLOUDINARY_FOLDER = "productos";
+    private static final String CLOUDINARY_FOLDER = "productos";
 
-    private final ArticuloManufacturadoMapper articuloManufacturadoMapper = ArticuloManufacturadoMapper.getInstance();
+    @Autowired
+    private ArticuloManufacturadoMapper articuloManufacturadoMapper;
 
     public ArticuloManufacturadoServiceImpl(BaseRepository<ArticuloManufacturado, Long> baseRepository, BaseMapper<ArticuloManufacturado, ArticuloManufacturadoDto> baseMapper) {
         super(baseRepository, baseMapper);
+    }
+
+    @Transactional
+    public List<ArticuloManufacturadoDto> findAll(String nombre) throws ServicioException {
+        try {
+            List<ArticuloManufacturado> entities = articuloManufacturadoRepository.findAllByNombre(nombre);
+            return baseMapper.toDTOsList(entities);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new ServicioException(e.getMessage());
+        }
     }
 
     @Transactional
@@ -105,4 +122,35 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         imagenService.deleteImage(id, CLOUDINARY_FOLDER);
         this.hardDelete(id);
     }
+
+    public List<ArticuloManufacturadoRankingDto> ranking(Date desde, Date hasta) throws ServicioException {
+        try {
+            if (desde == null) {
+                desde = new Date(Long.MIN_VALUE);
+            }
+            if (hasta == null) {
+                hasta = new Date();
+            }
+
+            LocalDateTime startOfDay = desde.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                    .atStartOfDay();
+
+            LocalDateTime endOfDay = hasta.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                    .atTime(23, 59, 59);
+
+            List<ArticuloManufacturadoRankingDto> lista = articuloManufacturadoRepository.ranking(
+                    Date.from(startOfDay.toInstant(ZoneOffset.UTC)),
+                    Date.from(endOfDay.toInstant(ZoneOffset.UTC)));
+
+            return lista;
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new ServicioException(e.getMessage());
+        }
+    }
+
 }

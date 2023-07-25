@@ -14,16 +14,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "usuario", uniqueConstraints = { @UniqueConstraint(columnNames = { "auth0_id", "identity_provider" }) })
+@Table(name = "usuario")
 public class Usuario extends Base {
 
     @NotNull
-    @Column(name = "auth0_id", nullable = false)
-    private String auth0Identifier;
-
-    @NotNull
-    @Column(name = "identity_provider", nullable = false)
-    private String identityProvider;
+    @Column(name = "auth0_id", nullable = false, unique = true)
+    private String auth0Id;
 
     @NotNull
     @Column(name = "username", nullable = false)

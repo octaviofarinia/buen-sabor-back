@@ -1,6 +1,6 @@
 package com.tup.buensabor.services;
 
-import com.tup.buensabor.dtos.UnidadMedidaDto;
+import com.tup.buensabor.dtos.unidadmedida.UnidadMedidaDto;
 import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.BaseMapper;
@@ -21,7 +21,8 @@ public class UnidadMedidaServiceImpl extends BaseServiceImpl<UnidadMedida, Unida
     @Autowired
     private UnidadMedidaRepository unidadMedidaRepository;
 
-    private final UnidadMedidaMapper unidadMedidaMapper = UnidadMedidaMapper.getInstance();
+    @Autowired
+    private UnidadMedidaMapper unidadMedidaMapper;
 
     public UnidadMedidaServiceImpl(BaseRepository<UnidadMedida, Long> baseRepository, BaseMapper<UnidadMedida, UnidadMedidaDto> baseMapper) {
         super(baseRepository, baseMapper);

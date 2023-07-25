@@ -1,4 +1,4 @@
-package com.tup.buensabor.mappers;
+package com.tup.buensabor.mappers.utils;
 
 import org.mapstruct.Qualifier;
 

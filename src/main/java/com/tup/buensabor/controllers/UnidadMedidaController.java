@@ -1,17 +1,19 @@
 package com.tup.buensabor.controllers;
 
 import com.tup.buensabor.controllers.base.BaseControllerImpl;
-import com.tup.buensabor.dtos.UnidadMedidaDto;
+import com.tup.buensabor.dtos.unidadmedida.UnidadMedidaDto;
 import com.tup.buensabor.entities.UnidadMedida;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.UnidadMedidaServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "api/v1/unidades-medida")
 public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, UnidadMedidaDto, UnidadMedidaServiceImpl> {
 
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody UnidadMedidaDto unidadMedidaDto) {
         try {
@@ -21,6 +23,7 @@ public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, Uni
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") Long id, @RequestBody UnidadMedidaDto unidadMedidaDto) {
         try {
@@ -30,6 +33,7 @@ public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, Uni
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") Long id) {
         try {
@@ -41,6 +45,7 @@ public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, Uni
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @DeleteMapping(value = "/hard_delete/{id}")
     public ResponseEntity<?> hardDelete(@PathVariable(name = "id") Long id) {
         try {

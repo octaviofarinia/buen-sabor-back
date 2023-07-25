@@ -18,10 +18,9 @@ public class UsuarioController extends BaseControllerImpl<Usuario, UsuarioDto, U
     @PostMapping(value = "/post_register_save")
     public ResponseEntity<?> save(@RequestBody() UsuarioDto userDto) {
         try {
-            servicio.save(userDto);
+            servicio.postRegisterSave(userDto);
             return ResponseEntity.ok().body("Usuario persistido correctamente.");
         } catch (ServicioException e) {
-            e.printStackTrace();
             return ResponseEntity.internalServerError().body("Error al persistir usuario: " + e.getMessage());
         }
     }
