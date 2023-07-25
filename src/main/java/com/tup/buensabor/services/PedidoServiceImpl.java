@@ -55,6 +55,9 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
     private DetallePedidoServiceImpl detallePedidoService;
 
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private PedidoRepository pedidoRepository;
 
     @Autowired
@@ -129,6 +132,12 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
             facturaService.saveFacturaFromPedidoAlta(pedido, detallesPedido, altaPedidoDto.getFactura());
         }
 
+        this.mailService.sendEmail(
+                cliente.getEmail(),
+                "Alta pedido confirmada Buen Sabor",
+                "Se ha dado de alta tu pedido en el buen sabor."
+        );
+
         return pedido;
     }
 
@@ -187,6 +196,12 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
             case EFECTIVO -> updateEstadoEfectivo(estado, pedido);
             case MERCADO_PAGO -> updateEstadoMercadoPago(estado, pedido);
         }
+
+        this.mailService.sendEmail(
+                pedido.getCliente().getEmail(),
+                "Actualizacion pedido Buen Sabor",
+                "Tu pedido a cambiado de estado: " + pedido.getEstado() + " -> " + estado
+        );
     }
 
     public void updateEstadoEfectivo(EstadoPedido newEstado, Pedido pedido) throws ServicioException {
@@ -252,6 +267,8 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
                     throw new ServicioException("Estado CANCELADO en pedidos de MERCADO_PAGO no implementado a traves de metodo updateEstado.");
             default -> throw new ServicioException("Estado seleccionado invalido.");
         }
+
+
     }
 
     public List<PedidoDto> findAll(EstadoPedido estado) throws ServicioException {
@@ -271,32 +288,6 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
             }
         }
         return true;
-    }
-
-    @Transactional(rollbackOn = ServicioException.class)
-    public FacturaDto anular(Long idPedido) throws ServicioException {
-        Optional<Pedido> optionalPedido = pedidoRepository.findById(idPedido);
-        if (optionalPedido.isEmpty()) {
-            throw new ServicioException("No se encontro el pedido con el id dado.");
-        }
-
-        Pedido pedido = optionalPedido.get();
-
-        this.retornarStock(pedido);
-
-        if (pedido.getEstado().equals(EstadoPedido.PAGADO)) {
-            pedido.setEstado(EstadoPedido.NOTA_CREDITO);
-            pedido.setFechaBaja(new Date());
-
-            pedido = pedidoRepository.save(pedido);
-            return facturaService.crearNotaCredito(pedido);
-        } else {
-            pedido.setEstado(EstadoPedido.CANCELADO);
-            pedido.setFechaBaja(new Date());
-
-            pedidoRepository.save(pedido);
-            return null;
-        }
     }
 
     private void retornarStock(Pedido pedido) throws ServicioException {

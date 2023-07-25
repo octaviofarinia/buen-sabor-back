@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                 .cors().and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/ws", "/api/v1/ws/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/articulos-manufacturados", "/api/v1/articulos-manufacturados/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/articulos-manufacturados", "/api/v1/articulos-manufacturados/**", "/api/v1/detalles-articulos-manufacturados", "/api/v1/detalles-articulos-manufacturados/**").permitAll()
                 .requestMatchers("/**").authenticated()
                 .and().oauth2ResourceServer()
                     .jwt()
