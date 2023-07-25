@@ -132,11 +132,15 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
             facturaService.saveFacturaFromPedidoAlta(pedido, detallesPedido, altaPedidoDto.getFactura());
         }
 
-        this.mailService.sendEmail(
-                cliente.getEmail(),
-                "Alta pedido confirmada Buen Sabor",
-                "Se ha dado de alta tu pedido en el buen sabor."
-        );
+        try {
+            this.mailService.sendEmail(
+                    cliente.getEmail(),
+                    "Alta pedido confirmada Buen Sabor",
+                    "Se ha dado de alta tu pedido en el buen sabor."
+            );
+        } catch (Exception ignored) {
+
+        }
 
         return pedido;
     }
@@ -192,16 +196,21 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         }
 
         Pedido pedido = optionalPedido.get();
+        EstadoPedido estadoAnterior = pedido.getEstado();
         switch (pedido.getFormaPago()) {
             case EFECTIVO -> updateEstadoEfectivo(estado, pedido);
             case MERCADO_PAGO -> updateEstadoMercadoPago(estado, pedido);
         }
 
-        this.mailService.sendEmail(
-                pedido.getCliente().getEmail(),
-                "Actualizacion pedido Buen Sabor",
-                "Tu pedido a cambiado de estado: " + pedido.getEstado() + " -> " + estado
-        );
+        try {
+            this.mailService.sendEmail(
+                    pedido.getCliente().getEmail(),
+                    "Actualizacion pedido Buen Sabor",
+                    "Tu pedido a cambiado de estado: " + estadoAnterior + " -> " + estado
+            );
+        } catch (Exception ignored) {
+        }
+
     }
 
     public void updateEstadoEfectivo(EstadoPedido newEstado, Pedido pedido) throws ServicioException {
