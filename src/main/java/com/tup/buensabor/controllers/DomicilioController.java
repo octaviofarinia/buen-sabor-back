@@ -39,7 +39,7 @@ public class DomicilioController extends BaseControllerImpl<Domicilio, Domicilio
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") Long id, @RequestBody() DomicilioDto domicilio) {
         try {
-            DomicilioDto articuloInsumo = servicio.update(id, domicilio);
+            DomicilioDto articuloInsumo = servicio.update(domicilio);
             return ResponseEntity.ok(articuloInsumo);
         } catch (ServicioException e) {
             e.printStackTrace();

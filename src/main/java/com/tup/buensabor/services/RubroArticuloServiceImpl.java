@@ -77,13 +77,13 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Rub
     }
 
     @Transactional
-    public RubroArticuloCompleteDto update(Long id, RubroArticuloCompleteDto rubroDto) throws ServicioException {
+    public RubroArticuloCompleteDto update(RubroArticuloCompleteDto rubroDto) throws ServicioException {
         try {
-            if (rubroDto.getId() == null) {
-                throw new ServicioException("La entidad a modificar debe contener un Id.");
+            if (rubroDto.getId() == null || rubroDto.getId() <= 0) {
+                throw new ServicioException("El campo id es obligatorio y mayor a cero.");
             }
 
-            Optional<RubroArticulo> entityOptional = baseRepository.findById(id);
+            Optional<RubroArticulo> entityOptional = baseRepository.findById(rubroDto.getId());
 
             if(entityOptional.isEmpty()) {
                 throw new ServicioException("No se encontro la entidad con el id dado.");
@@ -93,7 +93,7 @@ public class RubroArticuloServiceImpl extends BaseServiceImpl<RubroArticulo, Rub
 
             if(rubroDto.getIdRubroPadre() != null) {
                 if(baseRepository.existsById(rubroDto.getIdRubroPadre())) {
-                    entityDB.setRubroPadre(rubroArticuloRepository.findById(rubroDto.getIdRubroPadre()).get());
+                    entityDB.setRubroPadre(rubroArticuloRepository.getReferenceById(rubroDto.getIdRubroPadre()));
                 } else {
                     throw new ServicioException("No existe un RubroArticulo con id " + rubroDto.getIdRubroPadre());
                 }

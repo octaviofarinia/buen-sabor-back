@@ -27,7 +27,7 @@ public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, Uni
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") Long id, @RequestBody UnidadMedidaDto unidadMedidaDto) {
         try {
-            return ResponseEntity.ok().body(servicio.update(id, unidadMedidaDto));
+            return ResponseEntity.ok().body(servicio.update(unidadMedidaDto));
         } catch (ServicioException e) {
             return ResponseEntity.badRequest().body("Error al crear la unidad de medida: " + e.getMessage());
         }

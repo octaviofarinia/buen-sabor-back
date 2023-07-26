@@ -36,15 +36,18 @@ public class UnidadMedidaServiceImpl extends BaseServiceImpl<UnidadMedida, Unida
     }
 
     @Transactional
-    public UnidadMedidaDto update(Long id, UnidadMedidaDto unidadMedidaDto) throws ServicioException {
-        Optional<UnidadMedida> optionalUnidadMedida = baseRepository.findById(id);
+    public UnidadMedidaDto update(UnidadMedidaDto unidadMedidaDto) throws ServicioException {
+        if (unidadMedidaDto.getId() == null || unidadMedidaDto.getId() <= 0) {
+            throw new ServicioException("El campo id es obligatorio y mayor a cero.");
+        }
+
+        Optional<UnidadMedida> optionalUnidadMedida = baseRepository.findById(unidadMedidaDto.getId());
         if(optionalUnidadMedida.isEmpty()) {
             throw new ServicioException("No se encontro la unidad de medida con el id dado.");
         }
 
-        UnidadMedida unidadMedida = optionalUnidadMedida.get();
-        unidadMedida.setDenominacion(unidadMedidaDto.getDenominacion());
-        unidadMedida.setAbreviatura(unidadMedidaDto.getAbreviatura());
+        UnidadMedida unidadMedida = unidadMedidaMapper.toEntity(unidadMedidaDto);
+        unidadMedida.setFechaAlta(optionalUnidadMedida.get().getFechaAlta());
         unidadMedida.setFechaModificacion(new Date());
 
         return unidadMedidaMapper.toDTO(baseRepository.save(unidadMedida));
