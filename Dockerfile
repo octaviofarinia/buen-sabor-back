@@ -3,12 +3,12 @@ FROM alpine:latest as build
 RUN apk update
 RUN apk add openjdk17
 
-COPY . .
-RUN chmod +x ./gradlew
-RUN ./gradlew bootJar --no-daemon
+COPY . /app
+WORKDIR /app
+RUN mvn package
 
 FROM openjdk:17-alpine
 EXPOSE 8080
-COPY --from=build ./build/libs/buensabor-stable.jar ./app.jar
+COPY --from=build /app/target/buensabor-stable.jar ./app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
