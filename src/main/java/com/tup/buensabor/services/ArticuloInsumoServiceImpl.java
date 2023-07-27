@@ -141,8 +141,8 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
             BigDecimal subtotalPrevio = detalle.getCantidad().multiply(costoPrevio);
             BigDecimal subtotalNuevo = detalle.getCantidad().multiply(articuloInsumo.getPrecioCompra());
 
-            total.subtract(subtotalPrevio);
-            total.add(subtotalNuevo);
+            total = total.subtract(subtotalPrevio);
+            total = total.add(subtotalNuevo);
 
             articuloManufacturado.setCosto(total);
             articuloManufacturadoRepository.save(articuloManufacturado);
