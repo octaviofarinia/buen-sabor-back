@@ -68,7 +68,7 @@ public class RubroArticuloController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RubroArticuloCompleteDto object) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.update(id, object));
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.update(object));
         } catch (ServicioException servicioException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(servicioException.getMessage());
         } catch(Exception e) {

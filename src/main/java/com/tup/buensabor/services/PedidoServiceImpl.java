@@ -2,7 +2,6 @@ package com.tup.buensabor.services;
 
 import com.tup.buensabor.dtos.detallepedido.AltaPedidoDetallePedidoDto;
 import com.tup.buensabor.dtos.detallepedido.DetallePedidoSimpleDto;
-import com.tup.buensabor.dtos.factura.FacturaDto;
 import com.tup.buensabor.dtos.pedido.AltaPedidoDto;
 import com.tup.buensabor.dtos.pedido.PedidoDto;
 import com.tup.buensabor.entities.*;
@@ -17,22 +16,20 @@ import com.tup.buensabor.repositories.DetallePedidoRepository;
 import com.tup.buensabor.repositories.PedidoRepository;
 import com.tup.buensabor.services.interfaces.PedidoService;
 import jakarta.transaction.Transactional;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Log4j2
 @Service
 public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> implements PedidoService {
 
@@ -133,13 +130,9 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         }
 
         try {
-            this.mailService.sendEmail(
-                    cliente.getEmail(),
-                    "Alta pedido confirmada Buen Sabor",
-                    "Se ha dado de alta tu pedido en el buen sabor."
-            );
-        } catch (Exception ignored) {
-
+            this.mailService.sendAltaPedidoEmail(cliente.getEmail(), pedido);
+        } catch (Exception e) {
+            log.error(e);
         }
 
         return pedido;
@@ -208,9 +201,9 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
                     "Actualizacion pedido Buen Sabor",
                     "Tu pedido a cambiado de estado: " + estadoAnterior + " -> " + estado
             );
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            log.error(e);
         }
-
     }
 
     public void updateEstadoEfectivo(EstadoPedido newEstado, Pedido pedido) throws ServicioException {

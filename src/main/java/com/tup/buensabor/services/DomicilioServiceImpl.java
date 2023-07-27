@@ -49,8 +49,12 @@ public class DomicilioServiceImpl extends BaseServiceImpl<Domicilio, DomicilioDt
     }
 
     @Transactional
-    public DomicilioDto update(Long id, DomicilioDto domicilioDto) throws ServicioException {
-        Optional<Domicilio> optionalDomicilio = baseRepository.findById(id);
+    public DomicilioDto update(DomicilioDto domicilioDto) throws ServicioException {
+        if (domicilioDto.getId() == null || domicilioDto.getId() <= 0) {
+            throw new ServicioException("El campo id es obligatorio y mayor a cero.");
+        }
+
+        Optional<Domicilio> optionalDomicilio = baseRepository.findById(domicilioDto.getId());
         if(optionalDomicilio.isEmpty()) {
             throw new ServicioException("No se encontro el domicilio con el id dado.");
         }
@@ -60,14 +64,8 @@ public class DomicilioServiceImpl extends BaseServiceImpl<Domicilio, DomicilioDt
             throw new ServicioException("No se encontro un cliente con el id provisto.");
         }
 
-        Domicilio domicilio = optionalDomicilio.get();
-        domicilio.setCalle(domicilioDto.getCalle());
-        domicilio.setCliente(optionalCliente.get());
-        domicilio.setLocalidad(domicilioDto.getLocalidad());
-        domicilio.setNumero(domicilioDto.getNumero());
-        domicilio.setCodigoPostal(domicilioDto.getCodigoPostal());
-        domicilio.setNumeroDpto(domicilioDto.getNumeroDpto());
-        domicilio.setPisoDpto(domicilioDto.getPisoDpto());
+        Domicilio domicilio = domicilioMapper.toEntity(domicilioDto);
+        domicilio.setFechaAlta(optionalDomicilio.get().getFechaAlta());
         domicilio.setFechaModificacion(new Date());
 
         return domicilioMapper.toDTO(baseRepository.save(domicilio));

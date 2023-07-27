@@ -82,11 +82,8 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
             throw new ServicioException("No existe un producto con el id seleccionado.");
         }
 
-        ArticuloManufacturado articuloManufacturado = optionalArticuloManufacturado.get();
-        articuloManufacturado.setDenominacion(articuloManufacturadoDto.getDenominacion());
-        articuloManufacturado.setDescripcion(articuloManufacturadoDto.getDescripcion());
-        articuloManufacturado.setTiempoEstimadoCocina(articuloManufacturadoDto.getTiempoEstimadoCocina());
-        articuloManufacturado.setPrecioVenta(articuloManufacturadoDto.getPrecioVenta());
+        ArticuloManufacturado articuloManufacturado = articuloManufacturadoMapper.toEntity(articuloManufacturadoDto);
+        articuloManufacturado.setFechaAlta(optionalArticuloManufacturado.get().getFechaAlta());
         articuloManufacturado.setFechaModificacion(new Date());
         articuloManufacturado = this.save(articuloManufacturado);
 
