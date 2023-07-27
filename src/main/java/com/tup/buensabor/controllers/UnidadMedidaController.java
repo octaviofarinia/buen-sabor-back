@@ -49,7 +49,7 @@ public class UnidadMedidaController extends BaseControllerImpl<UnidadMedida, Uni
     @DeleteMapping(value = "/hard_delete/{id}")
     public ResponseEntity<?> hardDelete(@PathVariable(name = "id") Long id) {
         try {
-            servicio.hardDelete(id);
+            servicio.hardDeleteValidated(id);
             return ResponseEntity.noContent().build();
         } catch (ServicioException e) {
             e.printStackTrace();

@@ -8,6 +8,7 @@ import com.tup.buensabor.mappers.ArticuloManufacturadoMapper;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.repositories.ArticuloManufacturadoRepository;
 import com.tup.buensabor.repositories.BaseRepository;
+import com.tup.buensabor.repositories.DetalleArticuloManufacturadoRepository;
 import com.tup.buensabor.services.interfaces.ArticuloManufacturadoService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
     private ArticuloManufacturadoRepository articuloManufacturadoRepository;
 
     @Autowired
+    private DetalleArticuloManufacturadoRepository detalleArticuloManufacturadoRepository;
+
+    @Autowired
     private ImagenService imagenService;
 
     private static final String CLOUDINARY_FOLDER = "productos";
@@ -41,7 +45,6 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         super(baseRepository, baseMapper);
     }
 
-    @Transactional
     public List<ArticuloManufacturadoDto> findAll(String nombre) throws ServicioException {
         try {
             List<ArticuloManufacturado> entities = articuloManufacturadoRepository.findAllByNombre(nombre);
@@ -97,6 +100,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         return articuloManufacturadoMapper.toDTO(articuloManufacturado);
     }
 
+    @Transactional
     public void softDelete(Long id) throws ServicioException {
         Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoRepository.findById(id);
         if(optionalArticuloManufacturado.isEmpty()) {
@@ -109,12 +113,16 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         articuloManufacturadoRepository.save(articuloManufacturado);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ServicioException.class)
     public void hardDeleteImage(Long id) throws IOException, ServicioException {
         Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoRepository.findById(id);
         if(optionalArticuloManufacturado.isEmpty()) {
             throw new ServicioException("No existe un producto con el id seleccionado.");
+        }else if(articuloManufacturadoRepository.isPresentInPedido(id)) {
+            throw new ServicioException("No se puede hacer un hard delete del producto ya que este pertenece a pedidos ya procesados.");
         }
+
+        detalleArticuloManufacturadoRepository.deleteAll(detalleArticuloManufacturadoRepository.getByIdArticuloManufacturado(id));
 
         imagenService.deleteImage(id, CLOUDINARY_FOLDER);
         this.hardDelete(id);

@@ -7,6 +7,7 @@ import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.mappers.ArticuloInsumoMapper;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.repositories.ArticuloInsumoRepository;
+import com.tup.buensabor.repositories.ArticuloManufacturadoRepository;
 import com.tup.buensabor.repositories.BaseRepository;
 import com.tup.buensabor.repositories.DetalleArticuloManufacturadoRepository;
 import com.tup.buensabor.services.interfaces.ArticuloInsumoService;
@@ -19,16 +20,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, ArticuloInsumoCompleteDto, Long> implements ArticuloInsumoService {
 
     @Autowired
     private ArticuloInsumoRepository articuloInsumoRepository;
+
+    @Autowired
+    private ArticuloManufacturadoRepository articuloManufacturadoRepository;
 
     @Autowired
     private DetalleArticuloManufacturadoRepository detalleArticuloManufacturadoRepository;
@@ -83,7 +84,7 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
         return articuloInsumoMapper.toDTO(articuloInsumo);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ServicioException.class)
     public ArticuloInsumoCompleteDto update(ArticuloInsumoDto articuloInsumoDto, MultipartFile imagen) throws IOException, ServicioException {
         if (articuloInsumoDto.getId() == null || articuloInsumoDto.getId() <= 0) {
             throw new ServicioException("El campo id es obligatorio y mayor a cero.");
@@ -93,6 +94,8 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
         if(optionalArticuloInsumo.isEmpty()) {
             throw new ServicioException("No existe un insumo con el id seleccionado.");
         }
+
+        BigDecimal costoPrevio = optionalArticuloInsumo.get().getPrecioCompra();
 
         ArticuloInsumo articuloInsumo = articuloInsumoMapper.toEntity(articuloInsumoDto);
         articuloInsumo.setFechaAlta(optionalArticuloInsumo.get().getFechaAlta());
@@ -113,6 +116,10 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
 
         articuloInsumo = this.save(articuloInsumo);
 
+        if(!costoPrevio.equals(articuloInsumo.getPrecioCompra())) {
+            this.updateCosto(articuloInsumo, costoPrevio);
+        }
+
         if(imagen != null && !imagen.isEmpty()) {
             Map<String, Object> uploadData = imagenService.uploadImage(imagen, articuloInsumo.getId(), CLOUDINARY_FOLDER);
             articuloInsumo.setUrlImagen((String) uploadData.get("url"));
@@ -121,6 +128,25 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
         }
 
         return articuloInsumoMapper.toDTO(articuloInsumo);
+    }
+
+    private void updateCosto(ArticuloInsumo articuloInsumo, BigDecimal costoPrevio) {
+        List<ArticuloManufacturado> articulosManufacturados = detalleArticuloManufacturadoRepository.getArticulosByIdInsumo(articuloInsumo.getId());
+
+        for (ArticuloManufacturado articuloManufacturado : articulosManufacturados) {
+            DetalleArticuloManufacturado detalle = detalleArticuloManufacturadoRepository.getByIdArticuloManufacturadoAndIdInsumo(articuloManufacturado.getId(), articuloInsumo.getId());
+
+            BigDecimal total = articuloManufacturado.getCosto();
+
+            BigDecimal subtotalPrevio = detalle.getCantidad().multiply(costoPrevio);
+            BigDecimal subtotalNuevo = detalle.getCantidad().multiply(articuloInsumo.getPrecioCompra());
+
+            total = total.subtract(subtotalPrevio);
+            total = total.add(subtotalNuevo);
+
+            articuloManufacturado.setCosto(total);
+            articuloManufacturadoRepository.save(articuloManufacturado);
+        }
     }
 
     public void softDelete(Long id) throws ServicioException {
@@ -135,11 +161,13 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
         articuloInsumoRepository.save(articuloInsumo);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ServicioException.class)
     public void hardDeleteImage(Long id) throws IOException, ServicioException {
         Optional<ArticuloInsumo> optionalArticuloInsumo = articuloInsumoRepository.findById(id);
         if(optionalArticuloInsumo.isEmpty()) {
             throw new ServicioException("No existe un insumo con el id seleccionado.");
+        } else if(articuloInsumoRepository.isPresentInArticuloManufacturado(id)) {
+            throw new ServicioException("No se puede hacer un hard delete del insumo ya que este pertenece a productos ya cargados.");
         }
 
         imagenService.deleteImage(id, CLOUDINARY_FOLDER);

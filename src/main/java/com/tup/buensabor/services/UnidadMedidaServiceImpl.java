@@ -66,4 +66,15 @@ public class UnidadMedidaServiceImpl extends BaseServiceImpl<UnidadMedida, Unida
         unidadMedidaRepository.save(unidadMedida);
     }
 
+    @Transactional
+    public void hardDeleteValidated(Long id) throws ServicioException {
+        Optional<UnidadMedida> optionalUnidadMedida = baseRepository.findById(id);
+        if(optionalUnidadMedida.isEmpty()) {
+            throw new ServicioException("No se encontro la unidad de medida con el id dado.");
+        }else if(unidadMedidaRepository.isPresentInArticuloInsumo(id)) {
+            throw new ServicioException("No se puede hacer un hard delete de la unidad de medida ya que este pertenece a insumos ya cargados.");
+        }
+
+        this.hardDelete(id);
+    }
 }

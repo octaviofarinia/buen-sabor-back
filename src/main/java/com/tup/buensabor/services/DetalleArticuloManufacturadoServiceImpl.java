@@ -139,6 +139,7 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
     }
 
     @Override
+    @Transactional
     public boolean hardDelete(Long id) throws ServicioException {
         try {
             if (detalleArticuloManufacturadoRepository.existsById(id)) {
@@ -175,5 +176,9 @@ public class DetalleArticuloManufacturadoServiceImpl extends BaseServiceImpl<Det
         }
     }
 
+    @Transactional
+    public void hardDeleteAllByIdArticuloManufacturado(Long idArticuloManufacturado) {
+        detalleArticuloManufacturadoRepository.deleteAll(detalleArticuloManufacturadoRepository.getByIdArticuloManufacturado(idArticuloManufacturado));
+    }
 
 }
