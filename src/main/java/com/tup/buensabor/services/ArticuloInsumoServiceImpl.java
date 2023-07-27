@@ -161,11 +161,13 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
         articuloInsumoRepository.save(articuloInsumo);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ServicioException.class)
     public void hardDeleteImage(Long id) throws IOException, ServicioException {
         Optional<ArticuloInsumo> optionalArticuloInsumo = articuloInsumoRepository.findById(id);
         if(optionalArticuloInsumo.isEmpty()) {
             throw new ServicioException("No existe un insumo con el id seleccionado.");
+        } else if(articuloInsumoRepository.isPresentInArticuloManufacturado(id)) {
+            throw new ServicioException("No se puede hacer un hard delete del insumo ya que este pertenece a productos ya cargados.");
         }
 
         imagenService.deleteImage(id, CLOUDINARY_FOLDER);

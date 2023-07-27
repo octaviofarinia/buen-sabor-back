@@ -113,7 +113,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         articuloManufacturadoRepository.save(articuloManufacturado);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ServicioException.class)
     public void hardDeleteImage(Long id) throws IOException, ServicioException {
         Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoRepository.findById(id);
         if(optionalArticuloManufacturado.isEmpty()) {
