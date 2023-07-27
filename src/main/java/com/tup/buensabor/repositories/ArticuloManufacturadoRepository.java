@@ -30,7 +30,7 @@ public interface ArticuloManufacturadoRepository extends BaseRepository<Articulo
             "ORDER BY (SUM(d.cantidad * art.precioVenta) - SUM(d.cantidad * art.costo)) DESC")
     List<ArticuloManufacturadoRankingDto> ranking(Date desde, Date hasta);
 
-    @Query("SELECT count(dp) > 0 FROM DetallePedido dp WHERE dp.articuloManufacturado.id = :idArticuloManufacturado")
+    @Query("SELECT count(dp) > 0 FROM DetallePedido dp WHERE dp.articuloManufacturado.id = :idArticuloManfacturado")
     boolean isPresentInPedido(Long idArticuloManfacturado);
 
 }

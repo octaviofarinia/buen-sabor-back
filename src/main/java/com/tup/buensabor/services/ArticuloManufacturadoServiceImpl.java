@@ -8,6 +8,7 @@ import com.tup.buensabor.mappers.ArticuloManufacturadoMapper;
 import com.tup.buensabor.mappers.BaseMapper;
 import com.tup.buensabor.repositories.ArticuloManufacturadoRepository;
 import com.tup.buensabor.repositories.BaseRepository;
+import com.tup.buensabor.repositories.DetalleArticuloManufacturadoRepository;
 import com.tup.buensabor.services.interfaces.ArticuloManufacturadoService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
     private ArticuloManufacturadoRepository articuloManufacturadoRepository;
 
     @Autowired
-    private DetalleArticuloManufacturadoServiceImpl detalleArticuloManufacturadoService;
+    private DetalleArticuloManufacturadoRepository detalleArticuloManufacturadoRepository;
 
     @Autowired
     private ImagenService imagenService;
@@ -117,11 +118,11 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         Optional<ArticuloManufacturado> optionalArticuloManufacturado = articuloManufacturadoRepository.findById(id);
         if(optionalArticuloManufacturado.isEmpty()) {
             throw new ServicioException("No existe un producto con el id seleccionado.");
-        }else if(!articuloManufacturadoRepository.isPresentInPedido(id)) {
+        }else if(articuloManufacturadoRepository.isPresentInPedido(id)) {
             throw new ServicioException("No se puede hacer un hard delete del producto ya que este pertenece a pedidos ya procesados.");
         }
 
-        detalleArticuloManufacturadoService.hardDeleteAllByIdArticuloManufacturado(id);
+        detalleArticuloManufacturadoRepository.deleteAll(detalleArticuloManufacturadoRepository.getByIdArticuloManufacturado(id));
 
         imagenService.deleteImage(id, CLOUDINARY_FOLDER);
         this.hardDelete(id);
