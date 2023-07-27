@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.tup</groupId>
 	<artifactId>buensabor</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>stable</version>
 	<name>buensabor</name>
 	<description>Backend Services for El Buen Sabor</description>
 	<properties>
