@@ -39,6 +39,16 @@ public class PedidoController extends BaseControllerImpl<Pedido, PedidoDto, Pedi
         }
     }
 
+    @GetMapping("/listar/usuario")
+    public ResponseEntity<?> getAllUsuario(@RequestHeader("auth0Id") String auth0Id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.findAllByUser(auth0Id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+        }
+    }
+
     @PostMapping(value = "")
     public ResponseEntity<?> save(@RequestBody AltaPedidoDto altaPedidoDto) {
         try {

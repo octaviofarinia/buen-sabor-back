@@ -309,4 +309,11 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         return detallePedidoService.getByPedido(optionalPedido.get());
     }
 
+    public List<PedidoDto> findAllByUser(String auth0Id) throws ServicioException {
+        if (StringUtils.isBlank(auth0Id)) {
+            throw new ServicioException("Debe proporcionar un Auth0Id.");
+        }
+
+        return baseMapper.toDTOsList(pedidoRepository.findAllByAuth0Id(auth0Id));
+    }
 }
