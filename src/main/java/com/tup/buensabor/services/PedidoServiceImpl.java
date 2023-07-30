@@ -222,7 +222,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
                 pedido = pedidoRepository.save(pedido);
                 facturaService.saveFacturaAfterPagoEfectivo(pedido);
             }
-            case PENDIENTE_PAGO, PENDIENTE_ENVIO, PREPARACION, EN_CAMINO -> {
+            case PENDIENTE_PAGO, PENDIENTE_ENTREGA, PREPARACION, EN_CAMINO -> {
                 pedido.setEstado(newEstado);
                 pedido.setFechaModificacion(new Date());
                 pedidoRepository.save(pedido);
@@ -252,7 +252,7 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
         }
 
         switch (newEstado) {
-            case PAGADO, PREPARACION, PENDIENTE_ENVIO, EN_CAMINO, COMPLETADO -> {
+            case PAGADO, PREPARACION, PENDIENTE_ENTREGA, EN_CAMINO, COMPLETADO -> {
                 pedido.setEstado(newEstado);
                 pedido.setFechaModificacion(new Date());
                 pedidoRepository.save(pedido);
