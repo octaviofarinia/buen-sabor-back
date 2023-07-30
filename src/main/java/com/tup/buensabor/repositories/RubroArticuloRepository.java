@@ -14,4 +14,5 @@ public interface RubroArticuloRepository extends BaseRepository<RubroArticulo, L
 
     @Query("SELECT r FROM RubroArticulo r WHERE r.fechaBaja is null order by r.rubroPadre.id")
     List<RubroArticulo> getAllParents();
+
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -76,5 +77,15 @@ public class UnidadMedidaServiceImpl extends BaseServiceImpl<UnidadMedida, Unida
         }
 
         this.hardDelete(id);
+    }
+
+    public List<UnidadMedidaDto> findAllActive() throws ServicioException {
+        try {
+            List<UnidadMedida> entities = unidadMedidaRepository.findAllActive();
+            return baseMapper.toDTOsList(entities);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new ServicioException(e.getMessage());
+        }
     }
 }

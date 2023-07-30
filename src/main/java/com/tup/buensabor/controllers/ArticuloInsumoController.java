@@ -6,6 +6,7 @@ import com.tup.buensabor.dtos.articuloinsumo.ArticuloInsumoDto;
 import com.tup.buensabor.entities.ArticuloInsumo;
 import com.tup.buensabor.exceptions.ServicioException;
 import com.tup.buensabor.services.ArticuloInsumoServiceImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,15 @@ import java.math.BigDecimal;
 @RestController
 @RequestMapping(path = "api/v1/articulos-insumo")
 public class ArticuloInsumoController extends BaseControllerImpl<ArticuloInsumo, ArticuloInsumoCompleteDto, ArticuloInsumoServiceImpl> {
+
+    @GetMapping("/listar")
+    public ResponseEntity<?> getAllActive() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.findAllActive());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
+        }
+    }
 
     @PreAuthorize("hasAnyAuthority('administrador', 'logistica')")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

@@ -20,7 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, ArticuloInsumoCompleteDto, Long> implements ArticuloInsumoService {
@@ -238,5 +241,15 @@ public class ArticuloInsumoServiceImpl extends BaseServiceImpl<ArticuloInsumo, A
         articuloInsumoRepository.save(articuloInsumo);
 
         return articuloInsumoMapper.toDTO(articuloInsumo);
+    }
+
+    public List<ArticuloInsumoCompleteDto> findAllActive() throws ServicioException {
+        try {
+            List<ArticuloInsumo> entities = articuloInsumoRepository.findAllActive();
+            return baseMapper.toDTOsList(entities);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new ServicioException(e.getMessage());
+        }
     }
 }
