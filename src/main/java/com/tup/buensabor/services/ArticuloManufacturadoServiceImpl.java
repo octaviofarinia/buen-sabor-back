@@ -45,9 +45,9 @@ public class ArticuloManufacturadoServiceImpl extends BaseServiceImpl<ArticuloMa
         super(baseRepository, baseMapper);
     }
 
-    public List<ArticuloManufacturadoDto> findAll(String nombre) throws ServicioException {
+    public List<ArticuloManufacturadoDto> findAllActive(String nombre) throws ServicioException {
         try {
-            List<ArticuloManufacturado> entities = articuloManufacturadoRepository.findAllByNombre(nombre);
+            List<ArticuloManufacturado> entities = articuloManufacturadoRepository.findAllActiveByNombre(nombre);
             return baseMapper.toDTOsList(entities);
         }catch (Exception e) {
             e.printStackTrace();

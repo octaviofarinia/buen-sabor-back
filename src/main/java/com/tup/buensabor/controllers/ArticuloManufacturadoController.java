@@ -36,7 +36,7 @@ public class ArticuloManufacturadoController extends BaseControllerImpl<Articulo
     @GetMapping("/listar")
     public ResponseEntity<?> getAllFiltrados(@RequestParam(name = "filtro", required = false, defaultValue = "") String nombre) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.findAll(nombre));
+            return ResponseEntity.status(HttpStatus.OK).body(servicio.findAllActive(nombre));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"error\": \"Error. Por favor intente mas tarde\"}");
         }

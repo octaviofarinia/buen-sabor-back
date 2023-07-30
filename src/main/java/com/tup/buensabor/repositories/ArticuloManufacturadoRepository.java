@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface ArticuloManufacturadoRepository extends BaseRepository<ArticuloManufacturado, Long> {
 
-    @Query("SELECT a FROM ArticuloManufacturado a WHERE a.denominacion LIKE %:nombre%")
-    List<ArticuloManufacturado> findAllByNombre(@Param("nombre") String nombre);
+    @Query("SELECT a FROM ArticuloManufacturado a WHERE a.denominacion LIKE %:nombre% AND a.fechaBaja IS NULL")
+    List<ArticuloManufacturado> findAllActiveByNombre(@Param("nombre") String nombre);
 
     @Query("SELECT " +
             "art.denominacion as denominacion, " +
