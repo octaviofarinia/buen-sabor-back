@@ -215,6 +215,15 @@ public class PedidoServiceImpl extends BaseServiceImpl<Pedido, PedidoDto, Long> 
             throw new ServicioException(pedido.getEstado() + " -> " + newEstado + " es una transicion de estados invalida en pedidos en EFECTIVO");
         }
 
+        //TODO: incluir estas nuevas validaciones en el enum (va a ser necesario pasar como parametro el tipo envio)
+        if(pedido.getTipoEnvio().equals(TipoEnvio.TAKE_AWAY) && newEstado.equals(EstadoPedido.EN_CAMINO)) {
+            throw new ServicioException(pedido.getEstado() + " -> " + newEstado + " es una transicion de estados invalida en pedidos TAKE_AWAY");
+        }
+
+        if(pedido.getTipoEnvio().equals(TipoEnvio.DELIVERY) && pedido.getEstado().equals(EstadoPedido.PENDIENTE_ENTREGA) && (newEstado.equals(EstadoPedido.PAGADO) || newEstado.equals(EstadoPedido.COMPLETADO))) {
+            throw new ServicioException(pedido.getEstado() + " -> " + newEstado + " es una transicion de estados invalida en pedidos DELIVERY");
+        }
+
         switch (newEstado) {
             case PAGADO, COMPLETADO -> {
                 pedido.setEstado(EstadoPedido.COMPLETADO);
