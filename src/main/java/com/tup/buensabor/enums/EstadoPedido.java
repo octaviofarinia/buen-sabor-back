@@ -32,8 +32,8 @@ public enum EstadoPedido {
         @Override
         public boolean isValidNextState(EstadoPedido newEstado, FormaPago formaPago) {
             Set<EstadoPedido> validStates =  switch (formaPago) {
-                case EFECTIVO -> EnumSet.of(EstadoPedido.CANCELADO, EstadoPedido.PENDIENTE_ENTREGA, EstadoPedido.PAGADO, EstadoPedido.COMPLETADO);
-                case MERCADO_PAGO -> EnumSet.of(EstadoPedido.NOTA_CREDITO, EstadoPedido.PENDIENTE_ENTREGA, EstadoPedido.COMPLETADO);
+                case EFECTIVO -> EnumSet.of(EstadoPedido.CANCELADO, EstadoPedido.PENDIENTE_ENTREGA);
+                case MERCADO_PAGO -> EnumSet.of(EstadoPedido.NOTA_CREDITO, EstadoPedido.PENDIENTE_ENTREGA);
             };
 
             return validStates.contains(newEstado);
@@ -44,8 +44,8 @@ public enum EstadoPedido {
         @Override
         public boolean isValidNextState(EstadoPedido newEstado, FormaPago formaPago) {
             Set<EstadoPedido> validStates = switch (formaPago) {
-                case EFECTIVO -> EnumSet.of(EstadoPedido.CANCELADO, EstadoPedido.EN_CAMINO);
-                case MERCADO_PAGO -> EnumSet.of(EstadoPedido.NOTA_CREDITO, EstadoPedido.EN_CAMINO);
+                case EFECTIVO -> EnumSet.of(EstadoPedido.CANCELADO, EstadoPedido.EN_CAMINO, EstadoPedido.PAGADO, EstadoPedido.COMPLETADO);
+                case MERCADO_PAGO -> EnumSet.of(EstadoPedido.NOTA_CREDITO, EstadoPedido.EN_CAMINO, EstadoPedido.COMPLETADO);
             };
 
             return validStates.contains(newEstado);
